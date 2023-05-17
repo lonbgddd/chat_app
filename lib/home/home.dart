@@ -1,7 +1,5 @@
-import 'package:chat_app/config/changedNotify/resposome.dart';
 import 'package:chat_app/home/chat_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +13,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<CallDataProvider>();
   }
 
   @override

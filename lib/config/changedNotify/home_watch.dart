@@ -1,12 +1,25 @@
+import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/cupertino.dart';
 
-class HomeNotify extends ChangeNotifier {
-  final List<User>? listUser = [];
+import '../data_mothes.dart';
 
-  // Stream<List<User>?>? getUserChats(String uid) async {
-  //   final users = DatabaseMethods().getUserChats(uid);
-  //
-  //   return users;
-  // }
+class HomeNotify extends ChangeNotifier {
+  List<User>? listUser = [];
+
+  void initData() {
+    listUser = [];
+  }
+
+  Future<List<User>?>? getUserChats() async {
+    try {
+      String uid =
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      final users = DatabaseMethods().getUserChats(uid);
+      print("Chao $users");
+      return users;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

@@ -1,5 +1,6 @@
+import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
-import 'package:chat_app/home/home.dart';
+import 'package:chat_app/home/chat_screen.dart';
 import 'package:chat_app/router/router.dart';
 import 'package:chat_app/signup_or_signin/login_screen.dart';
 import 'package:chat_app/signup_or_signin/signup_screen.dart';
@@ -23,8 +24,8 @@ Future<void> main() async {
         child: const SignUpScreen(),
       ),
       ChangeNotifierProvider(
-        create: (context) => CallDataProvider(),
-        child: const HomePage(),
+        create: (context) => HomeNotify(),
+        child: const ChatScreen(),
       ),
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),

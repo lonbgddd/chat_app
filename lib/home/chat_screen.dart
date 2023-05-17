@@ -2,6 +2,9 @@ import 'package:chat_app/home/user_item.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../config/changedNotify/home_watch.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -21,7 +24,17 @@ class _ChatScreenState extends State<ChatScreen> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<HomeNotify>(context, listen: false);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    context.watch<HomeNotify>().getUserChats();
+
+    print('${context.watch<HomeNotify>().listUser?.length}');
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

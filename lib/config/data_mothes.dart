@@ -50,18 +50,18 @@ class DatabaseMethods {
     });
   }
 
-  // Stream<List<User>?>? getUserChats(String uid) async {
-  //   final userIdList = FirebaseFirestore.instance
-  //       .collection("chatRoom")
-  //       .where('users', arrayContains: uid)
-  //       .where('users', isNotEqualTo: uid)
-  //       .snapshots();
-  //
-  //   print(userIdList);
-  //   return FirebaseFirestore.instance
-  //       .collection('user')
-  //       .where('uid', arrayContains: userIdList)
-  //       .get()
-  //       .asStream();
-  // }
+  Future<List<User>?>? getUserChats(String uid) async {
+    final userIdList = FirebaseFirestore.instance
+        .collection("chatRoom")
+        .where('users', arrayContains: uid)
+        .snapshots();
+
+    print('listIdUser get  $userIdList');
+    return FirebaseFirestore.instance
+        .collection('user')
+        .where('uid', arrayContains: userIdList)
+        .get()
+        .then(
+            (value) => value.docs.map((e) => User.fromJson(e.data())).toList());
+  }
 }
