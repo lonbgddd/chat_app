@@ -1,4 +1,8 @@
+import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/chat_screen.dart';
+import 'package:chat_app/home/group_chat/who_like_page.dart';
+import 'package:chat_app/home/profile/profile.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,22 +19,41 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    BinderPage(),
+    ChatScreen(),
+    WhoLikePage(),
+    ProfileScreen()
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const ChatScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.grey.shade600,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
-        type: BottomNavigationBarType.fixed,
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: CurvedNavigationBar(
+        onTap: _onItemTapped,
+        letIndexChange: (index) => true,
+        color: Colors.blueAccent,
+        buttonBackgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.white,
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 600),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: "Chats"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.group_work), label: "Groups"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_box), label: "Profile"),
+          Icon(Icons.local_fire_department_rounded,
+              size: 30, color: Colors.black),
+          Icon(Icons.chat_bubble_outline_outlined,
+              size: 30, color: Colors.black),
+          Icon(Icons.favorite_border_outlined, size: 30, color: Colors.black),
+          Icon(Icons.account_circle_outlined, size: 30, color: Colors.black),
         ],
       ),
     );

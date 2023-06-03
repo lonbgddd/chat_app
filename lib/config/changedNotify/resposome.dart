@@ -1,5 +1,6 @@
 import 'package:chat_app/config/data.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,16 @@ class CallDataProvider extends ChangeNotifier {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       _userFormFirebase(credential.user);
+      QuerySnapshot dataUserSave = await FirebaseFirestore.instance
+          .collection('users')
+          .where('uid', isEqualTo: credential.user!.uid)
+          .get();
+      print(dataUserSave.docs.single['email']);
       await HelpersFunctions.saveIdUserSharedPreference(credential.user!.uid);
+      await HelpersFunctions.saveNameUserSharedPreference(
+          dataUserSave.docs.single['name']);
+      await HelpersFunctions.saveAvatarUserSharedPreference(
+          dataUserSave.docs.single['avatar']);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         key = 'user-not-found';
@@ -39,18 +49,20 @@ class CallDataProvider extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
+    await HelpersFunctions.saveIdUserSharedPreference('');
+    _userFormFirebase(null);
     return await FirebaseAuth.instance.signOut();
   }
 
-  Future<String?> signUpWithEmailAndPassword(
-      String email, String password, String name) async {
+  Future<String?> signUpWithEmailAndPassword(String email, String password,
+      String name, String sex, String year) async {
     try {
       User user = (await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password))
           .user!;
       if (user != null) {
         await DatabaseServices(user.uid)
-            .saveUserByEmailAndName(email, "", user.uid, name);
+            .saveUserByEmailAndName(email, "", user.uid, name, sex, year);
         return 'success';
       }
     } on FirebaseAuthException catch (e) {

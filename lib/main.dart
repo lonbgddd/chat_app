@@ -1,6 +1,15 @@
+import 'package:chat_app/config/changedNotify/binder_watch.dart';
+import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
+import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
+import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/update_watch.dart';
+import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/chat_screen.dart';
+import 'package:chat_app/home/group_chat/who_like_page.dart';
+import 'package:chat_app/home/profile/profile.dart';
+import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/router/router.dart';
 import 'package:chat_app/signup_or_signin/login_screen.dart';
 import 'package:chat_app/signup_or_signin/signup_screen.dart';
@@ -8,6 +17,8 @@ import 'package:chat_app/welcom/welcom.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'home/item_chat.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,12 +35,32 @@ Future<void> main() async {
         child: const SignUpScreen(),
       ),
       ChangeNotifierProvider(
+        create: (context) => ProfileWatch(),
+        child: const ProfileScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => BinderWatch(),
+        child: const BinderPage(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => UpdateNotify(),
+        child: const UpdateProfileScreen(),
+      ),
+      ChangeNotifierProvider(
         create: (context) => HomeNotify(),
         child: const ChatScreen(),
       ),
       ChangeNotifierProvider(
+        create: (context) => FollowNotify(),
+        child: const WhoLikePage(),
+      ),
+      ChangeNotifierProvider(
         create: (context) => CallDataProvider(),
         child: const WelcomeScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ItemChatNotify(),
+        child: ChatRoomsTile(),
       )
     ],
     child: const MyApp(),

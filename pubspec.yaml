@@ -46,6 +46,11 @@ dependencies:
   cloud_firestore: ^4.7.0
   firebase_database: ^10.2.0
   shared_preferences: ^2.1.1
+  curved_navigation_bar: ^1.0.3
+  flutter_tindercard: ^0.2.0
+  date_time_picker: ^2.1.0
+  firebase_storage: ^11.2.2
+  image_picker: ^0.8.7+5
 
 dev_dependencies:
   flutter_test:

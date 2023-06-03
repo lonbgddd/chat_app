@@ -7,11 +7,23 @@ class DatabaseServices {
 
   DatabaseServices(this.uid);
 
-  Future saveUserByEmailAndName(
-      String email, String avatar, String uid, String name) async {
-    data
-        .collection('users')
-        .doc(uid)
-        .set(User(email: email, name: name, avatar: avatar, uid: uid).toJson());
+  Future saveUserByEmailAndName(String email, String avatar, String uid,
+      String name, String sex, String year) async {
+    data.collection('users').doc(uid).set(User(
+        email: email,
+        name: name,
+        avatar: avatar,
+        uid: uid,
+        sex: sex,
+        year: year,
+        post: []).toJson());
+  }
+
+  Future<User> getUserInfors() async {
+    return data
+        .collection("users")
+        .where('uid', isEqualTo: uid)
+        .get()
+        .then((value) => value.docs.map((e) => User.fromJson(e.data())).single);
   }
 }

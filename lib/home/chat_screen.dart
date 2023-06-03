@@ -1,5 +1,6 @@
-import 'package:chat_app/home/user_item.dart';
-import 'package:chat_app/model/chat_user.dart';
+import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:chat_app/home/item_chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -14,27 +15,61 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  List<ChatUsers> chatUsers = [
-    ChatUsers(
-        uid: "Jane Russel",
-        messageText: "Awesome Setup",
-        imageURL:
-            "https://www.ldg.com.vn/media/uploads/uploads/22013642-hinh-anh-gai-xinh-9.jpg",
-        time: DateTime.now()),
-  ];
+  Stream<QuerySnapshot<Map<String, dynamic>>>? chatRooms;
+  String? keyUid;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getUserChat();
     Provider.of<HomeNotify>(context, listen: false);
+  }
+
+  getUserChat() async {
+    keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
+
+    await context.read<HomeNotify>().getUserChats()?.then(
+      (value) {
+        setState(() {
+          chatRooms = value;
+        });
+      },
+    );
+  }
+
+  Widget chatRoomsList() {
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: chatRooms,
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('errr'),
+          );
+        }
+
+        return snapshot.hasData
+            ? ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: snapshot.data?.docs.length,
+                itemBuilder: (context, index) {
+                  final data = snapshot.data?.docs[index];
+                  return ChatRoomsTile(
+                      uid: data!['chatRoomId']
+                          .toString()
+                          .replaceAll("_", "")
+                          .replaceAll(keyUid ?? "", ""),
+                      chatRoomId: data['chatRoomId']);
+                },
+              )
+            : Container();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    context.watch<HomeNotify>().getUserChats();
-
-    print('${context.watch<HomeNotify>().listUser?.length}');
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -80,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -107,21 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 16),
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ChatUserItem(
-                  name: chatUsers[index].messageText,
-                  messageText: chatUsers[index].messageText,
-                  imageUrl: chatUsers[index].imageURL,
-                  time: chatUsers[index].time.toString(),
-                  isMessageRead: (index == 0 || index == 3) ? true : false,
-                );
-              },
-            ),
+            chatRoomsList()
           ],
         ),
       ),

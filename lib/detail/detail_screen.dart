@@ -1,26 +1,56 @@
-import 'package:chat_app/model/chat_message.dart';
+import 'package:chat_app/config/data_mothes.dart';
+import 'package:chat_app/model/chat_user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({Key? key, this.uid}) : super(key: key);
+  const ChatDetailScreen(
+      {Key? key, this.uid, this.chatRomId, this.name, this.avatar})
+      : super(key: key);
 
   final String? uid;
+  final String? chatRomId;
+  final String? name;
+  final String? avatar;
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  final messageController = TextEditingController();
+  Stream<QuerySnapshot>? chats;
+
+  addMessage() {
+    print(widget.chatRomId);
+    if (messageController.text.isNotEmpty) {
+      print(widget.chatRomId);
+      DatabaseMethods().addMessage(
+          widget.chatRomId ?? "",
+          ChatMessage(
+              uid: widget.uid ?? "",
+              messageText: messageController.text,
+              imageURL: '',
+              time: DateTime.now()));
+
+      setState(() {
+        messageController.text = "";
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    DatabaseMethods().getChats(widget.chatRomId ?? "").then((val) {
+      setState(() {
+        chats = val;
+      });
+    });
+
+    super.initState();
+    messageController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +78,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 const SizedBox(
                   width: 2,
                 ),
-                const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "<https://randomuser.me/api/portraits/men/5.jpg>"),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(widget.avatar.toString()),
                   maxRadius: 20,
                 ),
                 const SizedBox(
@@ -62,7 +91,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '${uid}',
+                        '${widget.name}',
                         style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
@@ -88,34 +117,42 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
       ),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            itemCount: messages.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.only(
-                    left: 14, right: 14, top: 10, bottom: 10),
-                child: Align(
-                  alignment: (messages[index].messageType == "receiver"
-                      ? Alignment.topLeft
-                      : Alignment.topRight),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: (messages[index].messageType == "receiver"
-                          ? Colors.grey.shade200
-                          : Colors.blue[200]),
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      messages[index].messageContent,
-                      style: const TextStyle(fontSize: 15),
-                    ),
-                  ),
-                ),
-              );
+          StreamBuilder(
+            stream: chats,
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? ListView.builder(
+                      itemCount: snapshot.data?.docs.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.only(top: 10, bottom: 70),
+                      physics: const ScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: const EdgeInsets.only(
+                              left: 14, right: 14, top: 10, bottom: 10),
+                          child: Align(
+                            alignment: (snapshot.data?.docs[index]['uid'] != uid
+                                ? Alignment.topLeft
+                                : Alignment.topRight),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: (snapshot.data?.docs[index]['uid'] != uid
+                                    ? Colors.grey.shade200
+                                    : Colors.blue[200]),
+                              ),
+                              padding: const EdgeInsets.all(16),
+                              child: Text(
+                                snapshot.data?.docs[index]['messageText'],
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : const CircularProgressIndicator();
             },
           ),
           Align(
@@ -146,9 +183,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                   const SizedBox(
                     width: 15,
                   ),
-                  const Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
+                  Expanded(
+                    child: TextFormField(
+                      controller: messageController,
+                      decoration: const InputDecoration(
                           hintText: "Write message...",
                           hintStyle: TextStyle(color: Colors.black54),
                           border: InputBorder.none),
@@ -158,7 +196,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     width: 15,
                   ),
                   FloatingActionButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await addMessage();
+                    },
                     backgroundColor: Colors.blue,
                     elevation: 0,
                     child: const Icon(

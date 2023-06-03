@@ -1,14 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelpersFunctions {
-  static String sharedPreferenceUserLoggedInKey = "ISLOGGEDIN";
-  static String sharedPreferenceUserNameKey = "USERNAMEKEY";
   static String sharedPreferenceUserIdKey = "IDKEY";
 
-  static Future<bool> saveUserNameSharedPreference(String userName) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    return await preferences.setString(sharedPreferenceUserNameKey, userName);
-  }
+  static String sharedPreferenceNameUserKey = "NAMEKEY";
+  static String sharedPreferenceAvatarUserKey = "AVATARKEY";
 
   static Future saveIdUserSharedPreference(String uid) async {
     SharedPreferences rs = await SharedPreferences.getInstance();
@@ -18,5 +14,25 @@ class HelpersFunctions {
   Future<String?> getUserIdUserSharedPreference() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPreferenceUserIdKey).toString();
+  }
+
+  Future<String?> getNameUserSharedPreference() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPreferenceNameUserKey).toString();
+  }
+
+  Future<String?> getAvatarUserSharedPreference() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(sharedPreferenceAvatarUserKey).toString();
+  }
+
+  static Future saveNameUserSharedPreference(String name) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPreferenceNameUserKey, name);
+  }
+
+  static Future saveAvatarUserSharedPreference(String name) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPreferenceAvatarUserKey, name);
   }
 }

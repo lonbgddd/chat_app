@@ -1,4 +1,6 @@
 import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/helpers/enum_cal.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +20,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
   final conformPasswordController = TextEditingController();
+  final yearController = TextEditingController();
+  DateTime time = DateTime.now();
 
   @override
   void dispose() {
@@ -25,15 +29,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     passwordController.clear();
     conformPasswordController.clear();
     nameController.clear();
+    yearController.clear();
     super.dispose();
   }
 
+  SingingCharacter? character = SingingCharacter.man;
   bool isEmailCorrect = false;
 
   @override
   Widget build(BuildContext context) {
     final formSignUpKey = GlobalKey<FormState>();
     final signUp = context.read<CallDataProvider>();
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -48,6 +55,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Center(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
+              physics: const ScrollPhysics(),
+              padding: EdgeInsets.zero,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +90,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 30,
                   ),
                   Container(
-                    height: isEmailCorrect ? 480 : 400,
+                    height: isEmailCorrect ? 640 : 560,
                     // _formKey!.currentState!.validate() ? 200 : 600,
                     // height: isEmailCorrect ? 260 : 182,
                     width: MediaQuery.of(context).size.width / 1.1,
@@ -125,6 +134,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
+                        ListTile(
+                          title: const Text('Man'),
+                          leading: Radio<SingingCharacter>(
+                            value: SingingCharacter.man,
+                            groupValue: character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                character = value;
+                              });
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          title: const Text('Women'),
+                          leading: Radio<SingingCharacter>(
+                            value: SingingCharacter.women,
+                            groupValue: character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                character = value;
+                              });
+                            },
+                          ),
+                        ),
+                        getDatePicker(),
                         Padding(
                           padding: const EdgeInsets.only(left: 20, right: 20),
                           child: Form(
@@ -170,7 +204,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                   TextFormField(
                                     controller: nameController,
-                                    obscureText: true,
                                     decoration: const InputDecoration(
                                       focusedBorder: UnderlineInputBorder(
                                           borderSide: BorderSide.none,
@@ -181,7 +214,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10))),
                                       prefixIcon: Icon(
-                                        Icons.key,
+                                        Icons.nest_cam_wired_stand_rounded,
                                         color: Colors.purple,
                                       ),
                                       filled: true,
@@ -273,7 +306,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           .signUpWithEmailAndPassword(
                                               emailController.text,
                                               passwordController.text,
-                                              nameController.text);
+                                              nameController.text,
+                                              character == SingingCharacter.man
+                                                  ? 'man'
+                                                  : 'women',
+                                              time.toString());
                                       if (key == 'success') {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
@@ -322,4 +359,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  Widget getDatePicker() => SizedBox(
+        height: 60,
+        child: CupertinoDatePicker(
+          minimumYear: 1980,
+          maximumYear: DateTime.now().year,
+          onDateTimeChanged: (value) => setState(() => time = value),
+          initialDateTime: time,
+          mode: CupertinoDatePickerMode.date,
+        ),
+      );
 }

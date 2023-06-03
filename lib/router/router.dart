@@ -1,5 +1,6 @@
 import 'package:chat_app/detail/detail_screen.dart';
 import 'package:chat_app/home/home.dart';
+import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/search.dart';
 import 'package:chat_app/signup_or_signin/login_screen.dart';
 import 'package:chat_app/signup_or_signin/signup_screen.dart';
@@ -13,7 +14,16 @@ final GoRouter router = GoRouter(routes: [
       routes: [
         GoRoute(
           path: 'detail',
-          builder: (context, state) => ChatDetailScreen(),
+          name: 'Home-detail',
+          builder: (context, state) => ChatDetailScreen(
+              uid: state.queryParameters['uid'],
+              chatRomId: state.queryParameters['chatRomId'],
+              name: state.queryParameters['name'],
+              avatar: state.queryParameters['avatar']),
+        ),
+        GoRoute(
+          path: 'update-avatar',
+          builder: (context, state) => const UpdateProfileScreen(),
         ),
         GoRoute(
             path: 'search-user',

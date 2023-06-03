@@ -11,15 +11,9 @@ class HomeNotify extends ChangeNotifier {
     listUser = [];
   }
 
-  Future<List<User>?>? getUserChats() async {
-    try {
-      String uid =
-          await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      final users = DatabaseMethods().getUserChats(uid);
-      print("Chao $users");
-      return users;
-    } catch (e) {
-      print(e.toString());
-    }
+  getUserChats() async {
+    String uid =
+        await HelpersFunctions().getUserIdUserSharedPreference() as String;
+    return await DatabaseMethods().getUserChats(uid);
   }
 }
