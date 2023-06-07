@@ -283,14 +283,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_tindercard:
-    dependency: "direct main"
-    description:
-      name: flutter_tindercard
-      sha256: cbfec3f6e7c4d176a7f1e2a3c5fb96cf08ea7bb57694b44fe5bb7cbbbdebb7aa
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter

@@ -125,6 +125,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       itemCount: snapshot.data?.docs.length,
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
+                      reverse: true,
                       padding: const EdgeInsets.only(top: 10, bottom: 70),
                       physics: const ScrollPhysics(),
                       itemBuilder: (context, index) {
