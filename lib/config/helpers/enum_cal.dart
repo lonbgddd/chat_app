@@ -1,3 +1,3 @@
 enum SingingCharacter { man, women }
 
-enum Swipe { left, right, none }
+enum StatusCard { like, dislike, none }

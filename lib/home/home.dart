@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         buttonBackgroundColor: Colors.blueAccent,
         backgroundColor: Colors.white,
         animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 600),
+        animationDuration: const Duration(milliseconds: 600),
         items: const [
           Icon(Icons.local_fire_department_rounded,
               size: 30, color: Colors.black),

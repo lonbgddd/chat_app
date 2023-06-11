@@ -6,6 +6,7 @@ import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
+import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/chat_screen.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/profile/profile.dart';
@@ -29,6 +30,10 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),
         child: const LoginScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => BinderWatch(),
+        child: const ProfileCard(),
       ),
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),

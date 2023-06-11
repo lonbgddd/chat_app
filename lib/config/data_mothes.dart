@@ -70,7 +70,7 @@ class DatabaseMethods {
         .collection("chatRoom")
         .doc(chatRoomId)
         .collection("chats")
-        .orderBy('time')
+        .orderBy('time', descending: true)
         .snapshots();
   }
 
