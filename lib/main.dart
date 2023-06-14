@@ -2,7 +2,6 @@ import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
-import 'package:chat_app/config/changedNotify/liked_user_card_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
@@ -69,10 +68,6 @@ Future<void> main() async {
         create: (context) => ItemChatNotify(),
         child: ChatRoomsTile(),
       ),
-      ChangeNotifierProvider(
-        create: (context) => LikedUserCardNotify(),
-        child: LikedUserCard(),
-      )
     ],
     child: const MyApp(),
   ));
