@@ -41,7 +41,6 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     DatabaseMethods().getChats(widget.chatRomId ?? "").then((val) {
       setState(() {
         chats = val;

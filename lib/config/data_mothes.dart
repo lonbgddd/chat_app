@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -112,5 +114,44 @@ class DatabaseMethods {
         .collection("chatRoom")
         .where('users', arrayContains: uid)
         .snapshots();
+  }
+
+  // Future<ChatRoom> getChatRoom(String secondUid) async {
+  //   ChatRoom? chatRoom;
+  //   String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
+  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //       .collection("chatRoom")
+  //       .where('users', arrayContains: uid)
+  //       .get();
+  //   if (querySnapshot.docs.isNotEmpty) {
+  //     ChatRoom chatRoom =
+  //         ChatRoom.fromJson(docSnapshot.data() as Map<String, dynamic>);
+  //     return chatRoom;
+  //   } else {
+  //     // Return null or throw an exception if no matching document is found
+  //     throw Exception('No matching chat room found.');
+  //   }
+  // }
+
+  Future<ChatRoom> getChatRoom(String secondUid) async {
+    String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('chatRoom')
+        .where('users', arrayContains: uid)
+        .get();
+
+    final List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+    final List<QueryDocumentSnapshot> filteredDocuments = [];
+
+    for (final doc in documents) {
+      final users = doc.get('users') as List<dynamic>;
+      if (users.contains(secondUid)) {
+        filteredDocuments.add(doc);
+      }
+    }
+
+    final DocumentSnapshot document = filteredDocuments.first;
+    return ChatRoom.fromJson(document.data() as Map<String, dynamic>);
+    // Handle the document data as needed
   }
 }
