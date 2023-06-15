@@ -27,6 +27,18 @@ class _BinderPageState extends State<BinderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.2,
+        title: const Text(
+          "Binder",
+          style: TextStyle(fontFamily: 'Grandista',fontSize: 24,color: Colors.purple),
+        ),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications,color: Colors.grey,)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.tune,color: Colors.grey,))
+        ],
+      ),
       backgroundColor: Colors.white,
       body: getBodyP2(),
     );

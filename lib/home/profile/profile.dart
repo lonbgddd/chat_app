@@ -309,7 +309,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 onPressed: () async {
                                   context.read<CallDataProvider>().signOut();
                                   GoRouter.of(context)
-                                      .pushReplacement('/log-in');
+                                      .pushReplacement('/login-home-screen');
                                 },
                                 style: const ButtonStyle(
                                     backgroundColor:

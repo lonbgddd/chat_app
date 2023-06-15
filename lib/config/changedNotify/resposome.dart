@@ -3,6 +3,7 @@ import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class CallDataProvider extends ChangeNotifier {
   User? _userFormFirebase(User? user) {
@@ -10,6 +11,31 @@ class CallDataProvider extends ChangeNotifier {
       return null;
     } else {
       return user;
+    }
+  }
+
+  loginWithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    User? user = userCredential.user;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'avatar': user.photoURL ,
+        'email': user.email,
+        'name': user.displayName,
+        'post': [],
+        'sex': '',
+        'uid': user.uid,
+        'year': '2020-06-07 00:00:00.000'
+      });
+      await HelpersFunctions.saveIdUserSharedPreference(user.uid);
+
     }
   }
 

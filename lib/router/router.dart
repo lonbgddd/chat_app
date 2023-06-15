@@ -2,10 +2,12 @@ import 'package:chat_app/detail/detail_screen.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/search.dart';
-import 'package:chat_app/signup_or_signin/login_screen.dart';
-import 'package:chat_app/signup_or_signin/signup_screen.dart';
+import 'package:chat_app/Auth/login_screen.dart';
+import 'package:chat_app/Auth/signup_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:go_router/go_router.dart';
+
+import '../Auth/login_home_screen.dart';
 
 final GoRouter router = GoRouter(routes: [
   GoRoute(
@@ -41,6 +43,9 @@ final GoRouter router = GoRouter(routes: [
       path: '/',
       builder: (context, state) => const WelcomeScreen(),
       routes: [
+        GoRoute(
+            path: 'login-home-screen',
+            builder: (context, state) => const HomeScreenLogin()),
         GoRoute(
             path: 'log-in',
             builder: (context, state) => const LoginScreen(),
