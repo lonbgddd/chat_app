@@ -126,17 +126,17 @@ class BinderWatch extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future _nextCard() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    _listCard.removeAt(0);
-    resetPosition();
-  }
-
   void disLike() {
     _angle = -20;
     _offset -= Offset(2 * _size.width, 0);
     _nextCard();
 
     notifyListeners();
+  }
+
+  Future _nextCard() async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    _listCard.removeAt(0);
+    resetPosition();
   }
 }
