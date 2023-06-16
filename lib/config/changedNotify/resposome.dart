@@ -24,19 +24,19 @@ class CallDataProvider extends ChangeNotifier {
     final userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
     User? user = userCredential.user;
-    if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'avatar': user.photoURL ,
-        'email': user.email,
-        'name': user.displayName,
-        'post': [],
-        'sex': '',
-        'uid': user.uid,
-        'year': '2020-06-07 00:00:00.000'
-      });
-      await HelpersFunctions.saveIdUserSharedPreference(user.uid);
-
-    }
+    // if (user != null) {
+    //   await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+    //     'avatar': user.photoURL ,
+    //     'email': user.email,
+    //     'name': user.displayName,
+    //     'post': [],
+    //     'sex': '',
+    //     'uid': user.uid,
+    //     'year': '2020-06-07 00:00:00.000'
+    //   });
+    //   await HelpersFunctions.saveIdUserSharedPreference(user.uid);
+    //
+    // }
   }
 
   Stream<User?>? get user {
@@ -77,6 +77,7 @@ class CallDataProvider extends ChangeNotifier {
   Future<void> signOut() async {
     await HelpersFunctions.saveIdUserSharedPreference('');
     _userFormFirebase(null);
+    await GoogleSignIn().signOut();
     return await FirebaseAuth.instance.signOut();
   }
 

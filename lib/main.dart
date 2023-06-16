@@ -1,3 +1,4 @@
+import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
@@ -13,8 +14,7 @@ import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/router/router.dart';
-import 'package:chat_app/Auth/login_screen.dart';
-import 'package:chat_app/Auth/signup_screen.dart';
+import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -130,7 +130,7 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),
-        child: const SignUpScreen(),
+        child: const ConfirmProfile(),
       ),
       ChangeNotifierProvider(
         create: (context) => ProfileWatch(),
