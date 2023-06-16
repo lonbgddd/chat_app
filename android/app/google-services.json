@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "303940029661",
+    "firebase_url": "https://chatapp-2fc3d-default-rtdb.firebaseio.com",
     "project_id": "chatapp-2fc3d",
     "storage_bucket": "chatapp-2fc3d.appspot.com"
   },
@@ -14,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "303940029661-49clvcqnshadpbmhpar48b5h2r15f7oh.apps.googleusercontent.com",
+          "client_id": "303940029661-rnmsbtfhalf43bbnsmlkt6g6oed6gbhu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

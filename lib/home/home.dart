@@ -3,7 +3,10 @@ import 'package:chat_app/home/chat_screen.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,10 +16,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _token;
+  String? initialMessage;
+  bool _resolved = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    FirebaseMessaging.instance.getInitialMessage().then(
+          (value) => setState(
+            () {
+              _resolved = true;
+              initialMessage = value?.data.toString();
+            },
+          ),
+        );
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
   }
 
   int _selectedIndex = 0;

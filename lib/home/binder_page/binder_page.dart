@@ -65,7 +65,6 @@ class _BinderPageState extends State<BinderPage> {
 
   Widget getBodyP2() {
     final provider = Provider.of<BinderWatch>(context).listCard;
-    print(provider);
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Stack(
