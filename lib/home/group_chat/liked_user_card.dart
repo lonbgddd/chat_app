@@ -147,16 +147,18 @@ class _LikedUserCardState extends State<LikedUserCard>
                             color: Colors.white,
                           ),
                           IconButton(
-                              onPressed: () {
-                                context
-                                    .read<FollowNotify>()
-                                    .addFollow(widget.user!.uid);
+                              onPressed: () async {
                                 _toggleFavorite();
-                                DatabaseMethods()
-                                    .getChatRoom(widget.user!.uid)
-                                    .then((chatRoom) {
-                                  setState(() {
-                                    this.chatRoom = chatRoom;
+                                await context
+                                    .read<FollowNotify>()
+                                    .addFollow(widget.user!.uid)
+                                    .then((value) {
+                                  DatabaseMethods()
+                                      .getChatRoom(widget.user!.uid)
+                                      .then((chatRoom) {
+                                    setState(() {
+                                      this.chatRoom = chatRoom;
+                                    });
                                   });
                                 });
                               },
@@ -218,7 +220,7 @@ class _LikedUserCardState extends State<LikedUserCard>
                               });
                             },
                             icon: const Icon(
-                              Icons.message,
+                              Icons.send,
                               color: Colors.white,
                             )),
                       ),
