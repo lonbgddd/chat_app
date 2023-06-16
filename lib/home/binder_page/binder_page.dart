@@ -27,6 +27,29 @@ class _BinderPageState extends State<BinderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.2,
+        title: const Text(
+          "Binder",
+          style: TextStyle(
+              fontFamily: 'Grandista', fontSize: 24, color: Colors.purple),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.notifications,
+                color: Colors.grey,
+              )),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.tune,
+                color: Colors.grey,
+              ))
+        ],
+      ),
       backgroundColor: Colors.white,
       body: getBodyP2(),
     );
@@ -44,19 +67,19 @@ class _BinderPageState extends State<BinderPage> {
             final provider = Provider.of<BinderWatch>(context).listCard;
             return snapshot.hasData
                 ? Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Stack(
-                        alignment: Alignment.center,
-                        children: provider.reversed
-                            .map((e) => ProfileCard(
-                                  user: e,
-                                  isFont: provider.first == e,
-                                ))
-                            .toList()),
-                  )
+              padding: const EdgeInsets.all(20.0),
+              child: Stack(
+                  alignment: Alignment.center,
+                  children: provider.reversed
+                      .map((e) => ProfileCard(
+                    user: e,
+                    isFont: provider.first == e,
+                  ))
+                      .toList()),
+            )
                 : const Center(
-                    child: CircularProgressIndicator(color: Colors.black),
-                  );
+              child: CircularProgressIndicator(color: Colors.black),
+            );
           },
         ),
       ),
@@ -67,14 +90,14 @@ class _BinderPageState extends State<BinderPage> {
     final provider = Provider.of<BinderWatch>(context).listCard;
     print(provider);
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
       child: Stack(
           alignment: Alignment.center,
           children: provider.reversed
               .map((e) => ProfileCard(
-                    user: e,
-                    isFont: provider.first == e,
-                  ))
+            user: e,
+            isFont: provider.first == e,
+          ))
               .toList()),
     );
   }
