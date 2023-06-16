@@ -33,7 +33,7 @@ class ChatRoomsTile extends StatelessWidget {
           onTap: () => context.goNamed('Home-detail', queryParameters: {
             'uid': uid.toString(),
             'chatRomId': chatRoomId.toString(),
-            'name': snapshot.data?.name,
+            'name': snapshot.data?.fullName,
             'avatar': snapshot.data?.avatar
           }),
           child: Container(
@@ -59,7 +59,7 @@ class ChatRoomsTile extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                snapshot.data?.name ?? "",
+                                snapshot.data?.fullName ?? "",
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(

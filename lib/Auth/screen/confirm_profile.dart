@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
 
 import '../../config/changedNotify/resposome.dart';
 import '../../config/helpers/enum_cal.dart';
+
 class ConfirmProfile extends StatefulWidget {
   const ConfirmProfile({Key? key}) : super(key: key);
 
@@ -17,25 +15,28 @@ class ConfirmProfile extends StatefulWidget {
 }
 
 class _ConfirmProfileState extends State<ConfirmProfile> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final nameController = TextEditingController();
+  final bioController = TextEditingController();
   final conformPasswordController = TextEditingController();
-  final yearController = TextEditingController();
   DateTime time = DateTime.now();
+  static const List<String> interests = [
+    'Gym',
+    'Self-care',
+    'Reading',
+    'Rave',
+    'Shopping'
+  ];
+  List<String> newInterests = [];
 
   @override
   void dispose() {
-    emailController.clear();
-    passwordController.clear();
     conformPasswordController.clear();
-    nameController.clear();
-    yearController.clear();
+    bioController.clear();
     super.dispose();
   }
 
+
+
   SingingCharacter? character = SingingCharacter.man;
-  bool isEmailCorrect = false;
 
   @override
   Widget build(BuildContext context) {
@@ -53,247 +54,155 @@ class _ConfirmProfileState extends State<ConfirmProfile> {
             color: Colors.black,
             size: 42,
           ),
-          onPressed: () async{
+          onPressed: () async {
             await GoogleSignIn().signOut();
             context.pop();
           },
         ),
       ),
-      body: Container(
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              physics: const ScrollPhysics(),
-              padding: EdgeInsets.zero,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Confirm your\ninformation",
+                style: TextStyle(
+                    fontSize: 28,
+                    letterSpacing: 1,
+                    wordSpacing: 3,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
                 children: [
-                  Text(
-                    'Please sign up to continue using our app',
-                    style: GoogleFonts.indieFlower(
-                      textStyle: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
-                          fontWeight: FontWeight.w300,
-                          // height: 1.5,
-                          fontSize: 15),
+                  const Text(
+                    'Gender',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('Man'),
+                      leading: Radio<SingingCharacter>(
+                        value: SingingCharacter.man,
+                        groupValue: character,
+                        onChanged: (SingingCharacter? value) {
+                          setState(() {
+                            character = value;
+                          });
+                        },
+                      ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                    height: isEmailCorrect ? 640 : 560,
-                    // _formKey!.currentState!.validate() ? 200 : 600,
-                    // height: isEmailCorrect ? 260 : 182,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: const Text('Man'),
-                          leading: Radio<SingingCharacter>(
-                            value: SingingCharacter.man,
-                            groupValue: character,
-                            onChanged: (SingingCharacter? value) {
-                              setState(() {
-                                character = value;
-                              });
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Women'),
-                          leading: Radio<SingingCharacter>(
-                            value: SingingCharacter.women,
-                            groupValue: character,
-                            onChanged: (SingingCharacter? value) {
-                              setState(() {
-                                character = value;
-                              });
-                            },
-                          ),
-                        ),
-                        getDatePicker(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Form(
-                              key: formSignUpKey,
-                              child: ListView(
-                                shrinkWrap: true,
-                                children: [
-                                  TextFormField(
-                                    controller: passwordController,
-                                    obscuringCharacter: '*',
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      prefixIcon: Icon(
-                                        Icons.key,
-                                        color: Colors.purple,
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      labelText: "Password",
-                                      hintText: '*********',
-                                      labelStyle:
-                                      TextStyle(color: Colors.purple),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty && value!.length < 5) {
-                                        return 'Enter a valid password';
-                                      }
-                                      {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  TextFormField(
-                                    controller: nameController,
-                                    decoration: const InputDecoration(
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      prefixIcon: Icon(
-                                        Icons.nest_cam_wired_stand_rounded,
-                                        color: Colors.purple,
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      labelText: "Name",
-                                      labelStyle:
-                                      TextStyle(color: Colors.purple),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty && value!.length < 5) {
-                                        return 'Enter a valid name';
-                                      }
-                                      {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  TextFormField(
-                                    controller: conformPasswordController,
-                                    obscuringCharacter: '*',
-                                    obscureText: true,
-                                    decoration: const InputDecoration(
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      prefixIcon: Icon(
-                                        Icons.key,
-                                        color: Colors.purple,
-                                      ),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      labelText: "Repass-word",
-                                      hintText: '*********',
-                                      labelStyle:
-                                      TextStyle(color: Colors.purple),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty && value!.length < 5) {
-                                        return 'Enter a valid password';
-                                      }
-                                      {
-                                        return null;
-                                      }
-                                    },
-                                  ),
-                                ],
-                              )),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        isEmailCorrect
-                            ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(10.0)),
-                                backgroundColor: isEmailCorrect == false
-                                    ? Colors.red
-                                    : Colors.purple,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 131, vertical: 20)),
-                            onPressed: () async {
-                              if (formSignUpKey.currentState!.validate()) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Processing Data')),
-                                );
-
-                                if (passwordController.text !=
-                                    conformPasswordController.text) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            'Mật khẩu nhập lại không đúng!')),
-                                  );
-                                  return;
-                                } else {
-                                  String? key = await signUp
-                                      .signUpWithEmailAndPassword(
-                                      emailController.text,
-                                      passwordController.text,
-                                      nameController.text,
-                                      character == SingingCharacter.man
-                                          ? 'man'
-                                          : 'women',
-                                      time.toString());
-                                  if (key == 'success') {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Đăng ký tài khoản thành công')),
-                                    );
-                                    context.pop();
-                                  }
-                                }
-                              }
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(fontSize: 17),
-                            ))
-                            : Container(),
-                      ],
+                  Expanded(
+                    child: ListTile(
+                      title: const Text('Women'),
+                      leading: Radio<SingingCharacter>(
+                        value: SingingCharacter.women,
+                        groupValue: character,
+                        onChanged: (SingingCharacter? value) {
+                          setState(() {
+                            character = value;
+                          });
+                        },
+                      ),
                     ),
                   ),
-
                 ],
               ),
-            ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'Birthday',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              getDatePicker(),
+              Form(
+                  key: formSignUpKey,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      TextFormField(
+                        controller: bioController,
+                        decoration: const InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          filled: true,
+                          fillColor: Color(0xFFF3E5F5),
+                          labelText: "Biography",
+                          labelStyle: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Interests',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: interests.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final interest = interests[index];
+                  final isSelected = newInterests.contains(interest);
+
+                  return ListTile(
+                    title: Text(interest),
+                    trailing: isSelected ? Icon(Icons.check) : null,
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          newInterests.remove(interest);
+                        } else {
+                          newInterests.add(interest);
+                        }
+                      });
+                    },
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0)),
+                      backgroundColor: Colors.purple,
+                      padding: const EdgeInsets.symmetric(vertical: 13)),
+                  onPressed: () async {
+                    await signUp.confirmProfile( character == SingingCharacter.man
+                        ? 'man'
+                        : 'women', time.toString(),newInterests,bioController.text);
+                    context.go('/home');
+                  },
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(fontSize: 17),
+                  ))
+            ],
           ),
         ),
       ),
@@ -301,13 +210,13 @@ class _ConfirmProfileState extends State<ConfirmProfile> {
   }
 
   Widget getDatePicker() => SizedBox(
-    height: 60,
-    child: CupertinoDatePicker(
-      minimumYear: 1980,
-      maximumYear: DateTime.now().year,
-      onDateTimeChanged: (value) => setState(() => time = value),
-      initialDateTime: time,
-      mode: CupertinoDatePickerMode.date,
-    ),
-  );
+        height: 60,
+        child: CupertinoDatePicker(
+          minimumYear: 1980,
+          maximumYear: DateTime.now().year,
+          onDateTimeChanged: (value) => setState(() => time = value),
+          initialDateTime: time,
+          mode: CupertinoDatePickerMode.date,
+        ),
+      );
 }

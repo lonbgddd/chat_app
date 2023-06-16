@@ -70,9 +70,9 @@ class _WhoLikePageState extends State<WhoLikePage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 20),
                                 child: Text(
-                                  snapshot.data![index].name +
+                                  snapshot.data![index].fullName +
                                       "\n" +
-                                      snapshot.data![index].sex,
+                                      snapshot.data![index].gender,
                                   style: const TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
