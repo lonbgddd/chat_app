@@ -1,9 +1,8 @@
+import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/binder_page/compnents/taget.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/material.dart';
-
-enum Swipe { left, right, none }
 
 class DragWidget extends StatefulWidget {
   const DragWidget({
