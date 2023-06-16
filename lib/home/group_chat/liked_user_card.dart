@@ -14,9 +14,11 @@ class LikedUserCard extends StatefulWidget {
     super.key,
     this.user,
     this.chatRoom,
+    required this.onDislikeCallback,
   });
   final User? user;
   final ChatRoom? chatRoom;
+  final VoidCallback onDislikeCallback;
 
   @override
   State<LikedUserCard> createState() => _LikedUserCardState();
@@ -26,10 +28,13 @@ class _LikedUserCardState extends State<LikedUserCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _opacityAnimation;
+  ChatRoom? chatRoom;
 
   @override
   void initState() {
     super.initState();
+    chatRoom = widget.chatRoom;
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -95,7 +100,7 @@ class _LikedUserCardState extends State<LikedUserCard>
                   stops: const [0.6, 1]),
               borderRadius: BorderRadius.circular(15)),
         ),
-        if (widget.chatRoom == null)
+        if (chatRoom == null)
           Positioned(
             bottom: 0,
             left: 0,
@@ -129,7 +134,9 @@ class _LikedUserCardState extends State<LikedUserCard>
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                widget.onDislikeCallback();
+                              },
                               icon: const Icon(
                                 Icons.clear,
                                 color: Colors.white,
@@ -145,6 +152,13 @@ class _LikedUserCardState extends State<LikedUserCard>
                                     .read<FollowNotify>()
                                     .addFollow(widget.user!.uid);
                                 _toggleFavorite();
+                                DatabaseMethods()
+                                    .getChatRoom(widget.user!.uid)
+                                    .then((chatRoom) {
+                                  setState(() {
+                                    this.chatRoom = chatRoom;
+                                  });
+                                });
                               },
                               icon: const Icon(
                                 Icons.favorite,
@@ -158,8 +172,8 @@ class _LikedUserCardState extends State<LikedUserCard>
               ],
             ),
           ),
-        if (widget.chatRoom != null) const MatchedLabel(),
-        if (widget.chatRoom != null)
+        if (chatRoom != null) const MatchedLabel(),
+        if (chatRoom != null)
           Positioned(
             bottom: 0,
             left: 0,
@@ -197,7 +211,7 @@ class _LikedUserCardState extends State<LikedUserCard>
                                 context
                                     .goNamed('Home-detail', queryParameters: {
                                   'uid': uid,
-                                  'chatRomId': widget.chatRoom!.chatRoomId,
+                                  'chatRomId': chatRoom!.chatRoomId,
                                   'name': widget.user!.name,
                                   'avatar': widget.user!.avatar
                                 });

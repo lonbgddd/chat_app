@@ -11,6 +11,11 @@ class FollowNotify extends ChangeNotifier {
   List<User> list = [];
   // String? _check;
 
+  final StreamController<List<Map<User, ChatRoom?>>> _userFollowYouController =
+      StreamController<List<Map<User, ChatRoom?>>>.broadcast();
+  Stream<List<Map<User, ChatRoom?>>> get userFollowYouStream =>
+      _userFollowYouController.stream;
+
   void initData() {
     list = [];
     // _check = null;
@@ -31,7 +36,7 @@ class FollowNotify extends ChangeNotifier {
           result.add({user: null});
         }
       }
-
+      _userFollowYouController.add(result);
       return result;
     } catch (e) {
       throw Exception(e);
@@ -55,6 +60,18 @@ class FollowNotify extends ChangeNotifier {
       }
 
       return check;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future removeFollow(String followId) async {
+    try {
+      final uid =
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      await DatabaseMethods().removeFollow(uid, followId).then((value) async {
+        _userFollowYouController.add(await userFollowYou());
+      });
     } catch (e) {
       throw Exception(e);
     }

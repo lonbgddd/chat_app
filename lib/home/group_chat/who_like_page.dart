@@ -50,8 +50,8 @@ class _WhoLikePageState extends State<WhoLikePage> {
                 indent: 20,
                 endIndent: 20,
               ),
-              FutureBuilder(
-                  future: context.watch<FollowNotify>().userFollowYou(),
+              StreamBuilder(
+                  stream: context.watch<FollowNotify>().userFollowYouStream,
                   builder: (context,
                       AsyncSnapshot<List<Map<User, ChatRoom?>>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -78,6 +78,11 @@ class _WhoLikePageState extends State<WhoLikePage> {
                           return LikedUserCard(
                             user: userMap.keys.elementAt(0),
                             chatRoom: userMap.values.elementAt(0),
+                            onDislikeCallback: () {
+                              context
+                                  .read<FollowNotify>()
+                                  .removeFollow(userMap.keys.elementAt(0).uid);
+                            },
                           );
                         },
                       );

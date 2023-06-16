@@ -52,6 +52,12 @@ class DatabaseMethods {
     });
   }
 
+  Future removeFollow(String uid, String followId) async {
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      'post': FieldValue.arrayRemove([followId])
+    });
+  }
+
   Future<String> checkFollow(String uid, String followId) async {
     QuerySnapshot data = await FirebaseFirestore.instance
         .collection('users')
@@ -115,23 +121,6 @@ class DatabaseMethods {
         .where('users', arrayContains: uid)
         .snapshots();
   }
-
-  // Future<ChatRoom> getChatRoom(String secondUid) async {
-  //   ChatRoom? chatRoom;
-  //   String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
-  //   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //       .collection("chatRoom")
-  //       .where('users', arrayContains: uid)
-  //       .get();
-  //   if (querySnapshot.docs.isNotEmpty) {
-  //     ChatRoom chatRoom =
-  //         ChatRoom.fromJson(docSnapshot.data() as Map<String, dynamic>);
-  //     return chatRoom;
-  //   } else {
-  //     // Return null or throw an exception if no matching document is found
-  //     throw Exception('No matching chat room found.');
-  //   }
-  // }
 
   Future<ChatRoom> getChatRoom(String secondUid) async {
     String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
