@@ -51,18 +51,190 @@ class ProfileCard extends StatelessWidget {
         }),
       );
 
-  cardProfile() => ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+  cardProfile() => Stack(
+    children: [
+      ClipRRect(
+        borderRadius: BorderRadius.circular(15),
         child: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-            image: NetworkImage(user?.avatar ??
-                'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
-            fit: BoxFit.cover,
-          )),
+                image: NetworkImage(user?.avatar ??
+                    'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
+                fit: BoxFit.cover,
+              )),
           child: Container(),
         ),
-      );
+      ),
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.transparent, Colors.black.withOpacity(1)],
+            stops: const [0.6, 1],
+          ),
+        ),
+        child: Padding(
+          padding:
+          const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Padding(
+                  padding:
+                  EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
+                  child: Text(
+                    'Online',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user!.name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    (DateTime.now().year -
+                        int.parse(user!.year.substring(0, 4)))
+                        .toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.normal),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              const Text(
+                'This is bio',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.yellow,
+                        width: 2,
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.undo,
+                        color: Colors.yellow,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.red,
+                        width: 2,
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.green,
+                        width: 2,
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.star,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.bolt,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.purple,
+                        width: 2,
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.favorite,
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+
 
   Widget buildStamps(context) {
     final provider = Provider.of<BinderWatch>(context);

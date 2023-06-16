@@ -56,6 +56,7 @@ dependencies:
   flutter_local_notifications: ^14.1.1
   animated_splash_screen: ^1.3.0
 
+  google_sign_in: ^6.1.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -92,18 +93,12 @@ flutter:
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
+  assets:
+    - assets/images/
+    - assets/icons/
+  fonts:
+    - family: Grandista
+      fonts:
+        - asset: fonts/Grandista.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

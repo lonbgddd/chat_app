@@ -7,16 +7,8 @@ import 'package:provider/provider.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
-  Future goLogin(BuildContext context) {
-    return Future.delayed(
-      const Duration(seconds: 3),
-      () => context.go('/log-in'),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    // goLogin(context);
     final checkLogin = context.watch<CallDataProvider>();
 
     return StreamBuilder<User?>(
@@ -24,26 +16,28 @@ class WelcomeScreen extends StatelessWidget {
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           return Scaffold(
-            body: SafeArea(
-              child: Column(
-                children: [
-                  const Spacer(flex: 2),
-                  Image.network(
-                      'https://png.pngtree.com/png-clipart/20190916/ourlarge/pngtree-cartoon-hand-drawn-promotion-work-performance-illustration-png-image_1730059.jpg'),
-                  const Spacer(flex: 3),
-                  Text(
-                    "Welcome to our freedom \nmessaging app",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  Text(
-                    "Freedom talk any person of your \n mother language.",
+            body: Column(
+              children: [
+                const Spacer(flex: 2),
+                Image.network(
+                    'https://png.pngtree.com/png-clipart/20190916/ourlarge/pngtree-cartoon-hand-drawn-promotion-work-performance-illustration-png-image_1730059.jpg'),
+                const Spacer(flex: 3),
+                Text(
+                  "Find Your Perfect Match!",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    'Discover and connect with like-minded individuals. Start your journey to love today!',
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      fontSize: 15,
                       color: Theme.of(context)
                           .textTheme
                           .bodyLarge!
@@ -51,44 +45,42 @@ class WelcomeScreen extends StatelessWidget {
                           .withOpacity(0.64),
                     ),
                   ),
-                  const Spacer(flex: 3),
-                  FittedBox(
-                    child: TextButton(
-                        onPressed: () {
-                          snapshot.data == null
-                              ? context.go('/log-in')
-                              : context.go('/home');
-                        },
-                        child: Row(
-                          children: [
-                            Text(
-                              "Skip",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .color!
-                                        .withOpacity(0.8),
-                                  ),
-                            ),
-                            const SizedBox(),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .color!
-                                  .withOpacity(0.8),
-                            )
-                          ],
-                        )),
-                  )
-                ],
-              ),
+                ),
+                const Spacer(flex: 3),
+                FittedBox(
+                  child: TextButton(
+                      onPressed: () {
+                        snapshot.data == null
+                            ? context.pushReplacement('/login-home-screen')
+                            : context.go('/home');
+                      },
+                      child: Row(
+                        children: [
+                          Text(
+                            "Skip",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .color!
+                                          .withOpacity(0.8),
+                                    ),
+                          ),
+                          const SizedBox(),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .color!
+                                .withOpacity(0.8),
+                          )
+                        ],
+                      )),
+                )
+              ],
             ),
           );
         }
