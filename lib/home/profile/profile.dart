@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   const EdgeInsetsDirectional
                                                       .fromSTEB(24, 140, 0, 0),
                                               child: Text(
-                                                snapshot.data!.name,
+                                                snapshot.data!.fullName,
                                                 style: const TextStyle(
                                                   fontFamily: 'Lexend Deca',
                                                   color: Color(0xFF090F13),
@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                             .fromSTEB(
                                                         24, 174, 0, 0),
                                                 child: Text(
-                                                  snapshot.data!.year,
+                                                  snapshot.data!.birthday,
                                                   textAlign: TextAlign.start,
                                                   style: const TextStyle(
                                                     fontFamily: 'Lexend Deca',

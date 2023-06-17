@@ -10,39 +10,48 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   String email;
-  String name;
+  String fullName;
   String avatar;
   String uid;
   List<String> post;
-  String sex;
-  String year;
+  List<String> interests;
+  String gender;
+  String biography;
+  String birthday;
 
-  User(
-      {required this.email,
-      required this.name,
-      required this.avatar,
-      required this.uid,
-      required this.post,
-      required this.sex,
-      required this.year});
+  User({required this.email,
+    required this.biography,
+    required this.fullName,
+    required this.avatar,
+    required this.uid,
+    required this.post,
+    required this.interests,
+    required this.gender,
+    required this.birthday});
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory User.fromJson(Map<String, dynamic> json) =>
+      User(
         email: json["email"],
-        name: json["name"],
+        biography: json["biography"],
+        fullName: json["fullName"],
         avatar: json["avatar"],
         uid: json["uid"],
         post: List<String>.from(json["post"].map((x) => x)),
-        sex: json["sex"],
-        year: json["year"],
+        interests: List<String>.from(json["interests"].map((x) => x)),
+        gender: json["gender"],
+        birthday: json["birthday"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         "email": email,
-        "name": name,
+        "fullName": fullName,
+        "biography": biography,
         "avatar": avatar,
         "uid": uid,
         "post": List<String>.from(post.map((x) => x)),
-        "sex": sex,
-        "year": year
+        "interests": List<String>.from(post.map((x) => x)),
+        "gender": gender,
+        "birthday": birthday
       };
 }

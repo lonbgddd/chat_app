@@ -110,7 +110,7 @@ class ProfileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user!.name,
+                    user!.fullName,
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
@@ -121,7 +121,7 @@ class ProfileCard extends StatelessWidget {
                   ),
                   Text(
                     (DateTime.now().year -
-                        int.parse(user!.year.substring(0, 4)))
+                        int.parse(user!.birthday.substring(0, 4)))
                         .toString(),
                     style: const TextStyle(
                         color: Colors.white,
@@ -133,8 +133,8 @@ class ProfileCard extends StatelessWidget {
               const SizedBox(
                 height: 2,
               ),
-              const Text(
-                'This is bio',
+               Text(
+                user!.biography,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15,

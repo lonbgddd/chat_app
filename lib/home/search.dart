@@ -45,7 +45,7 @@ class _SearchUserChatState extends State<SearchUserChat> {
             shrinkWrap: true,
             itemCount: list.length,
             itemBuilder: (context, index) {
-              return userTile(list[index].name ?? "", list[index].email ?? "",
+              return userTile(list[index].fullName ?? "", list[index].email ?? "",
                   list[index].uid ?? "");
             })
         : Container();
