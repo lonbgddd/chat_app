@@ -12,55 +12,52 @@ import 'package:go_router/go_router.dart';
 import '../Auth/login_home_screen.dart';
 
 final GoRouter router = GoRouter(routes: [
-    GoRoute(
-    path: '/home',
-    builder: (context, state) => const HomePage(),
-    routes: [
-      GoRoute(
-        path: 'detail',
-        name: 'Home-detail',
-        builder: (context, state) =>
-            ChatDetailScreen(
-                uid: state.queryParameters['uid'],
-                chatRomId: state.queryParameters['chatRomId'],
-                name: state.queryParameters['name'],
-                avatar: state.queryParameters['avatar']),
-      ),
-      GoRoute(
-        path: 'update-avatar',
-        builder: (context, state) => const UpdateProfileScreen(),
-      ),
-      GoRoute(
-          path: 'search-user',
-          builder: (context, state) => const SearchUserChat(),
-          routes: [
-            GoRoute(
-              path: 'detail',
-              name: 'detail',
-              builder: (context, state) =>
-                  ChatDetailScreen(uid: state.extra as String),
-            ),
-          ])
-    ]),
-    GoRoute
-(
-path: '/',
-builder: (context, state) => const WelcomeScreen(),
-routes: [
-GoRoute(
-path: 'login-home-screen',
-builder: (context, state) => const HomeScreenLogin()), GoRoute(
-path: 'confirm-screen',
-builder: (context, state) => const ConfirmProfile()),
-GoRoute(path: 'login',
-builder: (context,state)=>const LoginWithPhoneNumber(),
-routes: [
-GoRoute(path: 'verify_otp',builder: (context,state)=>const VerifyOTP()),
-]
-)
-,
-
-]
-)
-]
-);
+  GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomePage(),
+      routes: [
+        GoRoute(
+          path: 'detail',
+          name: 'Home-detail',
+          builder: (context, state) => ChatDetailScreen(
+              uid: state.queryParameters['uid'],
+              chatRomId: state.queryParameters['chatRomId'],
+              name: state.queryParameters['name'],
+              avatar: state.queryParameters['avatar']),
+        ),
+        GoRoute(
+          path: 'update-avatar',
+          builder: (context, state) => const UpdateProfileScreen(),
+        ),
+        GoRoute(
+            path: 'search-user',
+            builder: (context, state) => const SearchUserChat(),
+            routes: [
+              GoRoute(
+                path: 'detail',
+                name: 'detail',
+                builder: (context, state) =>
+                    ChatDetailScreen(uid: state.extra as String),
+              ),
+            ])
+      ]),
+  GoRoute(
+      path: '/',
+      builder: (context, state) => const WelcomeScreen(),
+      routes: [
+        GoRoute(
+            path: 'login-home-screen',
+            builder: (context, state) => const HomeScreenLogin()),
+        GoRoute(
+            path: 'confirm-screen',
+            builder: (context, state) => const ConfirmProfile()),
+        GoRoute(
+            path: 'login',
+            builder: (context, state) => const LoginWithPhoneNumber(),
+            routes: [
+              GoRoute(
+                  path: 'verify_otp',
+                  builder: (context, state) => const VerifyOTP()),
+            ]),
+      ])
+]);
