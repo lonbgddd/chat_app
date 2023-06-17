@@ -112,7 +112,7 @@ class _LikedUserCardState extends State<LikedUserCard>
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                   child: Text(
-                    "${widget.user!.name}, ${calculateAge(widget.user!.year)}",
+                    "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
                     style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -187,7 +187,7 @@ class _LikedUserCardState extends State<LikedUserCard>
                   padding: const EdgeInsets.symmetric(
                       vertical: 8.0, horizontal: 16.0),
                   child: Text(
-                    "${widget.user!.name}, ${calculateAge(widget.user!.year)}",
+                    "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
                     style: const TextStyle(
                         fontSize: 18,
                         color: Colors.white,
@@ -214,7 +214,7 @@ class _LikedUserCardState extends State<LikedUserCard>
                                     .goNamed('Home-detail', queryParameters: {
                                   'uid': uid,
                                   'chatRomId': chatRoom!.chatRoomId,
-                                  'name': widget.user!.name,
+                                  'name': widget.user!.fullName,
                                   'avatar': widget.user!.avatar
                                 });
                               });
