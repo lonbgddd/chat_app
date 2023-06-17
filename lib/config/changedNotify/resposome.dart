@@ -12,7 +12,6 @@ class CallDataProvider extends ChangeNotifier {
       return user;
     }
   }
-
   Future<bool> loginWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication gAuth = await gUser!.authentication;
@@ -23,7 +22,6 @@ class CallDataProvider extends ChangeNotifier {
 
     await FirebaseAuth.instance.signInWithCredential(credential);
     User? user = FirebaseAuth.instance.currentUser;
-
     QuerySnapshot dataUserSave = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: user!.email)
@@ -31,17 +29,19 @@ class CallDataProvider extends ChangeNotifier {
 
     if (dataUserSave.docs.isNotEmpty) {
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
-      final token =
-      await HelpersFunctions().getUserTokenSharedPreference() as String;
+      final token = await HelpersFunctions().getUserTokenSharedPreference() as String;
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .update({'token': token});
+
+      _userFormFirebase(user);
       return true;
     } else {
       return false;
     }
   }
+
 
 
   Future<void> confirmProfile(String gender, String birthday,
@@ -63,6 +63,7 @@ class CallDataProvider extends ChangeNotifier {
         'interests': interests,
         'birthday': birthday,
       });
+
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
     }
   }
@@ -70,6 +71,7 @@ class CallDataProvider extends ChangeNotifier {
   Stream<User?>? get user {
     return FirebaseAuth.instance.authStateChanges().map(_userFormFirebase);
   }
+
 
   Future<String?> loginWithEmailAndPass(String email, String password) async {
     String? key = 'success';
@@ -101,7 +103,6 @@ class CallDataProvider extends ChangeNotifier {
     }
     return key;
   }
-
   Future<void> signOut() async {
     await HelpersFunctions.saveIdUserSharedPreference('');
     _userFormFirebase(null);
