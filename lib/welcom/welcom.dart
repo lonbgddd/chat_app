@@ -50,10 +50,9 @@ class WelcomeScreen extends StatelessWidget {
                 FittedBox(
                   child: TextButton(
                       onPressed: () {
-                        context.pushReplacement('/login-home-screen');
-                        // snapshot.data == null
-                        //     ? context.pushReplacement('/login-home-screen')
-                        //     : context.go('/home');
+                        snapshot.data == null
+                            ? context.pushReplacement('/login-home-screen')
+                            : context.go('/home');
                       },
                       child: Row(
                         children: [
