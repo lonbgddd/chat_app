@@ -7,20 +7,20 @@ import '../../model/chat_user.dart';
 import '../../model/model.dart';
 import 'detail_message.dart';
 
-class itemMessage extends StatefulWidget {
+class ItemMessage extends StatefulWidget {
   String? uid;
   String? chatRoomId;
   ChatMessage? mess;
 
-  itemMessage({super.key, this.uid, this.chatRoomId});
+  ItemMessage({super.key, this.uid, this.chatRoomId});
 
   @override
   State<StatefulWidget> createState() {
-    return itemMessageState();
+    return ItemMessageState();
   }
 }
 
-class itemMessageState extends State<itemMessage> {
+class ItemMessageState extends State<ItemMessage> {
   ChatMessage? mess;
   ChatMessage? mess2;
 
@@ -54,10 +54,12 @@ class itemMessageState extends State<itemMessage> {
                   return Container(
                       height: MediaQuery.of(context).size.height * 0.95,
                       child: DetailMessage(
-                          uid: widget.uid,
-                          chatRoomId: widget.chatRoomId,
-                          name: snapshot.data?.fullName,
-                          avatar: snapshot.data?.avatar));
+                        uid: widget.uid,
+                        chatRoomId: widget.chatRoomId,
+                        name: snapshot.data?.fullName,
+                        avatar: snapshot.data?.avatar,
+                        token: snapshot.data?.token,
+                      ));
                 });
           },
           child: Container(

@@ -81,6 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   ),
                                                   child: Image.network(
                                                     snapshot.data!.avatar,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),

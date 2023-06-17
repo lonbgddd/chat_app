@@ -7,14 +7,14 @@ import '../../model/chat_user.dart';
 
 class DetailMessage extends StatefulWidget {
   const DetailMessage(
-      {Key? key, this.uid, this.chatRoomId, this.name, this.avatar})
+      {Key? key, this.uid, this.chatRoomId, this.name, this.avatar, this.token})
       : super(key: key);
 
   final String? uid;
   final String? chatRoomId;
   final String? name;
   final String? avatar;
-
+  final String? token;
   @override
   State<StatefulWidget> createState() {
     return DetailMessageState();
@@ -29,16 +29,15 @@ class DetailMessageState extends State<DetailMessage> {
   String? name = '';
 
   addMessage() {
-    print(widget.chatRoomId);
     if (messageController.text.isNotEmpty) {
-      print(widget.chatRoomId);
       DatabaseMethods().addMessage(
           widget.chatRoomId ?? "",
           ChatMessage(
               uid: widget.uid ?? "",
               messageText: messageController.text,
               imageURL: '',
-              time: DateTime.now()));
+              time: DateTime.now()),
+          widget.token ?? "");
 
       setState(() {
         messageController.text = "";
