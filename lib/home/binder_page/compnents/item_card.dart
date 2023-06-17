@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
@@ -8,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key, this.user, this.isDetail,this.isFont}) : super(key: key);
+  const ProfileCard({Key? key, this.user, this.isDetail, this.isFont})
+      : super(key: key);
   final User? user;
   final bool? isFont;
   final Function()? isDetail;
@@ -54,225 +54,223 @@ class ProfileCard extends StatelessWidget {
       );
 
   cardProfile() => Stack(
-    children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
                 image: NetworkImage(user?.avatar ??
                     'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
                 fit: BoxFit.cover,
               )),
-        ),
-      ),
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(15),
-            bottomRight: Radius.circular(15),
+            ),
           ),
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.transparent, Colors.black.withOpacity(1)],
-            stops: const [0.6, 1],
-          ),
-        ),
-        child: Padding(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.black.withOpacity(1)],
+                stops: const [0.6, 1],
+              ),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 3,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: const Padding(
-                            padding:
-                            EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
-                            child: Text(
-                              'Online',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              flex:2,
-                              child: Text(
-                                user!.fullName,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold),
-                                overflow: TextOverflow.ellipsis,
-
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 4.0, horizontal: 10),
+                                child: Text(
+                                  'Online',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
                             ),
                             const SizedBox(
-                              width: 5,
+                              height: 5,
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                (DateTime.now().year -
-                                    int.parse(user!.birthday.substring(0, 4)))
-                                    .toString(),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 23,
-                                    fontWeight: FontWeight.normal),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    user!.fullName,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    (DateTime.now().year -
+                                            int.parse(
+                                                user!.birthday.substring(0, 4)))
+                                        .toString(),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              user?.biography ?? "",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
                               ),
-                            )
+                            ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        Text(
-                          user!.biography,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
+                      ),
+                      Container(
+                        width: 40,
+                        height: 40,
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          elevation: 0,
+                          onPressed: isDetail,
+                          child: Icon(
+                            Icons.arrow_upward_rounded,
+                            color: Colors.black,
                           ),
                         ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-
-                  Container(
-                    width: 40,
-                    height: 40,
-                    child: FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      onPressed: isDetail,
-                      child: Icon( Icons.arrow_upward_rounded,
-                        color: Colors.black,),
-                    ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.yellow,
+                            width: 2,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.undo,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.green,
+                            width: 2,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.star,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.bolt,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.purple,
+                            width: 2,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.favorite,
+                            color: Colors.purple,
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
-
               ),
-
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.yellow,
-                        width: 2,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.undo,
-                        color: Colors.yellow,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.red,
-                        width: 2,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.green,
-                        width: 2,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.star,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 2,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.bolt,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.purple,
-                        width: 2,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.favorite,
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-    ],
-  );
-
+        ],
+      );
 
   Widget buildStamps(context) {
     final provider = Provider.of<BinderWatch>(context);

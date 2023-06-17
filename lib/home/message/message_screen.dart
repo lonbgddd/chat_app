@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/changedNotify/chat_item_notify.dart';
@@ -108,8 +109,10 @@ class MessageScreenState extends State<MessageScreen> {
                             borderRadius: BorderRadius.circular(10)),
                         child: IconButton(
                           iconSize: 30,
-                          padding: EdgeInsets.all(5),
-                          onPressed: () {},
+                          padding: const EdgeInsets.all(5),
+                          onPressed: () async {
+                            context.go('/home/search-user');
+                          },
                           icon: const Icon(
                             Icons.menu,
                             color: Colors.pink,

@@ -1,4 +1,5 @@
 import 'package:chat_app/Auth/widget/button_custom.dart';
+import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class HomeScreenLogin extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(bottom: 50, left: 20,right: 20),
+            padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -42,7 +43,11 @@ class HomeScreenLogin extends StatelessWidget {
                     image: "icons/google.png",
                     onPressed: () async {
                       await login.loginWithGoogle();
-                      context.go('/confirm-screen');
+                      await HelpersFunctions()
+                                  .getUserIdUserSharedPreference() !=
+                              null
+                          ? context.go('/home')
+                          : context.go('/confirm-screen');
                       // context.go('/home');
                     }),
                 const SizedBox(
