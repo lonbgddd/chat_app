@@ -1,3 +1,4 @@
+
 import 'dart:math';
 
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
@@ -7,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key, this.user, this.isFont}) : super(key: key);
+  const ProfileCard({Key? key, this.user, this.isDetail,this.isFont}) : super(key: key);
   final User? user;
   final bool? isFont;
+  final Function()? isDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,6 @@ class ProfileCard extends StatelessWidget {
                     'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
                 fit: BoxFit.cover,
               )),
-          child: Container(),
         ),
       ),
       Container(
@@ -85,61 +86,98 @@ class ProfileCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: const Padding(
-                  padding:
-                  EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
-                  child: Text(
-                    'Online',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: const Padding(
+                            padding:
+                            EdgeInsets.symmetric(vertical: 4.0, horizontal: 10),
+                            child: Text(
+                              'Online',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex:2,
+                              child: Text(
+                                user!.fullName,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.ellipsis,
+
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                (DateTime.now().year -
+                                    int.parse(user!.birthday.substring(0, 4)))
+                                    .toString(),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.normal),
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          user!.biography,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user!.fullName,
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    (DateTime.now().year -
-                        int.parse(user!.birthday.substring(0, 4)))
-                        .toString(),
-                    style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.normal),
+
+                  Container(
+                    width: 40,
+                    height: 40,
+                    child: FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      onPressed: isDetail,
+                      child: Icon( Icons.arrow_upward_rounded,
+                        color: Colors.black,),
+                    ),
                   )
                 ],
+
               ),
-              const SizedBox(
-                height: 2,
-              ),
-               Text(
-                user!.biography,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                ),
-              ),
+
               const SizedBox(
                 height: 15,
               ),

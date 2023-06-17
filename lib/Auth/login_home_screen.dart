@@ -33,7 +33,7 @@ class HomeScreenLogin extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
+            padding: const EdgeInsets.only(bottom: 50, left: 20,right: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
