@@ -20,7 +20,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUserChat();
     Provider.of<HomeNotify>(context, listen: false);
@@ -85,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     const Text(
                       "Conversations",
                       style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Container(
                       padding: const EdgeInsets.only(
@@ -97,8 +96,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () => context.go('/home/search-user'),
-                        child: Row(
-                          children: const <Widget>[
+                        child: const Row(
+                          children: <Widget>[
                             Icon(
                               Icons.add,
                               color: Colors.pink,
