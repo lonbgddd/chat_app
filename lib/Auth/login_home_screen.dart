@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../config/changedNotify/resposome.dart';
 import '../config/changedNotify/resposome.dart';
 
 class HomeScreenLogin extends StatelessWidget {
@@ -42,13 +43,10 @@ class HomeScreenLogin extends StatelessWidget {
                     text: "Sign in with Google",
                     image: "icons/google.png",
                     onPressed: () async {
-                      await login.loginWithGoogle();
-                      await HelpersFunctions()
-                                  .getUserIdUserSharedPreference() !=
-                              null
-                          ? context.go('/home')
-                          : context.go('/confirm-screen');
-                      // context.go('/home');
+                        bool isLogin=  await login.loginWithGoogle();
+                        if(!isLogin) context.go('/confirm-screen');
+                        else  context.go('/home');
+
                     }),
                 const SizedBox(
                   height: 15,

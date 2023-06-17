@@ -1,9 +1,7 @@
 import 'package:chat_app/home/binder_page/binder_page.dart';
-import 'package:chat_app/home/chat_screen.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/message/message_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   String? _token;
   String? initialMessage;
   bool _resolved = false;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -33,13 +32,12 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         );
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    _selectedIndex != 1
+        ? FirebaseMessaging.onMessage.listen(showFlutterNotification)
+        : null;
   }
 
-  int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     BinderPage(),
     MessageScreen(),
     WhoLikePage(),
@@ -56,23 +54,46 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: CurvedNavigationBar(
-        onTap: _onItemTapped,
-        letIndexChange: (index) => true,
-        color: Colors.blueAccent,
-        buttonBackgroundColor: Colors.blueAccent,
-        backgroundColor: Colors.white,
-        animationCurve: Curves.easeInOut,
-        animationDuration: const Duration(milliseconds: 600),
-        items: const [
-          Icon(Icons.local_fire_department_rounded,
-              size: 30, color: Colors.black),
-          Icon(Icons.chat_bubble_outline_outlined,
-              size: 30, color: Colors.black),
-          Icon(Icons.favorite_border_outlined, size: 30, color: Colors.black),
-          Icon(Icons.account_circle_outlined, size: 30, color: Colors.black),
-        ],
-      ),
+      bottomNavigationBar: _bottomNavigation(),
+    );
+  }
+
+  BottomNavigationBar _bottomNavigation() {
+    return BottomNavigationBar(
+      backgroundColor: Colors.white,
+      elevation: 2,
+      items: const [
+        BottomNavigationBarItem(
+            label: '',
+            icon: Icon(
+              Icons.local_fire_department_rounded,
+              size: 24,
+            )),
+        BottomNavigationBarItem(
+            label: '',
+            icon: Icon(
+              Icons.chat_bubble,
+              size: 24,
+            )),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.favorite,
+            size: 24,
+          ),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.person,
+            size: 24,
+          ),
+          label: '',
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      selectedItemColor: Colors.purple,
+      type: BottomNavigationBarType.fixed,
+      onTap: _onItemTapped,
     );
   }
 }
