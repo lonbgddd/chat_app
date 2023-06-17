@@ -1,6 +1,7 @@
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/chat_screen.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
+import 'package:chat_app/home/message/message_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -38,9 +39,9 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     BinderPage(),
-    ChatScreen(),
+    MessageScreen(),
     WhoLikePage(),
     ProfileScreen()
   ];

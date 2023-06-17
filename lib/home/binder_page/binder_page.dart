@@ -2,6 +2,7 @@ import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BinderPage extends StatefulWidget {
@@ -51,51 +52,21 @@ class _BinderPageState extends State<BinderPage> {
         ],
       ),
       backgroundColor: Colors.white,
-      body: getBodyP2(),
+      body: getBody(),
     );
   }
 
   Widget getBody() {
-    var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30, top: 20),
-      child: SizedBox(
-        height: size.height,
-        child: FutureBuilder(
-          future: context.watch<BinderWatch>().allUserBinder(),
-          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
-            final provider = Provider.of<BinderWatch>(context).listCard;
-            return snapshot.hasData
-                ? Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Stack(
-                  alignment: Alignment.center,
-                  children: provider.reversed
-                      .map((e) => ProfileCard(
-                    user: e,
-                    isFont: provider.first == e,
-                  ))
-                      .toList()),
-            )
-                : const Center(
-              child: CircularProgressIndicator(color: Colors.black),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget getBodyP2() {
     final provider = Provider.of<BinderWatch>(context).listCard;
     print(provider);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+      padding: const EdgeInsets.all(20.0),
       child: Stack(
           alignment: Alignment.center,
           children: provider.reversed
               .map((e) => ProfileCard(
             user: e,
+            isDetail:()=> context.goNamed('Home-detail-others',queryParameters: { 'uid': e.uid.toString(),}),
             isFont: provider.first == e,
           ))
               .toList()),

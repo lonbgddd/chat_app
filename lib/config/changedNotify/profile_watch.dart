@@ -16,5 +16,18 @@ class ProfileWatch extends ChangeNotifier {
     }
   }
 
-  String get idUser => _uid ?? "";
+  Future<User> getDetailOthers(String? idUser) async {
+    try {
+      return await DatabaseServices(idUser).getUserInfors();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+
+
+  String get uid => _uid ?? "";
+
+
+
 }

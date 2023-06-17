@@ -34,8 +34,6 @@ class _ConfirmProfileState extends State<ConfirmProfile> {
     super.dispose();
   }
 
-
-
   SingingCharacter? character = SingingCharacter.man;
 
   @override
@@ -193,9 +191,11 @@ class _ConfirmProfileState extends State<ConfirmProfile> {
                       backgroundColor: Colors.purple,
                       padding: const EdgeInsets.symmetric(vertical: 13)),
                   onPressed: () async {
-                    await signUp.confirmProfile( character == SingingCharacter.man
-                        ? 'man'
-                        : 'women', time.toString(),newInterests,bioController.text);
+                    await signUp.confirmProfile(
+                        character == SingingCharacter.man ? 'man' : 'women',
+                        time.toString(),
+                        newInterests,
+                        bioController.text);
                     context.go('/home');
                   },
                   child: const Text(

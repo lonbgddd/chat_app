@@ -27,12 +27,11 @@ class ButtonCustom extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset('assets/$image'),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  text ?? "null",
-                  style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 18),
-                ),
+              const SizedBox(width: 10,),
+              Text(
+                text ?? "null",
+                style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 18),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
