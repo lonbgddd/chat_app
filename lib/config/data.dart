@@ -7,19 +7,21 @@ class DatabaseServices {
 
   DatabaseServices(this.uid);
 
-  Future saveUserByEmailAndName(String email, String avatar, String uid,
-      String name, String sex, String year,String bio) async {
-    data.collection('users').doc(uid).set(User(
-        email: email,
-        fullName: name,
-        biography: bio,
-        avatar: avatar,
-        uid: uid,
-        gender: sex,
-        birthday: year,
-        post: [], interests: []).toJson(),
-    );
-  }
+  // Future saveUserByEmailAndName(String email, String avatar, String uid,
+  //     String name, String sex, String year,String bio,String token) async {
+  //   data.collection('users').doc(uid).set(User(
+  //       email: email,
+  //       fullName: name,
+  //       biography: bio,
+  //       status:'online',
+  //       token: token,
+  //       avatar: avatar,
+  //       uid: uid,
+  //       gender: sex,
+  //       birthday: year,
+  //       post: [], interests: []).toJson(),
+  //   );
+  // }
 
   Future<User> getUserInfors() async {
     return data

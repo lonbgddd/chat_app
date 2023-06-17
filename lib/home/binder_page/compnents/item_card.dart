@@ -246,7 +246,7 @@ class ProfileCard extends StatelessWidget {
         return Positioned(child: child, top: 64, left: 50);
       case StatusCard.dislike:
         final child =
-            buildStamp(angle: 0.5, color: Colors.green, text: "DisLike");
+            buildStamp(angle: 0.5, color: Colors.red, text: "DisLike");
         return Positioned(child: child, top: 64, right: 50);
       default:
         return Container();

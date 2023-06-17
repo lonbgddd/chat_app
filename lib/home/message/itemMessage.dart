@@ -57,7 +57,7 @@ class itemMessageState extends State<itemMessage> {
                       child: DetailMessage(
                           uid: widget.uid,
                           chatRoomId: widget.chatRoomId,
-                          name: snapshot.data?.name,
+                          name: snapshot.data?.fullName,
                           avatar: snapshot.data?.avatar));
                 });
           },
@@ -99,7 +99,7 @@ class itemMessageState extends State<itemMessage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              snapshot.data?.name ?? "",
+                              snapshot.data?.fullName ?? "",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 14),
                             ),
