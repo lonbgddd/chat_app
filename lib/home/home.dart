@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   String? _token;
   String? initialMessage;
   bool _resolved = false;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -31,12 +32,12 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         );
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    _selectedIndex != 1
+        ? FirebaseMessaging.onMessage.listen(showFlutterNotification)
+        : null;
   }
 
-  int _selectedIndex = 0;
-
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     BinderPage(),
     MessageScreen(),
     WhoLikePage(),

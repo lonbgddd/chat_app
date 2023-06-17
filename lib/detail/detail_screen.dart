@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   const ChatDetailScreen(
-      {Key? key, this.uid, this.chatRomId, this.name, this.avatar})
+      {Key? key, this.uid, this.chatRomId, this.name, this.avatar, this.token})
       : super(key: key);
 
   final String? uid;
   final String? chatRomId;
   final String? name;
   final String? avatar;
-
+  final String? token;
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
@@ -22,7 +22,6 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   Stream<QuerySnapshot>? chats;
 
   addMessage() {
-    print(widget.chatRomId);
     if (messageController.text.isNotEmpty) {
       print(widget.chatRomId);
       DatabaseMethods().addMessage(
@@ -31,8 +30,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               uid: widget.uid ?? "",
               messageText: messageController.text,
               imageURL: '',
-              time: DateTime.now()));
-
+              time: DateTime.now()),
+          widget.token ?? "");
       setState(() {
         messageController.text = "";
       });
