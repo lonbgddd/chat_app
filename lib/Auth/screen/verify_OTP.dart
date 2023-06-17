@@ -1,140 +1,116 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-class VerifyOTP extends StatefulWidget {
+import 'package:pin_code_fields/pin_code_fields.dart';
 
-  const VerifyOTP({
-    Key? key,
-  }) : super(key: key);
+import '../login_phone.dart';
+
+class VerifyOTP extends StatefulWidget {
+  const VerifyOTP({Key? key}) : super(key: key);
 
   @override
   State<VerifyOTP> createState() => _VerifyOTPState();
 }
 
 class _VerifyOTPState extends State<VerifyOTP> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-
-  List<TextEditingController> otpControllers =
-  List.generate(6, (index) => TextEditingController());
-
-
-
-  void _verifyOTP() async {
-    String otp = '';
-    for (TextEditingController controller in otpControllers) {
-      otp += controller.text;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  var smsCode = '';
+  Future<void> verify() async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: LoginWithPhoneNumber.verify,
+        smsCode: smsCode,
+      );
+      await auth.signInWithCredential(credential);
+      context.go('/confirm-screen');
+    } catch (e) {
+      print('Lỗi xác minh số điện thoại: $e');
     }
-    context.go('/confirm-screen');
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>OTP is $otp');
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.west,
-              color: Colors.black,
-              size: 42,
+    return MaterialApp(
+      home: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.west,
+                color: Colors.black,
+                size: 42,
+              ),
+              onPressed: () {
+                context.pop();
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          ),
+          body: Container(
+            margin: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: const Text(
+                    'Enter OTP',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                  ),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Container(
+                  child: PinCodeTextField(
+                      appContext: context,
+                      length: 6,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      pinTheme: PinTheme(
+                        borderWidth: 2,
+                        shape: PinCodeFieldShape.underline,
+                        borderRadius: BorderRadius.circular(10),
+                        inactiveColor: Colors.grey,
+                        selectedColor: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (value) {
+                        smsCode = value;
+                      }),
+                ),
+                Center(
+                  child: InkWell(
+                    onTap: () {
+                      print('object');
+                    },
+                    child: const Text(
+                      'RESEND',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 30),
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                      onPressed: (){
+                        verify();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        backgroundColor: Colors.deepPurpleAccent,
+                      ),
+                      child: const Text('COUTINUE')),
+                ),
+              ],
+            ),
           ),
         ),
-        body: Container(
-          margin:
-          const EdgeInsets.only(top: 30, left: 20, right: 20, bottom: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Enter 6 digit code",
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      Text("Your code was sent to 'widget.phone'"),
-                    ]),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildOTPFields(),
-                ],
-              ),
-              TextButton(
-                onPressed:(){} ,
-                child: Text(
-                   "Resend code",
-                ),
-              ),
-              ElevatedButton(
-                onPressed: _verifyOTP,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text(
-                    "Verify",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ));
-  }
-
-  Widget _buildOTPFields() {
-    return Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          for (int i = 0; i < 6; i++)
-            SizedBox(
-              width: 55.0,
-              child: TextField(
-                controller: otpControllers[i],
-                keyboardType: TextInputType.number,
-                maxLength: 1,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20.0),
-                decoration: InputDecoration(
-                  counterText: '',
-                  border: UnderlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                onChanged: (value) {
-                  if (value.length == 1 && i < 5) {
-                    FocusScope.of(context).nextFocus();
-                  } else if (value.isEmpty && i > 0) {
-                    FocusScope.of(context).previousFocus();
-                  }
-                },
-              ),
-            ),
-        ],
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
-
 }

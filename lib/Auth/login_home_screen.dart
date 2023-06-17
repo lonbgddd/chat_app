@@ -49,7 +49,7 @@ class HomeScreenLogin extends StatelessWidget {
                   height: 15,
                 ),
                 ButtonCustom(
-                  text: "Sign in with Phone Number",
+                  text: "Sign in with Phone",
                   image: "icons/phone-call.png",
                   onPressed: () => context.go('/login'),
                 ),
