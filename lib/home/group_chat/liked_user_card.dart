@@ -67,188 +67,191 @@ class _LikedUserCardState extends State<LikedUserCard>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 2,
-              spreadRadius: 2,
-              offset: const Offset(0, 0))
-        ],
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Stack(children: [
-        Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                  image: widget.user!.avatar.isNotEmpty
-                      ? NetworkImage(widget.user!.avatar)
-                      : const NetworkImage(
-                          "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(15))),
-        Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.transparent, Colors.black.withOpacity(0.9)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.6, 1]),
-              borderRadius: BorderRadius.circular(15)),
+    return GestureDetector(
+      onTap: () {
+        context.goNamed('Home-detail-others',queryParameters: { 'uid': widget.user!.uid});
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 2,
+                spreadRadius: 2,
+                offset: const Offset(0, 0))
+          ],
+          borderRadius: BorderRadius.circular(15),
         ),
-        if (chatRoom == null)
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
-                  child: Text(
-                    "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
-                    style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
+        child: Stack(children: [
+          Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                    image: widget.user!.avatar.isNotEmpty
+                        ? NetworkImage(widget.user!.avatar)
+                        : const NetworkImage(
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"),
+                    fit: BoxFit.cover,
                   ),
-                ),
-                ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(bottom: Radius.circular(15)),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          borderRadius: const BorderRadius.vertical(
-                              bottom: Radius.circular(15))),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                widget.onDislikeCallback();
-                              },
-                              icon: const Icon(
-                                Icons.clear,
-                                color: Colors.white,
-                              )),
-                          Container(
-                            width: 1,
-                            height: 20, // Adjust height as needed
-                            color: Colors.white,
-                          ),
-                          IconButton(
-                              onPressed: () async {
-                                _toggleFavorite();
-                                await context
-                                    .read<FollowNotify>()
-                                    .addFollow(widget.user!.uid)
-                                    .then((value) {
-                                  DatabaseMethods()
-                                      .getChatRoom(widget.user!.uid)
-                                      .then((chatRoom) {
-                                    setState(() {
-                                      this.chatRoom = chatRoom;
+                  borderRadius: BorderRadius.circular(15))),
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.transparent, Colors.black.withOpacity(0.9)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: const [0.6, 1]),
+                borderRadius: BorderRadius.circular(15)),
+          ),
+          if (chatRoom == null)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    child: Text(
+                      "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(bottom: Radius.circular(15)),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.2),
+                            borderRadius: const BorderRadius.vertical(
+                                bottom: Radius.circular(15))),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  widget.onDislikeCallback();
+                                },
+                                icon: const Icon(
+                                  Icons.clear,
+                                  color: Colors.white,
+                                )),
+                            Container(
+                              width: 1,
+                              height: 20, // Adjust height as needed
+                              color: Colors.white,
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  _toggleFavorite();
+                                  await context
+                                      .read<FollowNotify>()
+                                      .addFollow(widget.user!.uid)
+                                      .then((value) {
+                                    DatabaseMethods()
+                                        .getChatRoom(widget.user!.uid)
+                                        .then((chatRoom) {
+                                      setState(() {
+                                        this.chatRoom = chatRoom;
+                                      });
                                     });
                                   });
+                                },
+                                icon: const Icon(
+                                  Icons.favorite,
+                                  color: Colors.white,
+                                ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          if (chatRoom != null) const MatchedLabel(),
+          if (chatRoom != null)
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    child: Text(
+                      "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
+                      style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(bottom: Radius.circular(15)),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.2),
+                            borderRadius: const BorderRadius.vertical(
+                                bottom: Radius.circular(15))),
+                        child: Center(
+                          child: IconButton(
+                              onPressed: () {
+
+                                  context
+                                      .goNamed('Home-detail', queryParameters: {
+                                    'uid': widget.user!.uid,
+                                    'chatRomId': chatRoom!.chatRoomId,
+                                    'name': widget.user!.fullName,
+                                    'avatar': widget.user!.avatar
+
                                 });
                               },
                               icon: const Icon(
-                                Icons.favorite,
+                                Icons.send,
                                 color: Colors.white,
-                              ))
-                        ],
+                              )),
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        if (chatRoom != null) const MatchedLabel(),
-        if (chatRoom != null)
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
-                  child: Text(
-                    "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
-                    style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(bottom: Radius.circular(15)),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
-                          borderRadius: const BorderRadius.vertical(
-                              bottom: Radius.circular(15))),
-                      child: Center(
-                        child: IconButton(
-                            onPressed: () async {
-                              await HelpersFunctions()
-                                  .getUserIdUserSharedPreference()
-                                  .then((uid) {
-                                context
-                                    .goNamed('Home-detail', queryParameters: {
-                                  'uid': uid,
-                                  'chatRomId': chatRoom!.chatRoomId,
-                                  'name': widget.user!.fullName,
-                                  'avatar': widget.user!.avatar
-                                });
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.send,
-                              color: Colors.white,
-                            )),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        AnimatedBuilder(
-          animation: _opacityAnimation,
-          builder: (context, child) {
-            return Opacity(
-              opacity: _opacityAnimation.value,
-              child: const Align(
-                alignment: Alignment.center,
-                child: Center(
-                  child: Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                    size: 60,
-                  ),
-                ),
+                  )
+                ],
               ),
-            );
-          },
-        ),
-      ]),
+            ),
+          AnimatedBuilder(
+            animation: _opacityAnimation,
+            builder: (context, child) {
+              return Opacity(
+                opacity: _opacityAnimation.value,
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Center(
+                    child: Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ]),
+      ),
     );
   }
 }

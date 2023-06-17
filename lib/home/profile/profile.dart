@@ -2,6 +2,7 @@ import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -30,274 +31,225 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ? Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 210,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Stack(
-                                          children: [
-                                            Align(
-                                              alignment:
-                                                  const AlignmentDirectional(
-                                                      0, 0),
-                                              child: Image.network(
-                                                'https://dean2020.edu.vn/wp-content/uploads/2019/03/anh-thien-nhien-dep-3.jpeg',
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: 130,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment:
-                                                  const AlignmentDirectional(
-                                                      0.85, 0),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                        .fromSTEB(0, 90, 0, 0),
-                                                child: Container(
-                                                  width: 80,
-                                                  height: 80,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Image.network(
-                                                    snapshot.data!.avatar,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsetsDirectional
-                                                      .fromSTEB(24, 140, 0, 0),
-                                              child: Text(
-                                                snapshot.data!.fullName,
-                                                style: const TextStyle(
-                                                  fontFamily: 'Lexend Deca',
-                                                  color: Color(0xFF090F13),
-                                                  fontSize: 22,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment:
-                                                  const AlignmentDirectional(
-                                                      -1, 0),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                        24, 174, 0, 0),
-                                                child: Text(
-                                                  snapshot.data!.birthday,
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                    fontFamily: 'Lexend Deca',
-                                                    color: Color(0xFF95A1AC),
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                        ClipPath(
+                          clipper: OvalBottomBorderClipper(),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            color: const Color(0XFFAA3FEC).withOpacity(0.8),
+                            child: GestureDetector(
+                              onTap: () {
+                                context.go('/home/update-avatar');
+                              },
+                              child: Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ProfileAvatar(
+                                      avataUrl: snapshot.data!.avatar,
+                                    ),
+                                    const SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    Text(
+                                      "${snapshot.data!.fullName}, ${calculateAge(snapshot.data!.birthday)}",
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: const [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(24, 12, 0, 12),
-                              child: Text(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const Text(
                                 'Account Settings',
                                 style: TextStyle(
-                                  fontFamily: 'Lexend Deca',
-                                  color: Color(0xFF090F13),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
+                                  color: Color(0xFF000000),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        ListView(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
+
+                              GestureDetector(
+                                onTap: () {},
+                                child: Container(
                                   decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.rectangle,
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Color(0XFF247DCF), // Specify the color of the border
+                                        width: 1.0,  // Specify the width of the border
+                                      ),
+                                    ),
                                   ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            24, 0, 0, 0),
-                                        child: Text(
-                                          'Update avatar',
-                                          style: TextStyle(
-                                            fontFamily: 'Lexend Deca',
-                                            color: Color(0xFF090F13),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                        ),
+                                  child: const Text(
+                                      "Edit",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w300,
+                                          color: Color(0XFF247DCF),
                                       ),
-                                      Expanded(
-                                        child: Align(
-                                          alignment: const AlignmentDirectional(
-                                              0.9, 0),
-                                          child: IconButton(
-                                              onPressed: () async {
-                                                context
-                                                    .go('/home/update-avatar');
-                                              },
-                                              padding: EdgeInsets.zero,
-                                              icon: const Icon(
-                                                Icons.arrow_forward_ios,
-                                                color: Color(0xFF95A1AC),
-                                                size: 18,
-                                              )),
-                                        ),
-                                      ),
-                                    ],
+
                                   ),
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 1, 0, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: const [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  24, 0, 0, 0),
-                                          child: Text(
-                                            'Notifications',
-                                            style: TextStyle(
-                                              fontFamily: 'Lexend Deca',
-                                              color: Color(0xFF090F13),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(0.9, 0),
-                                            child: Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: Color(0xFF95A1AC),
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 1, 0, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.rectangle,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: const [
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  24, 0, 0, 0),
-                                          child: Text(
-                                            'Change Password',
-                                            style: TextStyle(
-                                              fontFamily: 'Lexend Deca',
-                                              color: Color(0xFF090F13),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(0.9, 0),
-                                            child: Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: Color(0xFF95A1AC),
-                                              size: 18,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        // ListView(
+                        //   padding: EdgeInsets.zero,
+                        //   shrinkWrap: true,
+                        //   scrollDirection: Axis.vertical,
+                        //   children: [
+                        //     Row(
+                        //       mainAxisSize: MainAxisSize.max,
+                        //       children: [
+                        //         Container(
+                        //           width: MediaQuery.of(context).size.width,
+                        //           height: 50,
+                        //           decoration: const BoxDecoration(
+                        //             color: Colors.white,
+                        //             shape: BoxShape.rectangle,
+                        //           ),
+                        //           child: Row(
+                        //             mainAxisSize: MainAxisSize.max,
+                        //             children: [
+                        //               const Padding(
+                        //                 padding: EdgeInsetsDirectional.fromSTEB(
+                        //                     24, 0, 0, 0),
+                        //                 child: Text(
+                        //                   'Update avatar',
+                        //                   style: TextStyle(
+                        //                     fontFamily: 'Lexend Deca',
+                        //                     color: Color(0xFF090F13),
+                        //                     fontSize: 14,
+                        //                     fontWeight: FontWeight.normal,
+                        //                   ),
+                        //                 ),
+                        //               ),
+                        //               Expanded(
+                        //                 child: Align(
+                        //                   alignment: const AlignmentDirectional(
+                        //                       0.9, 0),
+                        //                   child: IconButton(
+                        //                       onPressed: () async {
+                        //                         context
+                        //                             .go('/home/update-avatar');
+                        //                       },
+                        //                       padding: EdgeInsets.zero,
+                        //                       icon: const Icon(
+                        //                         Icons.arrow_forward_ios,
+                        //                         color: Color(0xFF95A1AC),
+                        //                         size: 18,
+                        //                       )),
+                        //                 ),
+                        //               ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //     Padding(
+                        //       padding: const EdgeInsetsDirectional.fromSTEB(
+                        //           0, 1, 0, 0),
+                        //       child: Row(
+                        //         mainAxisSize: MainAxisSize.max,
+                        //         children: [
+                        //           Container(
+                        //             width: MediaQuery.of(context).size.width,
+                        //             height: 50,
+                        //             decoration: const BoxDecoration(
+                        //               color: Colors.white,
+                        //               shape: BoxShape.rectangle,
+                        //             ),
+                        //             child: Row(
+                        //               mainAxisSize: MainAxisSize.max,
+                        //               children: const [
+                        //                 Padding(
+                        //                   padding:
+                        //                       EdgeInsetsDirectional.fromSTEB(
+                        //                           24, 0, 0, 0),
+                        //                   child: Text(
+                        //                     'Notifications',
+                        //                     style: TextStyle(
+                        //                       fontFamily: 'Lexend Deca',
+                        //                       color: Color(0xFF090F13),
+                        //                       fontSize: 14,
+                        //                       fontWeight: FontWeight.normal,
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //                 Expanded(
+                        //                   child: Align(
+                        //                     alignment:
+                        //                         AlignmentDirectional(0.9, 0),
+                        //                     child: Icon(
+                        //                       Icons.arrow_forward_ios,
+                        //                       color: Color(0xFF95A1AC),
+                        //                       size: 18,
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //     Padding(
+                        //       padding: const EdgeInsetsDirectional.fromSTEB(
+                        //           0, 1, 0, 0),
+                        //       child: Row(
+                        //         mainAxisSize: MainAxisSize.max,
+                        //         children: [
+                        //           Container(
+                        //             width: MediaQuery.of(context).size.width,
+                        //             height: 50,
+                        //             decoration: const BoxDecoration(
+                        //               color: Colors.white,
+                        //               shape: BoxShape.rectangle,
+                        //             ),
+                        //             child: Row(
+                        //               mainAxisSize: MainAxisSize.max,
+                        //               children: const [
+                        //                 Padding(
+                        //                   padding:
+                        //                       EdgeInsetsDirectional.fromSTEB(
+                        //                           24, 0, 0, 0),
+                        //                   child: Text(
+                        //                     'Change Password',
+                        //                     style: TextStyle(
+                        //                       fontFamily: 'Lexend Deca',
+                        //                       color: Color(0xFF090F13),
+                        //                       fontSize: 14,
+                        //                       fontWeight: FontWeight.normal,
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //                 Expanded(
+                        //                   child: Align(
+                        //                     alignment:
+                        //                         AlignmentDirectional(0.9, 0),
+                        //                     child: Icon(
+                        //                       Icons.arrow_forward_ios,
+                        //                       color: Color(0xFF95A1AC),
+                        //                       size: 18,
+                        //                     ),
+                        //                   ),
+                        //                 ),
+                        //               ],
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         Padding(
                           padding:
                               const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
@@ -336,4 +288,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   : Container();
             }));
   }
+}
+
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({
+    super.key,
+    required this.avataUrl,
+  });
+
+  final String avataUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: NetworkImage(avataUrl), fit: BoxFit.cover)),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              width: 40,
+              height: 40,
+              padding: const EdgeInsets.all(4.0),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: Colors.white),
+              child: const Center(
+                  child: Icon(
+                Icons.edit,
+                color: Color(0XFFAA3FEC),
+                size: 16,
+              )),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+int calculateAge(String birthdayString) {
+  DateTime birthday = DateTime.parse(birthdayString);
+  DateTime today = DateTime.now();
+  int age = today.year - birthday.year;
+
+  if (today.month < birthday.month ||
+      (today.month == birthday.month && today.day < birthday.day)) {
+    age--;
+  }
+
+  return age;
 }
