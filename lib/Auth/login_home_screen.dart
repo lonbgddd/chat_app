@@ -1,4 +1,5 @@
 import 'package:chat_app/Auth/widget/button_custom.dart';
+import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,7 @@ class HomeScreenLogin extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 25),
+            padding: const EdgeInsets.only(bottom: 50, left: 20, right: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -45,6 +46,7 @@ class HomeScreenLogin extends StatelessWidget {
                         bool isLogin=  await login.loginWithGoogle();
                         if(!isLogin) context.go('/confirm-screen');
                         else  context.go('/home');
+
                     }),
                 const SizedBox(
                   height: 15,

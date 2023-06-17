@@ -2,6 +2,7 @@ import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BinderPage extends StatefulWidget {
@@ -131,7 +132,7 @@ class _BinderPageState extends State<BinderPage> {
     final provider = Provider.of<BinderWatch>(context).listCard;
     print(provider);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+      padding: const EdgeInsets.all(20.0),
       child: Stack(
           alignment: Alignment.center,
           children: provider.reversed
@@ -139,6 +140,7 @@ class _BinderPageState extends State<BinderPage> {
                     user: e,
                     isFont: provider.first == e,
                   ))
+
               .toList()),
     );
   }

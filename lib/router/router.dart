@@ -3,6 +3,7 @@ import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
 import 'package:chat_app/detail/detail_screen.dart';
 import 'package:chat_app/home/home.dart';
+import 'package:chat_app/home/profile/detail_profile_others.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/search.dart';
 import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
@@ -39,7 +40,14 @@ final GoRouter router = GoRouter(routes: [
                 builder: (context, state) =>
                     ChatDetailScreen(uid: state.extra as String),
               ),
-            ])
+            ]),
+        GoRoute(
+          path: 'detail-others',
+          name: 'Home-detail-others',
+          builder: (context, state) => DetailProfileOthersScreen(
+              uid: state.queryParameters['uid'],
+          ),
+        ),
       ]),
   GoRoute(
       path: '/',

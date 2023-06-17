@@ -96,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       child: GestureDetector(
                         onTap: () => context.go('/home/search-user'),
-                        child: const Row(
+                        child: Row(
                           children: <Widget>[
                             Icon(
                               Icons.add,

@@ -36,16 +36,16 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         avatar: json["avatar"],
+        email: json["email"],
         biography: json["biography"],
         birthday: json["birthday"],
-        email: json["email"],
         fullName: json["fullName"],
         gender: json["gender"],
         interests: List<String>.from(json["interests"].map((x) => x)),
         post: List<String>.from(json["post"].map((x) => x)),
-        status: json["status"],
         token: json["token"],
         uid: json["uid"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -59,6 +59,8 @@ class User {
         "post": List<String>.from(post.map((x) => x)),
         "interests": List<String>.from(interests.map((x) => x)),
         "gender": gender,
-        "birthday": birthday
+        "birthday": birthday,
+        "status": status,
+        "token": token,
       };
 }

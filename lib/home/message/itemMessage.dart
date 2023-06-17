@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +52,7 @@ class itemMessageState extends State<itemMessage> {
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
                   return Container(
-                      height: MediaQuery.of(context).size.height * 0.85,
+                      height: MediaQuery.of(context).size.height * 0.95,
                       child: DetailMessage(
                           uid: widget.uid,
                           chatRoomId: widget.chatRoomId,
@@ -105,13 +104,15 @@ class itemMessageState extends State<itemMessage> {
                             ),
                             Text(
                               mess2?.messageText ?? '',
-                              style: TextStyle(fontSize: 14),
+                              style: const TextStyle(fontSize: 14),
                             )
                           ],
                         ),
                         const Spacer(),
                         Text(
-                          mess2 != null ? DateFormat('HH:mm a').format(mess2!.time) : '',
+                          mess2 != null
+                              ? DateFormat('HH:mm a').format(mess2!.time)
+                              : '',
                           style: const TextStyle(color: Colors.grey),
                         )
                       ],
