@@ -23,6 +23,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
         smsCode: smsCode,
       );
       await auth.signInWithCredential(credential);
+
       context.go('/confirm-screen');
     } catch (e) {
       print('Lỗi xác minh số điện thoại: $e');

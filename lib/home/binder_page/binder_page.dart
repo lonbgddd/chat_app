@@ -25,38 +25,110 @@ class _BinderPageState extends State<BinderPage> {
     });
   }
 
+  bool hasNotification = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.2,
-        title: const Text(
-          "Binder",
-          style: TextStyle(
-              fontFamily: 'Grandista', fontSize: 24, color: Colors.purple),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.notifications,
-                color: Colors.grey,
-              )),
-          IconButton(
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.2,
+          title: const Text(
+            "Binder",
+            style: TextStyle(
+              fontFamily: 'Grandista',
+              fontSize: 24,
+              color: Colors.purple,
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.notifications,
+                      color: Colors.grey,
+                      size: 25,
+                    ),
+                  ),
+                  if (hasNotification)
+                    Positioned(
+                      top: 6,
+                      right: 6,
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '1',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            IconButton(
               onPressed: () {},
               icon: const Icon(
                 Icons.tune,
                 color: Colors.grey,
-              ))
-        ],
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        body: getBodyP2(),
       ),
-      backgroundColor: Colors.white,
-      body: getBody(),
     );
   }
 
   Widget getBody() {
+    var size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30, top: 20),
+      child: SizedBox(
+        height: size.height,
+        child: FutureBuilder(
+          future: context.watch<BinderWatch>().allUserBinder(),
+          builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
+            final provider = Provider.of<BinderWatch>(context).listCard;
+            return snapshot.hasData
+                ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Stack(
+                        alignment: Alignment.center,
+                        children: provider.reversed
+                            .map((e) => ProfileCard(
+                                  user: e,
+                                  isFont: provider.first == e,
+                                ))
+                            .toList()),
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(color: Colors.black),
+                  );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget getBodyP2() {
     final provider = Provider.of<BinderWatch>(context).listCard;
     print(provider);
     return Padding(
@@ -65,10 +137,10 @@ class _BinderPageState extends State<BinderPage> {
           alignment: Alignment.center,
           children: provider.reversed
               .map((e) => ProfileCard(
-            user: e,
-            isDetail:()=> context.goNamed('Home-detail-others',queryParameters: { 'uid': e.uid.toString(),}),
-            isFont: provider.first == e,
-          ))
+                    user: e,
+                    isFont: provider.first == e,
+                  ))
+
               .toList()),
     );
   }

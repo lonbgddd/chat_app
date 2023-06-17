@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chat_app/config/firebase/key.dart';
+import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,7 @@ class FirebaseApi {
   Future<void> PemissionKey() async {
     final _message = FirebaseMessaging.instance;
     String? token = await _message.getToken();
+    await HelpersFunctions.saveTokenUserSharedPreference(token!);
     if (kDebugMode) {
       print('Registration Token=$token');
     }

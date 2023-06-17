@@ -84,24 +84,23 @@ class MessageScreenState extends State<MessageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    const Text(
-                      "Messages",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
+    return  Scaffold(
+        body:  Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(left: 20,right: 20,top: 30,bottom: 15),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Messages",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        ),
                       ),
-                    ),
                     const Spacer(),
                     Container(
                         decoration: BoxDecoration(
@@ -139,12 +138,10 @@ class MessageScreenState extends State<MessageScreen> {
                   'Messages',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-              chatRoomsList('vertical')
-            ],
-          ),
+                SingleChildScrollView(child: chatRoomsList('vertical'))
+              ],
+            ),
         ),
-      ),
     );
   }
 
