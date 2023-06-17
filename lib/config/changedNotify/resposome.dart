@@ -21,22 +21,28 @@ class CallDataProvider extends ChangeNotifier {
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
     );
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    User? user = userCredential.user;
-    // if (user != null) {
-    //   await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-    //     'avatar': user.photoURL ,
-    //     'email': user.email,
-    //     'name': user.displayName,
-    //     'post': [],
-    //     'sex': '',
-    //     'uid': user.uid,
-    //     'year': '2020-06-07 00:00:00.000'
-    //   });
-    //   await HelpersFunctions.saveIdUserSharedPreference(user.uid);
-    //
-    // }
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+  }
+
+  Future<void> confirmProfile(String gender, String birthday,List<String> interests,String biography) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'avatar': user.photoURL,
+        'email': user.email,
+        'fullName': user.displayName,
+        'post': [],
+        'gender': gender,
+        'biography':biography,
+        'uid': user.uid,
+        'interests':interests,
+        'birthday': birthday,
+
+      });
+      await HelpersFunctions.saveIdUserSharedPreference(user.uid);
+    }
   }
 
   Stream<User?>? get user {
@@ -82,14 +88,14 @@ class CallDataProvider extends ChangeNotifier {
   }
 
   Future<String?> signUpWithEmailAndPassword(String email, String password,
-      String name, String sex, String year) async {
+      String name, String sex, String year,String biography) async {
     try {
       User user = (await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password))
           .user!;
       if (user != null) {
         await DatabaseServices(user.uid)
-            .saveUserByEmailAndName(email, "", user.uid, name, sex, year);
+            .saveUserByEmailAndName(email, "", user.uid, name, sex, year,biography);
         return 'success';
       }
     } on FirebaseAuthException catch (e) {

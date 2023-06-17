@@ -8,15 +8,17 @@ class DatabaseServices {
   DatabaseServices(this.uid);
 
   Future saveUserByEmailAndName(String email, String avatar, String uid,
-      String name, String sex, String year) async {
+      String name, String sex, String year,String bio) async {
     data.collection('users').doc(uid).set(User(
         email: email,
-        name: name,
+        fullName: name,
+        biography: bio,
         avatar: avatar,
         uid: uid,
-        sex: sex,
-        year: year,
-        post: []).toJson());
+        gender: sex,
+        birthday: year,
+        post: [], interests: []).toJson(),
+    );
   }
 
   Future<User> getUserInfors() async {

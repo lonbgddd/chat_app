@@ -1,3 +1,4 @@
+import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
@@ -10,11 +11,11 @@ import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/chat_screen.dart';
+import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/router/router.dart';
-import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -112,6 +113,21 @@ Future<void> main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
+  final messaging = FirebaseMessaging.instance;
+
+  final settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (kDebugMode) {
+    print('Permission granted: ${settings.authorizationStatus}');
+  }
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
@@ -159,7 +175,7 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => ItemChatNotify(),
         child: ChatRoomsTile(),
-      )
+      ),
     ],
     child: const MyApp(),
   ));

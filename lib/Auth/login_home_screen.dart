@@ -42,8 +42,8 @@ class HomeScreenLogin extends StatelessWidget {
                     image: "icons/google.png",
                     onPressed: () async {
                       await login.loginWithGoogle();
-                      // context.go('/confirm-screen');
-                      context.go('/home');
+                      context.go('/confirm-screen');
+                      // context.go('/home');
                     }),
                 const SizedBox(
                   height: 15,

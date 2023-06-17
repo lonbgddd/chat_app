@@ -44,44 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDvxPNhYR4b9C7MS-mr3tDpTM1WiYF5vkY',
-    appId: '1:303940029661:web:71a42f37794985df1d1f34',
-    messagingSenderId: '303940029661',
-    projectId: 'chatapp-2fc3d',
-    authDomain: 'chatapp-2fc3d.firebaseapp.com',
-    databaseURL: 'https://chatapp-2fc3d-default-rtdb.firebaseio.com',
-    storageBucket: 'chatapp-2fc3d.appspot.com',
-    measurementId: 'G-YBZQTQE3XC',
+    apiKey: 'AIzaSyA4V-LemRW2syrf2sMQVzp0Pb9MAo95O9I',
+    appId: '1:32903398845:web:bf3949975ce0e21f943ed4',
+    messagingSenderId: '32903398845',
+    projectId: 'binder-app-3b8de',
+    authDomain: 'binder-app-3b8de.firebaseapp.com',
+    storageBucket: 'binder-app-3b8de.appspot.com',
+    measurementId: 'G-M2Z2CS2PVE',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDeqAprvLa46YqbTqwCHZTASazE_dkDQ-4',
-    appId: '1:303940029661:android:e9743b61a75d70e01d1f34',
-    messagingSenderId: '303940029661',
-    projectId: 'chatapp-2fc3d',
-    databaseURL: 'https://chatapp-2fc3d-default-rtdb.firebaseio.com',
-    storageBucket: 'chatapp-2fc3d.appspot.com',
+    apiKey: 'AIzaSyDvDYqP4XFvQtF2gB-nljIt-Q_pgRdoEGM',
+    appId: '1:32903398845:android:973311cc9f97c01a943ed4',
+    messagingSenderId: '32903398845',
+    projectId: 'binder-app-3b8de',
+    storageBucket: 'binder-app-3b8de.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBlaxYnXWgtb4baRPZMByF1a-U9-Tcju8o',
-    appId: '1:303940029661:ios:5fd541a435e7d13e1d1f34',
-    messagingSenderId: '303940029661',
-    projectId: 'chatapp-2fc3d',
-    databaseURL: 'https://chatapp-2fc3d-default-rtdb.firebaseio.com',
-    storageBucket: 'chatapp-2fc3d.appspot.com',
-    iosClientId: '303940029661-sl1ethd68n6te5jas82o0vsn1ls4bmna.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBCwZZKmp2m5ScUF5G5aTqYT_MC_eLoJys',
+    appId: '1:32903398845:ios:55b9df6459bb2f05943ed4',
+    messagingSenderId: '32903398845',
+    projectId: 'binder-app-3b8de',
+    storageBucket: 'binder-app-3b8de.appspot.com',
+    iosClientId: '32903398845-qgv4m7ergep2f3fls72g29tgf6q9o0mh.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBlaxYnXWgtb4baRPZMByF1a-U9-Tcju8o',
-    appId: '1:303940029661:ios:5fd541a435e7d13e1d1f34',
-    messagingSenderId: '303940029661',
-    projectId: 'chatapp-2fc3d',
-    databaseURL: 'https://chatapp-2fc3d-default-rtdb.firebaseio.com',
-    storageBucket: 'chatapp-2fc3d.appspot.com',
-    iosClientId: '303940029661-sl1ethd68n6te5jas82o0vsn1ls4bmna.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBCwZZKmp2m5ScUF5G5aTqYT_MC_eLoJys',
+    appId: '1:32903398845:ios:55b9df6459bb2f05943ed4',
+    messagingSenderId: '32903398845',
+    projectId: 'binder-app-3b8de',
+    storageBucket: 'binder-app-3b8de.appspot.com',
+    iosClientId: '32903398845-qgv4m7ergep2f3fls72g29tgf6q9o0mh.apps.googleusercontent.com',
     iosBundleId: 'com.example.chatApp',
   );
 }
