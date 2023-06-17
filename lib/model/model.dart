@@ -18,8 +18,11 @@ class User {
   String gender;
   String biography;
   String birthday;
+  String token;
+  String status;
 
-  User({required this.email,
+  User({
+    required this.email,
     required this.biography,
     required this.fullName,
     required this.avatar,
@@ -27,10 +30,12 @@ class User {
     required this.post,
     required this.interests,
     required this.gender,
-    required this.birthday});
+    required this.birthday,
+    required this.token,
+    required this.status,
+  });
 
-  factory User.fromJson(Map<String, dynamic> json) =>
-      User(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         email: json["email"],
         biography: json["biography"],
         fullName: json["fullName"],
@@ -40,10 +45,11 @@ class User {
         interests: List<String>.from(json["interests"].map((x) => x)),
         gender: json["gender"],
         birthday: json["birthday"],
+        status: json["status"],
+        token: json["token"],
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "email": email,
         "fullName": fullName,
         "biography": biography,
@@ -52,6 +58,8 @@ class User {
         "post": List<String>.from(post.map((x) => x)),
         "interests": List<String>.from(post.map((x) => x)),
         "gender": gender,
-        "birthday": birthday
+        "birthday": birthday,
+        "status": status,
+        "token": token,
       };
 }
