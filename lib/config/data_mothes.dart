@@ -167,4 +167,55 @@ class DatabaseMethods {
     return ChatRoom.fromJson(document.data() as Map<String, dynamic>);
     // Handle the document data as needed
   }
+
+  Future<bool> checkUserExists(String userId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (snapshot.exists) {
+        return true;
+      }
+    } catch (error) {
+      // Lỗi xảy ra hoặc không thể kiểm tra người dùng
+      print('Kiểm tra người dùng không thành công: $error');
+    }
+    return false;
+  }
+
+  Future<List<User>> getListUserChat(String uid) async {
+    List<String> listUid = [];
+    List<User> userList =[];
+    try{
+      await FirebaseFirestore.instance
+          .collection("chatRoom")
+          .where('users', arrayContains: uid)
+          .get()
+          .then((QuerySnapshot querySnapshot) async {
+        querySnapshot.docs.forEach((doc) {
+          var listUid2 = doc['users'];
+          for (var uid2 in listUid2) {
+            if (uid != uid2) {
+              listUid.add(uid2);
+            }
+          }
+        });
+        await FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', whereIn: listUid)
+            .get()
+            .then((QuerySnapshot querySnapshot) {
+          userList = querySnapshot.docs.map((doc) {
+            User user = User.fromJson(doc.data() as Map<String, dynamic>);
+            return user;
+          }).toList();
+        });
+      });
+      return userList;
+    }catch(error){
+      print(error);
+    }
+    return userList;
+  }
 }

@@ -63,7 +63,7 @@ class ItemMessageState extends State<ItemMessage> {
                 });
           },
           child: Container(
-            color: Colors.white,
+            color: Colors.transparent,
             margin: const EdgeInsets.only(left: 20, bottom: 20),
             width: 60,
             height: 60,
@@ -96,21 +96,29 @@ class ItemMessageState extends State<ItemMessage> {
                     ),
                     child: Row(
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              snapshot.data?.fullName ?? "",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14),
-                            ),
-                            Text(
-                              mess2?.messageText ?? '',
-                              style: const TextStyle(fontSize: 14),
-                            )
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                snapshot.data?.fullName ?? "",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                mess2?.messageText ?? '',
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            ],
+                          ),
                         ),
-                        const Spacer(),
                         Text(
                           mess2 != null
                               ? DateFormat('HH:mm a').format(mess2!.time)
