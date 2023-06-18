@@ -71,7 +71,7 @@ final GoRouter router = GoRouter(routes: [
               GoRoute(
                   path: 'verify_otp',
                   name: 'verify_otp',
-                  builder: (context, state) => VerifyOTP(numberPhone: state.queryParameters['phoneNumber'],)),
+                  builder: (context, state) => VerifyOTP()),
             ]),
       ])
 ]);

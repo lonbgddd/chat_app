@@ -74,7 +74,7 @@ class SearchMessageState extends State<SearchMessage> {
                   String chatRoomId = data['chatRoomId'];
                   if(listUser[index].fullName.toLowerCase().toString().contains(context.watch<SearchMessageProvider>().name)) {
                     if(listUser[index].uid == uid){
-                      return itemMessage(uid: uid, chatRoomId: chatRoomId);
+                      return ItemMessage(uid: uid, chatRoomId: chatRoomId);
                     }
                   }
                   return const SizedBox.shrink();

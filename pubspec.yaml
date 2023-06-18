@@ -57,6 +57,9 @@ dependencies:
   flutter_local_notifications: ^14.1.1
   animated_splash_screen: ^1.3.0
   pin_code_fields: ^7.4.0
+  flutter_svg:
+  emoji_picker_flutter:
+  intl:
 
   google_sign_in: ^6.1.4
   loading_animation_widget: ^1.2.0+4
