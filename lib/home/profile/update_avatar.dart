@@ -6,14 +6,14 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({Key? key}) : super(key: key);
+class UpdateAvatarScreen extends StatefulWidget {
+  const UpdateAvatarScreen({Key? key}) : super(key: key);
 
   @override
-  State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
+  State<UpdateAvatarScreen> createState() => _UpdateAvatarScreenState();
 }
 
-class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+class _UpdateAvatarScreenState extends State<UpdateAvatarScreen> {
   final imagePick = ImagePicker();
   File? imageGallery;
 

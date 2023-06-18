@@ -57,231 +57,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                                   ],
                                 ),
-                       
-                      
                               ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
+                          child: Column(
                             children: [
-                              const Text(
-                                'Account Settings',
-                                style: TextStyle(
-                                  color: Color(0xFF000000),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        color: Color(0XFF247DCF), // Specify the color of the border
-                                        width: 1.0,  // Specify the width of the border
-                                      ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  const Text(
+                                    'Account Settings',
+                                    style: TextStyle(
+                                      color: Color(0xFF000000),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  child: const Text(
-                                      "Edit",
-                                      style: TextStyle(
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.goNamed("update-profile",
+                                          queryParameters: {
+                                            'uid': snapshot.data!.uid
+                                          });
+                                    },
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                          bottom: BorderSide(
+                                            color: Color(
+                                                0XFF247DCF), // Specify the color of the border
+                                            width:
+                                                1.0, // Specify the width of the border
+                                          ),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        "Edit",
+                                        style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w300,
                                           color: Color(0XFF247DCF),
+                                        ),
                                       ),
-
+                                    ),
                                   ),
+                                ],
+                              ),
+                              InforRow(
+                                title: "Name",
+                                content: snapshot.data!.fullName,
+                              ),
+                              InforRow(
+                                title: "Email",
+                                content: snapshot.data!.email,
+                              ),
+                              InforRow(
+                                title: "Gender",
+                                content: snapshot.data!.gender,
+                              ),
+                              InforRow(
+                                title: "Biography",
+                                content: snapshot.data!.biography,
+                              ),
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    0, 20, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        context
+                                            .read<CallDataProvider>()
+                                            .signOut();
+                                        GoRouter.of(context).pushReplacement(
+                                            '/login-home-screen');
+                                      },
+                                      style: const ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStatePropertyAll<Color>(
+                                                  Colors.white),
+                                          foregroundColor:
+                                              MaterialStatePropertyAll<Color>(
+                                                  Colors.green)),
+                                      child: const Text(
+                                        'Sign Out',
+                                        style: TextStyle(
+                                          fontFamily: 'Lexend Deca',
+                                          color: Color(0xFF4B39EF),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        // ListView(
-                        //   padding: EdgeInsets.zero,
-                        //   shrinkWrap: true,
-                        //   scrollDirection: Axis.vertical,
-                        //   children: [
-                        //     Row(
-                        //       mainAxisSize: MainAxisSize.max,
-                        //       children: [
-                        //         Container(
-                        //           width: MediaQuery.of(context).size.width,
-                        //           height: 50,
-                        //           decoration: const BoxDecoration(
-                        //             color: Colors.white,
-                        //             shape: BoxShape.rectangle,
-                        //           ),
-                        //           child: Row(
-                        //             mainAxisSize: MainAxisSize.max,
-                        //             children: [
-                        //               const Padding(
-                        //                 padding: EdgeInsetsDirectional.fromSTEB(
-                        //                     24, 0, 0, 0),
-                        //                 child: Text(
-                        //                   'Update avatar',
-                        //                   style: TextStyle(
-                        //                     fontFamily: 'Lexend Deca',
-                        //                     color: Color(0xFF090F13),
-                        //                     fontSize: 14,
-                        //                     fontWeight: FontWeight.normal,
-                        //                   ),
-                        //                 ),
-                        //               ),
-                        //               Expanded(
-                        //                 child: Align(
-                        //                   alignment: const AlignmentDirectional(
-                        //                       0.9, 0),
-                        //                   child: IconButton(
-                        //                       onPressed: () async {
-                        //                         context
-                        //                             .go('/home/update-avatar');
-                        //                       },
-                        //                       padding: EdgeInsets.zero,
-                        //                       icon: const Icon(
-                        //                         Icons.arrow_forward_ios,
-                        //                         color: Color(0xFF95A1AC),
-                        //                         size: 18,
-                        //                       )),
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     Padding(
-                        //       padding: const EdgeInsetsDirectional.fromSTEB(
-                        //           0, 1, 0, 0),
-                        //       child: Row(
-                        //         mainAxisSize: MainAxisSize.max,
-                        //         children: [
-                        //           Container(
-                        //             width: MediaQuery.of(context).size.width,
-                        //             height: 50,
-                        //             decoration: const BoxDecoration(
-                        //               color: Colors.white,
-                        //               shape: BoxShape.rectangle,
-                        //             ),
-                        //             child: Row(
-                        //               mainAxisSize: MainAxisSize.max,
-                        //               children: const [
-                        //                 Padding(
-                        //                   padding:
-                        //                       EdgeInsetsDirectional.fromSTEB(
-                        //                           24, 0, 0, 0),
-                        //                   child: Text(
-                        //                     'Notifications',
-                        //                     style: TextStyle(
-                        //                       fontFamily: 'Lexend Deca',
-                        //                       color: Color(0xFF090F13),
-                        //                       fontSize: 14,
-                        //                       fontWeight: FontWeight.normal,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //                 Expanded(
-                        //                   child: Align(
-                        //                     alignment:
-                        //                         AlignmentDirectional(0.9, 0),
-                        //                     child: Icon(
-                        //                       Icons.arrow_forward_ios,
-                        //                       color: Color(0xFF95A1AC),
-                        //                       size: 18,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //     Padding(
-                        //       padding: const EdgeInsetsDirectional.fromSTEB(
-                        //           0, 1, 0, 0),
-                        //       child: Row(
-                        //         mainAxisSize: MainAxisSize.max,
-                        //         children: [
-                        //           Container(
-                        //             width: MediaQuery.of(context).size.width,
-                        //             height: 50,
-                        //             decoration: const BoxDecoration(
-                        //               color: Colors.white,
-                        //               shape: BoxShape.rectangle,
-                        //             ),
-                        //             child: Row(
-                        //               mainAxisSize: MainAxisSize.max,
-                        //               children: const [
-                        //                 Padding(
-                        //                   padding:
-                        //                       EdgeInsetsDirectional.fromSTEB(
-                        //                           24, 0, 0, 0),
-                        //                   child: Text(
-                        //                     'Change Password',
-                        //                     style: TextStyle(
-                        //                       fontFamily: 'Lexend Deca',
-                        //                       color: Color(0xFF090F13),
-                        //                       fontSize: 14,
-                        //                       fontWeight: FontWeight.normal,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //                 Expanded(
-                        //                   child: Align(
-                        //                     alignment:
-                        //                         AlignmentDirectional(0.9, 0),
-                        //                     child: Icon(
-                        //                       Icons.arrow_forward_ios,
-                        //                       color: Color(0xFF95A1AC),
-                        //                       size: 18,
-                        //                     ),
-                        //                   ),
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        Padding(
-                          padding:
-                              const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ElevatedButton(
-                                onPressed: () async {
-                                  context.read<CallDataProvider>().signOut();
-                                  GoRouter.of(context)
-                                      .pushReplacement('/login-home-screen');
-                                },
-                                style: const ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStatePropertyAll<Color>(
-                                            Colors.white),
-                                    foregroundColor:
-                                        MaterialStatePropertyAll<Color>(
-                                            Colors.green)),
-                                child: const Text(
-                                  'Sign Out',
-                                  style: TextStyle(
-                                    fontFamily: 'Lexend Deca',
-                                    color: Color(0xFF4B39EF),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              )
                             ],
                           ),
                         ),
@@ -289,6 +167,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     )
                   : Container();
             }));
+  }
+}
+
+class InforRow extends StatelessWidget {
+  const InforRow({
+    super.key,
+    required this.title,
+    required this.content,
+  });
+
+  final String title;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 16.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(width: 1.0, color: const Color(0XFFC6C6C6))),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          title,
+          style: const TextStyle(color: Colors.black, fontSize: 14),
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        Text(
+          content,
+          style: const TextStyle(color: Color(0XFF8E8E8E), fontSize: 14),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+      ]),
+    );
   }
 }
 
