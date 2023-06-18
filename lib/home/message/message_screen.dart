@@ -85,67 +85,130 @@ class MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(
-                  left: 20, right: 20, top: 30, bottom: 15),
-              child: Row(
-                children: [
-                  const Text(
-                    "Messages",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(
+                    left: 20, right: 20, top: 30, bottom: 15),
+                child: Row(
+                  children: [
+                    const Text(
+                      "Messages",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: IconButton(
-                        iconSize: 30,
-                        padding: const EdgeInsets.all(5),
-                        onPressed: () async {
-                          context.go('/home/search-user');
-                        },
-                        icon: const Icon(
-                          Icons.menu,
-                          color: Colors.pink,
-                        ),
-                      ))
-                ],
+                    const Spacer(),
+                    Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: IconButton(
+                          iconSize: 30,
+                          padding: const EdgeInsets.all(5),
+                          onPressed: () async {
+                            context.go('/home/search-user');
+                          },
+                          icon: const Icon(
+                            Icons.menu,
+                            color: Colors.pink,
+                          ),
+                        ))
+                  ],
+                ),
               ),
-            ),
-            Search(),
-            Container(
-              margin: const EdgeInsets.all(20),
-              child: const Text(
-                'Activities',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Search(),
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: const Text(
+                  'Activities',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 120,
-              child: chatRoomsList('horizontal'),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 20, left: 20),
-              child: const Text(
-                'Messages',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              SizedBox(
+                height: 120,
+                child: chatRoomsList('horizontal'),
               ),
-            ),
-            SingleChildScrollView(child: chatRoomsList('vertical'))
-          ],
+              Container(
+                margin: const EdgeInsets.only(bottom: 20, left: 20),
+                child: const Text(
+                  'Messages',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SingleChildScrollView(child: chatRoomsList('vertical'))
+            ],
+          ),
         ),
       ),
     );
   }
+  // Widget itemMessage(){
+  //    return  Scaffold(
+  //       body:  SingleChildScrollView(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Container(
+  //                 margin: const EdgeInsets.only(left: 20,right: 20,top: 30,bottom: 15),
+  //                 child: Row(
+  //                   children: [
+  //                     const Text(
+  //                       "Messages",
+  //                       style: TextStyle(
+  //                         fontWeight: FontWeight.bold,
+  //                         fontSize: 30,
+  //                       ),
+  //                     ),
+  //                   const Spacer(),
+  //                   Container(
+  //                       decoration: BoxDecoration(
+  //                           border: Border.all(width: 1, color: Colors.grey),
+  //                           borderRadius: BorderRadius.circular(10)),
+  //                       child: IconButton(
+  //                         iconSize: 30,
+  //                         padding: const EdgeInsets.all(5),
+  //                         onPressed: () async {
+  //                           context.go('/home/search-user');
+  //                         },
+  //                         icon: const Icon(
+  //                           Icons.menu,
+  //                           color: Colors.pink,
+  //                         ),
+  //                       ))
+  //                 ],
+  //               ),
+  //             ),
+  //             Search(),
+  //             Container(
+  //               margin: const EdgeInsets.all(20),
+  //               child: const Text(
+  //                 'Activities',
+  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 120,
+  //               child: chatRoomsList('horizontal'),
+  //             ),
+  //             Container(
+  //               margin: const EdgeInsets.only(left: 20),
+  //               child: const Text(
+  //                 'Messages',
+  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //               ),
+  //             ),
+  //               chatRoomsList('vertical')
+  //             ],
+  //           ),
+  //       ),
+  //   );
+  // }
 
   Widget Search() {
     return Card(
@@ -163,9 +226,12 @@ class MessageScreenState extends State<MessageScreen> {
               color: Colors.grey,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              onTap: (){
+               context.go('/home/search-message');
+              },
+              decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   hintText: 'Search',
                   hintStyle: TextStyle(color: Colors.grey),
@@ -238,7 +304,10 @@ class MessageScreenState extends State<MessageScreen> {
                       child: Text(
                         snapshot.data?.fullName ?? "",
                         style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                            fontSize: 14, fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ))
                 ],
               ),

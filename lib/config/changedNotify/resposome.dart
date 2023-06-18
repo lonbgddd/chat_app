@@ -42,8 +42,6 @@ class CallDataProvider extends ChangeNotifier {
     }
   }
 
-
-
   Future<void> confirmProfile(String gender, String birthday,
       List<String> interests, String biography) async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -51,9 +49,9 @@ class CallDataProvider extends ChangeNotifier {
         await HelpersFunctions().getUserTokenSharedPreference() as String;
     if (user != null) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'avatar': user.photoURL,
-        'email': user.email,
-        'fullName': user.displayName,
+        'avatar': user.photoURL ?? 'https://antimatter.vn/wp-content/uploads/2022/10/hinh-anh-gai-xinh-de-thuong.jpg',
+        'email': user.email ?? 'admin@gmail.com',
+        'fullName': user.displayName ?? 'admin',
         'post': [],
         'status': 'online',
         'token': token,
