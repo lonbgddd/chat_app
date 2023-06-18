@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/chat_user.dart';
@@ -83,15 +84,27 @@ class DatabaseMethods {
   }
 
   Future<void> addMessage(
-      String chatRoomId, ChatMessage chatMessageData) async {
+      String chatRoomId, ChatMessage chatMessageData, String token) async {
     await FirebaseFirestore.instance
         .collection("chatRoom")
         .doc(chatRoomId)
         .collection("chats")
         .add(chatMessageData.toJson())
-        .catchError((e) {
+        .then((_) {
+      FirebaseApi()
+          .sendPushMessage(chatMessageData.messageText, 'Tin nhắn', token);
+    }).catchError((e) {
       print(e.toString());
     });
+  }
+
+  Future<User> getToken(String uid) async {
+    final data = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get();
+    return User.fromJson(data.docs.first.data());
   }
 
   Future<String> pushImage(File? image, String uid) async {

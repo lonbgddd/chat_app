@@ -1,86 +1,93 @@
+import 'dart:async';
+
 import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     final checkLogin = context.watch<CallDataProvider>();
-
     return StreamBuilder<User?>(
       stream: checkLogin.user,
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           return Scaffold(
-            body: Column(
-              children: [
-                const Spacer(flex: 2),
-                Image.network(
-                    'https://png.pngtree.com/png-clipart/20190916/ourlarge/pngtree-cartoon-hand-drawn-promotion-work-performance-illustration-png-image_1730059.jpg'),
-                const Spacer(flex: 3),
-                Text(
-                  "Find Your Perfect Match!",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'Discover and connect with like-minded individuals. Start your journey to love today!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .color!
-                          .withOpacity(0.64),
+            body: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromRGBO(238, 128, 95, 100),
+                      Color.fromRGBO(234, 64, 128, 100),
+
+                    ]),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 80),
+                          SvgPicture.asset(
+                            AppAssets.iconTinder,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.contain,
+                            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            'Binder',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontFamily: 'Grandista',
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  InkWell(
+                    onTap: () {
+                      snapshot.data == null
+                          ? context.pushReplacement('/login-home-screen')
+                          : context.go('/home');
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(12),
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.white
+                        ),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Center(
+                        child: Text('Hẹn hò ngay',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                      ),
                     ),
                   ),
+                  ],
                 ),
-                const Spacer(flex: 3),
-                FittedBox(
-                  child: TextButton(
-                      onPressed: () {
-                        snapshot.data == null
-                            ? context.pushReplacement('/login-home-screen')
-                            : context.go('/home');
-                      },
-                      child: Row(
-                        children: [
-                          Text(
-                            "Skip",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .color!
-                                          .withOpacity(0.8),
-                                    ),
-                          ),
-                          const SizedBox(),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .color!
-                                .withOpacity(0.8),
-                          )
-                        ],
-                      )),
-                )
-              ],
+              ),
             ),
           );
         }
