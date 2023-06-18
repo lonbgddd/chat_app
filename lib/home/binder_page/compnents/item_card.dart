@@ -55,15 +55,28 @@ class ProfileCard extends StatelessWidget {
 
   cardProfile() => Stack(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                image: NetworkImage(user?.avatar ??
-                    'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
-                fit: BoxFit.cover,
-              )),
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.shade300,
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: NetworkImage(user?.avatar ??
+                      'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
+                  fit: BoxFit.cover,
+                ),
+                ),
+              ),
             ),
           ),
           Container(

@@ -20,17 +20,18 @@ class ButtonCustom extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             backgroundColor: color ?? Colors.white,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25))),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+                borderRadius: BorderRadius.circular(30))),
+        child: Container(
+          padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 18),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/$image'),
+              Image.asset(image!,width: 25,),
               const SizedBox(width: 10,),
               Text(
                 text ?? "null",
-                style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black, fontSize: 18),
+                style: const TextStyle(fontWeight: FontWeight.w500,color: Colors.black, fontSize: 17),
                 overflow: TextOverflow.ellipsis,
               ),
             ],
