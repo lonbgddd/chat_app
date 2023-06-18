@@ -3,6 +3,7 @@ import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
 import 'package:chat_app/detail/detail_screen.dart';
 import 'package:chat_app/home/home.dart';
+import 'package:chat_app/home/message/search_Message.dart';
 import 'package:chat_app/home/profile/detail_profile_others.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/search.dart';
@@ -48,6 +49,10 @@ final GoRouter router = GoRouter(routes: [
               uid: state.queryParameters['uid'],
           ),
         ),
+        GoRoute(
+            path: 'search-message',
+            builder: (context, state) => SearchMessage(),
+        )
       ]),
   GoRoute(
       path: '/',
@@ -65,7 +70,8 @@ final GoRouter router = GoRouter(routes: [
             routes: [
               GoRoute(
                   path: 'verify_otp',
-                  builder: (context, state) => const VerifyOTP()),
+                  name: 'verify_otp',
+                  builder: (context, state) => VerifyOTP(numberPhone: state.queryParameters['phoneNumber'],)),
             ]),
       ])
 ]);
