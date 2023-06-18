@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/current_remaining_time.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:go_router/go_router.dart';
 
 
@@ -31,7 +33,7 @@ class LoginWithPhoneNumberState extends State<LoginWithPhoneNumber>{
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
             leading: IconButton(
               icon: const Icon(
                 Icons.west,
@@ -43,96 +45,97 @@ class LoginWithPhoneNumberState extends State<LoginWithPhoneNumber>{
               },
             ),
           ),
-          body: Container(
-            margin: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: const Text('My number is',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 26
-                    ),),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Card(
-                    margin: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
-                              ),
-                            ),
-                            value: selectedCountry.isNotEmpty ? selectedCountry : null,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedCountry = newValue!;
-                              });
-                            },
-                            items: countryCodes.map((Map<String, dynamic> item) {
-                              return DropdownMenuItem<String>(
-                                value: item['value'],
-                                child: Text('${item['display']} ${item['value']}'),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: TextField(
-                            controller: controller,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 10) ,
-                                hintText: 'Number phone',
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: InputBorder.none),
-                          ),
-                        ),
-                      ],
-                    )
-                ),
-                Spacer(),
-                Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          await FirebaseAuth.instance.verifyPhoneNumber(
-                            phoneNumber: '+84384745334',
-                            verificationCompleted: (PhoneAuthCredential credential) {},
-                            verificationFailed: (FirebaseAuthException e) {
-                              print('${e.message} lonme mey');
-                            },
-                            codeSent: (String verificationId, int? resendToken) {
-                              LoginWithPhoneNumber.verify = verificationId;
-                              context.go('/login/verify_otp');
-                            },
-                            codeAutoRetrievalTimeout: (String verificationId) {},
-                          );
-                        },
-
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          backgroundColor: Colors.deepPurpleAccent,
-                        ),
-                        child: const Text('SEND THE CODE')),
+          body: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: const Text('My number is',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26
+                      ),),
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Card(
+                      margin: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                ),
+                              ),
+                              value: selectedCountry.isNotEmpty ? selectedCountry : null,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectedCountry = newValue!;
+                                });
+                              },
+                              items: countryCodes.map((Map<String, dynamic> item) {
+                                return DropdownMenuItem<String>(
+                                  value: item['value'],
+                                  child: Text('${item['display']} ${item['value']}'),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: TextField(
+                              controller: controller,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 10) ,
+                                  hintText: 'Number phone',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none),
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+                  Center(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 30),
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            await FirebaseAuth.instance.verifyPhoneNumber(
+                              phoneNumber: '$selectedCountry ${controller.text}' ,
+                              verificationCompleted: (PhoneAuthCredential credential) {},
+                              verificationFailed: (FirebaseAuthException e) {
+                                print('${e.message}');
+                              },
+                              codeSent: (String verificationId, int? resendToken) {
+                                LoginWithPhoneNumber.verify = verificationId;
+                                context.goNamed('verify_otp', queryParameters: {'phoneNumber':'$selectedCountry${controller.text}'});
+                              },
+                              codeAutoRetrievalTimeout: (String verificationId) {},
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            backgroundColor: Colors.deepPurpleAccent,
+                          ),
+                          child: const Text('SEND THE CODE')),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

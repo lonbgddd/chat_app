@@ -1,3 +1,4 @@
+import 'package:chat_app/home/message/search_Message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +32,6 @@ class MessageScreenState extends State<MessageScreen> {
 
   getUserChat() async {
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-
     await context.read<HomeNotify>().getUserChats()?.then(
       (value) {
         setState(() {
@@ -85,8 +85,7 @@ class MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-        body:  Container(
-            color: Colors.white,
+        body:  SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -133,12 +132,13 @@ class MessageScreenState extends State<MessageScreen> {
                 child: chatRoomsList('horizontal'),
               ),
               Container(
-                margin: const EdgeInsets.only(bottom: 20, left: 20),
+                margin: const EdgeInsets.only(left: 20),
                 child: const Text(
                   'Messages',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                SingleChildScrollView(child: chatRoomsList('vertical'))
+              ),
+                chatRoomsList('vertical')
               ],
             ),
         ),
@@ -161,9 +161,12 @@ class MessageScreenState extends State<MessageScreen> {
               color: Colors.grey,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              onTap: (){
+               context.go('/home/search-message');
+              },
+              decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   hintText: 'Search',
                   hintStyle: TextStyle(color: Colors.grey),
@@ -234,7 +237,10 @@ class MessageScreenState extends State<MessageScreen> {
                       child: Text(
                         snapshot.data?.fullName ?? "",
                         style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                            fontSize: 14, fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ))
                 ],
               ),

@@ -6,6 +6,7 @@ import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
@@ -24,9 +25,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
 import 'home/item_chat.dart';
+import 'home/message/search_Message.dart';
 
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   await Firebase.initializeApp();
@@ -175,6 +176,10 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => ItemChatNotify(),
         child: ChatRoomsTile(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => SearchMessageProvider(),
+        child: SearchMessage(),
       ),
     ],
     child: const MyApp(),
