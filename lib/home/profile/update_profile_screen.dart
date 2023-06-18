@@ -1,3 +1,4 @@
+import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/data.dart';
 import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
@@ -6,6 +7,7 @@ import 'package:chat_app/home/profile/components/input_field.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key, required this.uid});
@@ -56,12 +58,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Update success'),
-              content: Text('Your information has been updated'),
+              title: const Text('Update success'),
+              content: const Text('Your information has been updated'),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Ok'),
+                  child: const Text('Ok'),
                   onPressed: () {
+                    context.read<ProfileWatch>().getUser();
                     Navigator.of(context).pop();
                   },
                 ),

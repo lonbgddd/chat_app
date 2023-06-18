@@ -1,9 +1,11 @@
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,18 +19,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProfileWatch>(context, listen: false).getUser();
+    // Provider.of<ProfileWatch>(context, listen: false).getUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: const Color(0xFFF1F4F8),
-        body: FutureBuilder<User>(
-            future: context.read<ProfileWatch>().getUser(),
-            builder: (context, snapshot) {
-              return snapshot.hasData
-                  ? Column(
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: const Color(0xFFF1F4F8),
+          body: StreamBuilder<User>(
+              stream: context.watch<ProfileWatch>().getUserStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  String dateString = snapshot.data!.birthday;
+                  DateTime dateTime = DateTime.parse(dateString);
+                  String formattedDate = DateFormat.yMMMMd().format(dateTime);
+                  return SingleChildScrollView(
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         ClipPath(
@@ -122,8 +129,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 content: snapshot.data!.gender,
                               ),
                               InforRow(
-                                title: "Biography",
-                                content: snapshot.data!.biography,
+                                title: "Birthday",
+                                content: formattedDate,
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 16.0),
+                                padding: const EdgeInsets.all(16.0),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        width: 1.0,
+                                        color: const Color(0XFFC6C6C6))),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Biography",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 8.0,
+                                      ),
+                                      Text(
+                                        snapshot.data!.biography,
+                                        style: const TextStyle(
+                                            color: Color(0XFF8E8E8E),
+                                            fontSize: 14),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ]),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 16.0),
+                                padding: const EdgeInsets.all(16.0),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                        width: 1.0,
+                                        color: const Color(0XFFC6C6C6))),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Interests",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Wrap(
+                                        children: List.generate(
+                                            snapshot.data!.interests.length,
+                                            (index) => InterestItem(
+                                                title: snapshot
+                                                    .data!.interests[index])),
+                                      )
+                                    ]),
                               ),
                               Padding(
                                 padding: const EdgeInsetsDirectional.fromSTEB(
@@ -151,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         'Sign Out',
                                         style: TextStyle(
                                           fontFamily: 'Lexend Deca',
-                                          color: Color(0xFF4B39EF),
+                                          color: Colors.red,
                                           fontSize: 14,
                                           fontWeight: FontWeight.normal,
                                         ),
@@ -164,9 +233,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ],
-                    )
-                  : Container();
-            }));
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              })),
+    );
+  }
+}
+
+class InterestItem extends StatelessWidget {
+  const InterestItem({
+    super.key,
+    required this.title,
+  });
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 8.0, top: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+      decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            const Color(0XFFAA3FEC).withOpacity(0.4),
+            const Color(0XFFAA3FEC).withOpacity(0.8)
+          ]),
+          borderRadius: BorderRadius.circular(15)),
+      child: Text(
+        title,
+        style: const TextStyle(fontSize: 12, color: Colors.white),
+      ),
+    );
   }
 }
 
@@ -191,7 +289,10 @@ class InforRow extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(
           title,
-          style: const TextStyle(color: Colors.black, fontSize: 14),
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+          ),
         ),
         const SizedBox(
           width: 16,
@@ -203,52 +304,6 @@ class InforRow extends StatelessWidget {
           maxLines: 1,
         ),
       ]),
-    );
-  }
-}
-
-class ProfileAvatar extends StatelessWidget {
-  const ProfileAvatar({
-    super.key,
-    required this.avataUrl,
-  });
-
-  final String avataUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 120,
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: NetworkImage(avataUrl), fit: BoxFit.cover)),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              width: 40,
-              height: 40,
-              padding: const EdgeInsets.all(4.0),
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: Colors.white),
-              child: const Center(
-                  child: Icon(
-                Icons.edit,
-                color: Color(0XFFAA3FEC),
-                size: 16,
-              )),
-            ),
-          )
-        ],
-      ),
     );
   }
 }

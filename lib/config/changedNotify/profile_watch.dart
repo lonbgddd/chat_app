@@ -15,6 +15,11 @@ class ProfileWatch extends ChangeNotifier {
     }
   }
 
+  Stream<User> getUserStream() async* {
+    final uid = await HelpersFunctions().getUserIdUserSharedPreference();
+    yield* DatabaseServices(uid).getUserInforsStream();
+  }
+
   Future<User> getDetailOthers(String? idUser) async {
     try {
       return await DatabaseServices(idUser).getUserInfors();
