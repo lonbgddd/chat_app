@@ -42,7 +42,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           clipper: OvalBottomBorderClipper(),
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.35,
-                            color: const Color(0XFFAA3FEC).withOpacity(0.8),
+                            color: const Color.fromRGBO(229, 58, 69, 100),
                             child: GestureDetector(
                               onTap: () {
                                 context.go('/home/update-avatar');
@@ -256,8 +256,8 @@ class InterestItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
       decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            const Color(0XFFAA3FEC).withOpacity(0.4),
-            const Color(0XFFAA3FEC).withOpacity(0.8)
+            const Color.fromRGBO(229, 58, 69, 100).withOpacity(0.4),
+            const Color.fromRGBO(229, 58, 69, 100).withOpacity(0.8)
           ]),
           borderRadius: BorderRadius.circular(15)),
       child: Text(

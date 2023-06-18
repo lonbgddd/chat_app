@@ -190,10 +190,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               style: const TextStyle(fontSize: 14),
                             ),
                             trailing: isSelected
-                                ? Icon(
+                                ? const Icon(
                                     Icons.check,
-                                    color: const Color(0XFFAA3FEC)
-                                        .withOpacity(0.8),
+                                    color: Color.fromRGBO(229, 58, 69, 100),
                                   )
                                 : null,
                             onTap: () {
@@ -218,7 +217,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0)),
                                 backgroundColor:
-                                    const Color(0XFFAA3FEC).withOpacity(0.8),
+                                    const Color.fromRGBO(229, 58, 69, 100),
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 13, horizontal: 16)),
                             onPressed: update,

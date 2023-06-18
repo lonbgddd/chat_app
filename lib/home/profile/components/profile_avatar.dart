@@ -35,7 +35,7 @@ class ProfileAvatar extends StatelessWidget {
               child: const Center(
                   child: Icon(
                 Icons.edit,
-                color: Color(0XFFAA3FEC),
+                color: Color.fromRGBO(229, 58, 69, 100),
                 size: 16,
               )),
             ),

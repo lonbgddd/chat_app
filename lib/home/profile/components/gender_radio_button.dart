@@ -24,7 +24,7 @@ class GenderRadioButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
-      tileColor: const Color(0XFFAA3FEC).withOpacity(0.2),
+      tileColor: const Color.fromRGBO(229, 58, 69, 100).withOpacity(0.2),
       value: value,
       groupValue: selectedValue,
       onChanged: onChanged,
