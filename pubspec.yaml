@@ -48,6 +48,7 @@ dependencies:
   shared_preferences: ^2.1.1
   curved_navigation_bar: ^1.0.3
   date_time_picker: ^2.1.0
+  zoom_tap_animation: ^1.1.0
   firebase_storage: ^11.2.2
   image_picker: ^0.8.7+5
   firebase_messaging: ^14.6.2
@@ -58,8 +59,12 @@ dependencies:
   pin_code_fields: ^7.4.0
   flutter_custom_clippers: ^2.1.0
   intl: ^0.17.0
+  flutter_svg: ^2.0.7
 
   google_sign_in: ^6.1.4
+  loading_animation_widget: ^1.2.0+4
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
