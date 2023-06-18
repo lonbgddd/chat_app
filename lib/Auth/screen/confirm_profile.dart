@@ -152,7 +152,7 @@ class _ConfirmProfileState extends State<ConfirmProfile> {
                       ),
                     ],
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               const Text(

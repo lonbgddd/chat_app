@@ -54,11 +54,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
                   stream: context.watch<FollowNotify>().userFollowYouStream,
                   builder: (context,
                       AsyncSnapshot<List<Map<User, ChatRoom?>>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.data!.isNotEmpty) {
+                    if (snapshot.hasData) {
                       return GridView.builder(
                         itemCount: snapshot.data!.length,
                         shrinkWrap: true,

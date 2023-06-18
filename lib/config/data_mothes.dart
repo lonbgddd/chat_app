@@ -128,6 +128,17 @@ class DatabaseMethods {
     }
   }
 
+  Future updateUser(User user) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update(user.toJson());
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future getUserChats(String uid) async {
     return FirebaseFirestore.instance
         .collection("chatRoom")
