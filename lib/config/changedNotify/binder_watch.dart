@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
@@ -55,7 +57,7 @@ class BinderWatch extends ChangeNotifier {
   void endPosition() {
     _isDragging = false;
     notifyListeners();
-    final status = getStatus();
+    final status = getStatus(focus: true);
 
     switch (status) {
       case StatusCard.like:
@@ -106,15 +108,30 @@ class BinderWatch extends ChangeNotifier {
     }
   }
 
-  StatusCard? getStatus() {
+  double getStatusOpacity() {
+    const detail = 100;
+    final pos = max(_offset.dx.abs(), _offset.dy.abs());
+    final opacity = pos / detail;
+    return min(opacity, 1);
+  }
+
+  StatusCard? getStatus({bool focus = false}) {
     final x = _offset.dx;
 
-    const delta = 100;
-
-    if (x >= delta) {
-      return StatusCard.like;
-    } else if (x <= -delta) {
-      return StatusCard.dislike;
+    if (focus) {
+      const delta = 100;
+      if (x >= delta) {
+        return StatusCard.like;
+      } else if (x <= -delta) {
+        return StatusCard.dislike;
+      }
+    } else {
+      const delta = 20;
+      if (x >= delta) {
+        return StatusCard.like;
+      } else if (x <= -delta) {
+        return StatusCard.dislike;
+      }
     }
   }
 
