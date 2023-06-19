@@ -115,7 +115,7 @@ class _BinderPageState extends State<BinderPage> {
 
   Widget getBody() {
     return FutureBuilder(
-        future: context.watch<BinderWatch>().allUserBinder(),
+        future: context.read<BinderWatch>().allUserBinder(),
         builder: (context, snapshot) => snapshot.hasData
             ? Padding(
                 padding: const EdgeInsets.all(10),
