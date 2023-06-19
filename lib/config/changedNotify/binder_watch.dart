@@ -30,7 +30,6 @@ class BinderWatch extends ChangeNotifier {
 
       final users = await DatabaseMethods().getAllUser(uid);
       _listCard = users ?? [];
-      // notifyListeners();
 
       return _listCard;
     } catch (e) {
