@@ -60,7 +60,5 @@ class User {
         "interests": List<String>.from(interests.map((x) => x)),
         "gender": gender,
         "birthday": birthday,
-        "status": status,
-        "token": token,
       };
 }

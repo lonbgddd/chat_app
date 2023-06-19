@@ -12,9 +12,14 @@ class CallDataProvider extends ChangeNotifier {
       return user;
     }
   }
-  Future<bool> loginWithGoogle() async {
+  Future<String> loginWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    if (gUser == null) {
+      print(">>>>>>>>>>>>>>>>>LOG: Mày click ra ngoài Google Sign-in dialog");
+      return 'false';
+    }
+
+    final GoogleSignInAuthentication gAuth = await gUser.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
@@ -29,18 +34,20 @@ class CallDataProvider extends ChangeNotifier {
 
     if (dataUserSave.docs.isNotEmpty) {
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
-      final token = await HelpersFunctions().getUserTokenSharedPreference() as String;
+      final token =
+      await HelpersFunctions().getUserTokenSharedPreference() as String;
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
           .update({'token': token});
 
       _userFormFirebase(user);
-      return true;
+      return 'home';
     } else {
-      return false;
+      return 'confirm-screen'; // Trả về 'confirm' nếu email không tồn tại trong cơ sở dữ liệu
     }
   }
+
 
   Future<void> confirmProfile(String gender, String birthday,
       List<String> interests, String biography) async {

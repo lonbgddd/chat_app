@@ -63,7 +63,7 @@ final GoRouter router = GoRouter(routes: [
             builder: (context, state) => const HomeScreenLogin()),
         GoRoute(
             path: 'confirm-screen',
-            builder: (context, state) => const ConfirmProfile()),
+            builder: (context, state) =>  const ConfirmProfile()),
         GoRoute(
             path: 'login',
             builder: (context, state) => const LoginWithPhoneNumber(),
