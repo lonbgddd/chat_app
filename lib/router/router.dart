@@ -6,8 +6,8 @@ import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/search_Message.dart';
 import 'package:chat_app/home/profile/detail_profile_others.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
+import 'package:chat_app/home/profile/update_profile_screen.dart';
 import 'package:chat_app/home/search.dart';
-import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,7 +29,14 @@ final GoRouter router = GoRouter(routes: [
         ),
         GoRoute(
           path: 'update-avatar',
-          builder: (context, state) => const UpdateProfileScreen(),
+          builder: (context, state) => const UpdateAvatarScreen(),
+        ),
+        GoRoute(
+          path: 'update-profile',
+          name: 'update-profile',
+          builder: (context, state) => UpdateProfileScreen(
+            uid: state.queryParameters['uid'],
+          ),
         ),
         GoRoute(
             path: 'search-user',
@@ -46,7 +53,7 @@ final GoRouter router = GoRouter(routes: [
           path: 'detail-others',
           name: 'Home-detail-others',
           builder: (context, state) => DetailProfileOthersScreen(
-              uid: state.queryParameters['uid'],
+            uid: state.queryParameters['uid'],
           ),
         ),
         GoRoute(

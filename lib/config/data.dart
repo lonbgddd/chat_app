@@ -47,4 +47,13 @@ class DatabaseServices {
         .get()
         .then((value) => value.docs.map((e) => User.fromJson(e.data())).single);
   }
+
+  Stream<User> getUserInforsStream() {
+  return data
+      .collection("users")
+      .where('uid', isEqualTo: uid)
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => User.fromJson(doc.data())).single);
+}
 }

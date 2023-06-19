@@ -9,11 +9,15 @@ class ProfileWatch extends ChangeNotifier {
   Future<User> getUser() async {
     try {
       _uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>$_uid");
       return await DatabaseServices(_uid).getUserInfors();
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  Stream<User> getUserStream() async* {
+    final uid = await HelpersFunctions().getUserIdUserSharedPreference();
+    yield* DatabaseServices(uid).getUserInforsStream();
   }
 
   Future<User> getDetailOthers(String? idUser) async {
@@ -24,10 +28,5 @@ class ProfileWatch extends ChangeNotifier {
     }
   }
 
-
-
   String get uid => _uid ?? "";
-
-
-
 }

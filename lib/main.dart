@@ -12,7 +12,6 @@ import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/chat_screen.dart';
-import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
@@ -159,7 +158,7 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(
         create: (context) => UpdateNotify(),
-        child: const UpdateProfileScreen(),
+        child: const UpdateAvatarScreen(),
       ),
       ChangeNotifierProvider(
         create: (context) => HomeNotify(),
