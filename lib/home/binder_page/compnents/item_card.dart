@@ -70,11 +70,11 @@ class ProfileCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               child: Container(
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: NetworkImage(user?.avatar ??
-                      'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
-                  fit: BoxFit.cover,
-                ),
+                  image: DecorationImage(
+                    image: NetworkImage(user?.avatar ??
+                        'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -288,33 +288,41 @@ class ProfileCard extends StatelessWidget {
   Widget buildStamps(context) {
     final provider = Provider.of<BinderWatch>(context);
     final status = provider.getStatus();
+    final opacity = provider.getStatusOpacity();
     switch (status) {
       case StatusCard.like:
-        final child =
-            buildStamp(angle: -0.5, color: Colors.green, text: "Like");
+        final child = buildStamp(
+            angle: -0.5, color: Colors.green, text: "Like", opacity: opacity);
         return Positioned(child: child, top: 64, left: 50);
       case StatusCard.dislike:
-        final child =
-            buildStamp(angle: 0.5, color: Colors.red, text: "DisLike");
+        final child = buildStamp(
+            angle: 0.5, color: Colors.red, text: "DisLike", opacity: opacity);
         return Positioned(child: child, top: 64, right: 50);
       default:
         return Container();
     }
   }
 
-  buildStamp({double angle = 0, required Color color, required String text}) =>
-      Transform.rotate(
-        angle: angle,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: color, width: 4)),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: color, fontSize: 48, fontWeight: FontWeight.bold),
+  buildStamp(
+          {double angle = 0,
+          required Color color,
+          required String text,
+          required double opacity}) =>
+      Opacity(
+        opacity: opacity,
+        child: Transform.rotate(
+          angle: angle,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: color, width: 4)),
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: color, fontSize: 48, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       );

@@ -1,6 +1,5 @@
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
-import 'package:chat_app/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +15,6 @@ class BinderPage extends StatefulWidget {
 }
 
 class _BinderPageState extends State<BinderPage> {
-
   @override
   void initState() {
     super.initState();
@@ -37,22 +35,25 @@ class _BinderPageState extends State<BinderPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title:  Row(
+          title: Row(
             children: [
               SvgPicture.asset(
                 AppAssets.iconTinder,
                 width: 30,
                 height: 30,
                 fit: BoxFit.contain,
-                colorFilter: ColorFilter.mode(Color.fromRGBO(223, 54, 64, 100), BlendMode.srcIn),
+                colorFilter: const ColorFilter.mode(
+                    Color.fromRGBO(223, 54, 64, 100), BlendMode.srcIn),
               ),
-              const SizedBox(width: 5,),
-              Text(
+              const SizedBox(
+                width: 5,
+              ),
+              const Text(
                 "Binder",
                 style: TextStyle(
                   fontFamily: 'Grandista',
                   fontSize: 24,
-                  color: Color.fromRGBO(223, 54, 64, 100) ,
+                  color: Color.fromRGBO(223, 54, 64, 100),
                 ),
               ),
             ],
@@ -75,16 +76,16 @@ class _BinderPageState extends State<BinderPage> {
                       top: 6,
                       right: 6,
                       child: Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(2),
+                        decoration: const BoxDecoration(
                           color: Colors.red,
                           shape: BoxShape.circle,
                         ),
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minWidth: 16,
                           minHeight: 16,
                         ),
-                        child: Text(
+                        child: const Text(
                           '1',
                           style: TextStyle(
                             color: Colors.white,
@@ -113,20 +114,32 @@ class _BinderPageState extends State<BinderPage> {
   }
 
   Widget getBody() {
-    final provider = Provider.of<BinderWatch>(context).listCard;
-    print('List card: $provider');
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Stack(
-          alignment: Alignment.center,
-          children: provider.reversed
-              .map((e) => ProfileCard(
-                    user: e,
-                    isDetail:()=> context.goNamed('Home-detail-others',queryParameters: { 'uid': e.uid.toString(),}),
-                    isFont: provider.first == e,
-                  ))
-
-              .toList()),
-    );
+    return FutureBuilder(
+        future: context.watch<BinderWatch>().allUserBinder(),
+        builder: (context, snapshot) => snapshot.hasData
+            ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Stack(
+                    alignment: Alignment.center,
+                    children: context
+                        .watch<BinderWatch>()
+                        .listCard
+                        .reversed
+                        .map((e) => ProfileCard(
+                              user: e,
+                              isDetail: () => context.goNamed(
+                                  'Home-detail-others',
+                                  queryParameters: {
+                                    'uid': e.uid.toString(),
+                                  }),
+                              isFont:
+                                  context.watch<BinderWatch>().listCard.first ==
+                                      e,
+                            ))
+                        .toList()),
+              )
+            : const Center(
+                child: CircularProgressIndicator(),
+              ));
   }
 }
