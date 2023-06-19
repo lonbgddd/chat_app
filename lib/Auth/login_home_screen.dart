@@ -29,15 +29,18 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
       isLoading = true;
     });
     final login = context.read<CallDataProvider>();
-    bool isLogin=  await login.loginWithGoogle();
-    if(!isLogin) {
-      context.go('/confirm-screen');
-    }else {
-      context.go('/home');
-    }
-    setState(() {
-      isLoading = false;
-    });
+    String loginResult = await login.loginWithGoogle();
+      if (loginResult == 'false') {
+        context.go('/login-home-screen');
+      } else if (loginResult == 'home') {
+        context.go('/home');
+      } else if (loginResult == 'confirm-screen') {
+        context.go('/confirm-screen');
+      }
+
+      setState(() {
+        isLoading = false;
+      });
   }
 
 

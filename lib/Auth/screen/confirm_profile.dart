@@ -53,7 +53,7 @@ class _ConfirmProfileState extends State<ConfirmProfile> {
             size: 42,
           ),
           onPressed: () async {
-            await GoogleSignIn().signOut();
+            await signUp.signOut();
             context.pop();
           },
         ),

@@ -62,9 +62,9 @@ dependencies:
   intl: ^0.17.0
   flutter_svg: ^2.0.7
   emoji_picker_flutter:
-
   google_sign_in: ^6.1.4
   loading_animation_widget: ^1.2.0+4
+  intl: ^0.17.0
 
 
 dev_dependencies:
