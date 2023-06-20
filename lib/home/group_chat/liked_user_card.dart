@@ -16,7 +16,7 @@ class LikedUserCard extends StatefulWidget {
     this.chatRoom,
     required this.onDislikeCallback,
   });
-  final User? user;
+  final UserModal? user;
   final ChatRoom? chatRoom;
   final VoidCallback onDislikeCallback;
 

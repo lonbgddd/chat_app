@@ -9,15 +9,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseMethods {
-  Future<List<User>> searchByName(String searchField) async {
+  Future<List<UserModal>> searchByName(String searchField) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: searchField)
         .get();
-    return data.docs.map((e) => User.fromJson(e.data())).toList();
+    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
   }
 
-  Future<List<User>> getUserFollow(String uid) async {
+  Future<List<UserModal>> getUserFollow(String uid) async {
     QuerySnapshot list = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
@@ -29,15 +29,15 @@ class DatabaseMethods {
         .collection('users')
         .where('uid', whereIn: listId)
         .get();
-    return data.docs.map((e) => User.fromJson(e.data())).toList();
+    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
   }
 
-  Future<List<User>> getAllUser(String uid) async {
+  Future<List<UserModal>> getAllUser(String uid) async {
     QuerySnapshot data = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', whereNotIn: [uid])
         .get();
-    return data.docs.map((e) => User.fromJson(e.data() as  Map<String, dynamic>)).toList();
+    return data.docs.map((e) => UserModal.fromJson(e.data() as  Map<String, dynamic>)).toList();
   }
 
   Future addChatRoom(chatRoom, chatRoomId) async {
@@ -99,13 +99,13 @@ class DatabaseMethods {
     });
   }
 
-  Future<User> getToken(String uid) async {
+  Future<UserModal> getToken(String uid) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
         .limit(1)
         .get();
-    return User.fromJson(data.docs.first.data());
+    return UserModal.fromJson(data.docs.first.data());
   }
 
   Future<String> pushImage(File? image, String uid) async {
@@ -129,7 +129,7 @@ class DatabaseMethods {
     }
   }
 
-  Future updateUser(User user) async {
+  Future updateUser(UserModal user) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -185,9 +185,9 @@ class DatabaseMethods {
     return false;
   }
 
-  Future<List<User>> getListUserChat(String uid) async {
+  Future<List<UserModal>> getListUserChat(String uid) async {
     List<String> listUid = [];
-    List<User> userList =[];
+    List<UserModal> userList =[];
     try{
       await FirebaseFirestore.instance
           .collection("chatRoom")
@@ -208,7 +208,7 @@ class DatabaseMethods {
             .get()
             .then((QuerySnapshot querySnapshot) {
           userList = querySnapshot.docs.map((doc) {
-            User user = User.fromJson(doc.data() as Map<String, dynamic>);
+            UserModal user = UserModal.fromJson(doc.data() as Map<String, dynamic>);
             return user;
           }).toList();
         });

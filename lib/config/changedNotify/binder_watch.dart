@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class BinderWatch extends ChangeNotifier {
-  List<User> _listCard = [];
+  List<UserModal> _listCard = [];
   Offset _offset = Offset.zero;
   bool _isDragging = false;
   double _angle = 0;
@@ -17,17 +17,16 @@ class BinderWatch extends ChangeNotifier {
   bool get isDragging => _isDragging;
   Size _size = Size.zero;
 
-  List<User> get listCard => _listCard;
+  List<UserModal> get listCard => _listCard;
 
   void initData() {
     _listCard = [];
   }
 
-  Future<List<User>> allUserBinder() async {
+  Future<List<UserModal>> allUserBinder() async {
     try {
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
-
       final users = await DatabaseMethods().getAllUser(uid);
       _listCard = users ?? [];
 

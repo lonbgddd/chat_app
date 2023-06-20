@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class ProfileCard extends StatelessWidget {
   const ProfileCard({Key? key, this.user, this.isDetail, this.isFont})
       : super(key: key);
-  final User? user;
+  final UserModal? user;
   final bool? isFont;
   final Function()? isDetail;
 

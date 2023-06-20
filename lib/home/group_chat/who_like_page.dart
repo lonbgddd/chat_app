@@ -53,7 +53,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
               StreamBuilder(
                   stream: context.watch<FollowNotify>().userFollowYouStream,
                   builder: (context,
-                      AsyncSnapshot<List<Map<User, ChatRoom?>>> snapshot) {
+                      AsyncSnapshot<List<Map<UserModal, ChatRoom?>>> snapshot) {
                     if (snapshot.hasData) {
                       return GridView.builder(
                         itemCount: snapshot.data!.length,
@@ -69,7 +69,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
                                 crossAxisSpacing: 16,
                                 mainAxisExtent: 250),
                         itemBuilder: (context, index) {
-                          Map<User, ChatRoom?> userMap = snapshot.data![index];
+                          Map<UserModal, ChatRoom?> userMap = snapshot.data![index];
                           return LikedUserCard(
                             user: userMap.keys.elementAt(0),
                             chatRoom: userMap.values.elementAt(0),

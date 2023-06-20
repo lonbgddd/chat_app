@@ -18,7 +18,7 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  User? currentUser;
+  UserModal? currentUser;
   SingingCharacter? character = SingingCharacter.man;
   TextEditingController nameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
@@ -33,7 +33,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   ];
   List<String> newInterests = [];
   void getUserInfo() async {
-    await DatabaseServices(widget.uid).getUserInfors().then((user) {
+    await DatabaseServices(widget.uid).getUserInfo().then((user) {
       setState(() {
         currentUser = user;
         character = currentUser!.gender == "man"

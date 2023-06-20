@@ -8,12 +8,12 @@ import 'package:flutter/cupertino.dart';
 import '../../model/user_model.dart';
 
 class FollowNotify extends ChangeNotifier {
-  List<User> list = [];
+  List<UserModal> list = [];
   // String? _check;
 
-  final StreamController<List<Map<User, ChatRoom?>>> _userFollowYouController =
-      StreamController<List<Map<User, ChatRoom?>>>.broadcast();
-  Stream<List<Map<User, ChatRoom?>>> get userFollowYouStream =>
+  final StreamController<List<Map<UserModal, ChatRoom?>>> _userFollowYouController =
+      StreamController<List<Map<UserModal, ChatRoom?>>>.broadcast();
+  Stream<List<Map<UserModal, ChatRoom?>>> get userFollowYouStream =>
       _userFollowYouController.stream;
 
   void initData() {
@@ -21,12 +21,12 @@ class FollowNotify extends ChangeNotifier {
     // _check = null;
   }
 
-  Future<List<Map<User, ChatRoom?>>> userFollowYou() async {
+  Future<List<Map<UserModal, ChatRoom?>>> userFollowYou() async {
     try {
-      List<Map<User, ChatRoom?>> result = [];
+      List<Map<UserModal, ChatRoom?>> result = [];
       String uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      List<User> userFollow = await DatabaseMethods().getUserFollow(uid);
+      List<UserModal> userFollow = await DatabaseMethods().getUserFollow(uid);
 
       for (var user in userFollow) {
         if (user.post.contains(uid)) {
