@@ -22,8 +22,7 @@ class DatabaseMethods {
         .collection('users')
         .where('uid', isEqualTo: uid)
         .get();
-    // print(list.docs.single['post']);
-    List<dynamic> listId = list.docs.single['post'];
+    List<dynamic> listId = list.docs.single['followersList'];
 
     final data = await FirebaseFirestore.instance
         .collection('users')
@@ -50,13 +49,13 @@ class DatabaseMethods {
 
   Future addFollow(String uid, String followId) async {
     await FirebaseFirestore.instance.collection('users').doc(followId).update({
-      'post': FieldValue.arrayUnion([uid])
+      'followersList': FieldValue.arrayUnion([uid])
     });
   }
 
   Future removeFollow(String uid, String followId) async {
     await FirebaseFirestore.instance.collection('users').doc(uid).update({
-      'post': FieldValue.arrayRemove([followId])
+      'followersList': FieldValue.arrayRemove([followId])
     });
   }
 
@@ -64,9 +63,9 @@ class DatabaseMethods {
     QuerySnapshot data = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
-        .where('post', arrayContains: followId)
+        .where('followersList', arrayContains: followId)
         .get();
-    if (data.docs.single['post'] != null) {
+    if (data.docs.single['followersList'] != null) {
       return 'follow';
     }
     {
