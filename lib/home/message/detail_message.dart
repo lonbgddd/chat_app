@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/foundation.dart' as foundation;
+
 import '../../config/data_mothes.dart';
 import '../../model/chat_user.dart';
 
@@ -50,6 +51,7 @@ class DetailMessageState extends State<DetailMessage> {
       });
     }
   }
+
   bool checkTime(DateTime dateTime) {
     DateTime timeCurrent = DateTime.now();
     String date = DateFormat('yyyy-MM-dd').format(dateTime);
@@ -180,14 +182,12 @@ class DetailMessageState extends State<DetailMessage> {
                           checkTime(time)
                               ? const SizedBox.shrink()
                               : Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
                                     dateFormat.format(time),
-                                    style: const TextStyle(
-                                        color: Colors.grey
-                                    ),
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
-                              ),
+                                ),
                           Align(
                             alignment: (snapshot.data?.docs[index]['uid'] != uid
                                 ? Alignment.topLeft
@@ -232,13 +232,13 @@ class DetailMessageState extends State<DetailMessage> {
                                 ),
                                 checkTime(time)
                                     ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
                                           timeFormat.format(time),
-                                          style:
-                                              const TextStyle(color: Colors.grey),
+                                          style: const TextStyle(
+                                              color: Colors.grey),
                                         ),
-                                    )
+                                      )
                                     : const SizedBox.shrink(),
                               ],
                             ),

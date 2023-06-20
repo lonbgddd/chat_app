@@ -1,3 +1,4 @@
+import 'package:chat_app/home/message/itemMessage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,6 @@ import '../../config/changedNotify/home_watch.dart';
 import '../../config/helpers/helpers_database.dart';
 import '../../model/user_model.dart';
 import 'detail_message.dart';
-import 'itemMessage.dart';
 
 class MessageScreen extends StatefulWidget {
   @override
@@ -26,12 +26,10 @@ class MessageScreenState extends State<MessageScreen> {
     // TODO: implement initState
     super.initState();
     getUserChat();
-    Provider.of<HomeNotify>(context, listen: false);
   }
 
   getUserChat() async {
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-
     await context.read<HomeNotify>().getUserChats()?.then(
       (value) {
         setState(() {
@@ -73,7 +71,11 @@ class MessageScreenState extends State<MessageScreen> {
                       .replaceAll(keyUid ?? "", "");
                   String chatRoomId = data['chatRoomId'];
                   return direction == 'vertical'
-                      ? ItemMessage(uid: uid, chatRoomId: chatRoomId)
+                      ? ItemMessage(
+                          uid: uid,
+                          chatRoomId: chatRoomId,
+                          key: Key(chatRoomId),
+                        )
                       : itemActivities(uid, chatRoomId);
                 },
               )
@@ -228,8 +230,8 @@ class MessageScreenState extends State<MessageScreen> {
           ),
           Expanded(
             child: TextField(
-              onTap: (){
-               context.go('/home/search-message');
+              onTap: () {
+                context.go('/home/search-message');
               },
               decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -304,7 +306,8 @@ class MessageScreenState extends State<MessageScreen> {
                       child: Text(
                         snapshot.data?.fullName ?? "",
                         style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
