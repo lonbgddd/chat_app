@@ -33,11 +33,11 @@ class DatabaseMethods {
   }
 
   Future<List<UserModal>> getAllUser(String uid) async {
-    QuerySnapshot data = await FirebaseFirestore.instance
+    final data = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', whereNotIn: [uid])
         .get();
-    return data.docs.map((e) => UserModal.fromJson(e.data() as  Map<String, dynamic>)).toList();
+    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
   }
 
   Future addChatRoom(chatRoom, chatRoomId) async {

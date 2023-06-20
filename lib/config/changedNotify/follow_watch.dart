@@ -29,7 +29,7 @@ class FollowNotify extends ChangeNotifier {
       List<UserModal> userFollow = await DatabaseMethods().getUserFollow(uid);
 
       for (var user in userFollow) {
-        if (user.post.contains(uid)) {
+        if (user.followersList.contains(uid)) {
           ChatRoom chatRoom = await DatabaseMethods().getChatRoom(user.uid);
           result.add({user: chatRoom});
         } else {

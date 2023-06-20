@@ -1,6 +1,4 @@
 import 'package:chat_app/config/helpers/helpers_database.dart';
-import 'package:chat_app/model/basic_info_user.dart';
-import 'package:chat_app/model/style_of_life_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,8 +53,6 @@ class CallDataProvider extends ChangeNotifier {
   Future<void> confirmProfile(String gender, String birthday,
       List<String> interests, String biography) async {
     User? user = FirebaseAuth.instance.currentUser;
-    BasicInfoUser basicInfoUser = new BasicInfoUser(zodiac: '', academicLever: '', communicateStyle: '', languageOfLove: '', personalityType: '', familyStyle: '');
-    StyleOfLifeUser styleOfLifeUser = new StyleOfLifeUser(myPet: '', drinkingStatus: '', smokingStatus: '', sportsStatus: '', eatingStatus: '', socialNetworkStatus: '', sleepingHabits: '');
     final token =
         await HelpersFunctions().getUserTokenSharedPreference() as String;
     if (user != null) {
@@ -71,7 +67,7 @@ class CallDataProvider extends ChangeNotifier {
             activeStatus: '',
             gender: gender,
             birthday: birthday,
-            post: [],
+            followersList: [],
             interestsList: [],
             phone: '',
             school: '',
@@ -81,8 +77,8 @@ class CallDataProvider extends ChangeNotifier {
             photoList: [],
             fluentLanguageList: [],
             sexualOrientationList: [],
-            // styleOfLifeUser: styleOfLifeUser,
-            // basicInfoUser: basicInfoUser,
+            zodiac: '', academicLever: '', communicateStyle: '', languageOfLove: '', personalityType: '', familyStyle: '',
+            myPet: '', drinkingStatus: '', smokingStatus: '', sportsStatus: '', eatingStatus: '', socialNetworkStatus: '', sleepingHabits: ''
           ).toJson(),
       );
 
