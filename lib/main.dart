@@ -1,9 +1,11 @@
 import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
+import 'package:chat_app/Auth/screen/verify_OTP.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
+import 'package:chat_app/config/changedNotify/login_phone.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
@@ -24,6 +26,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'Auth/login_phone.dart';
 import 'firebase_options.dart';
 import 'home/item_chat.dart';
 import 'home/message/search_Message.dart';
@@ -179,6 +182,10 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => SearchMessageProvider(),
         child: SearchMessage(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => LoginPhoneProvider(),
+        child: LoginWithPhoneNumber(),
       ),
     ],
     child: const MyApp(),
