@@ -28,7 +28,9 @@ class BinderWatch extends ChangeNotifier {
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
       final users = await DatabaseMethods().getAllUser(uid);
+      print('List: $users');
       _listCard = users ?? [];
+
 
       return _listCard;
     } catch (e) {

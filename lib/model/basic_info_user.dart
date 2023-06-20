@@ -24,12 +24,12 @@ class BasicInfoUser {
       required this.familyStyle,});
 
   factory BasicInfoUser.fromJson(Map<String, dynamic> json) => BasicInfoUser(
-    zodiac: json["zodiac"],
-    academicLever: json["academicLever"],
-    communicateStyle: json["communicateStyle"],
-    languageOfLove: json["languageOfLove"],
-    personalityType: json["personalityType"],
-    familyStyle: json["familyStyle"],
+    zodiac: json["zodiac"]?? '',
+    academicLever: json["academicLever"] ?? '',
+    communicateStyle: json["communicateStyle"]?? '',
+    languageOfLove: json["languageOfLove"]?? '',
+    personalityType: json["personalityType"]?? '',
+    familyStyle: json["familyStyle"]?? '',
   );
 
   Map<String, dynamic> toJson() => {

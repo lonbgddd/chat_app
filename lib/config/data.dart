@@ -25,7 +25,7 @@ class DatabaseServices {
   // }
 
   Future saveUserByEmailAndName(String email, String avatar, String uid,
-      String name, String sex, String year, String bio,BasicInfoUser basicInfoUser,  StyleOfLifeUser styleOfLifeUser) async {
+      String name, String gender, String birthday, String bio,BasicInfoUser basicInfoUser,  StyleOfLifeUser styleOfLifeUser) async {
     data.collection('users').doc(uid).set(
           UserModal(
               email: email,
@@ -35,8 +35,8 @@ class DatabaseServices {
               uid: uid,
               token: '',
               activeStatus: 'online',
-              gender: sex,
-              birthday: year,
+              gender: gender,
+              birthday: birthday,
               post: [],
               interestsList: [],
               phone: '',
@@ -47,8 +47,8 @@ class DatabaseServices {
               photoList: [],
               fluentLanguageList: [],
               sexualOrientationList: [],
-              styleOfLifeUser: styleOfLifeUser,
-              basicInfoUser: basicInfoUser,
+              // styleOfLifeUser: styleOfLifeUser,
+              // basicInfoUser: basicInfoUser,
           ).toJson(),
         );
   }
