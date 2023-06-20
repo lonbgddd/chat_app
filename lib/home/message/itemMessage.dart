@@ -11,6 +11,7 @@ class ItemMessage extends StatefulWidget {
   String? uid;
   String? chatRoomId;
   ChatMessage? mess;
+
   ItemMessage({super.key, this.uid, this.chatRoomId});
 
   @override
@@ -46,7 +47,7 @@ class ItemMessageState extends State<ItemMessage> {
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
-                  return Container(
+                  return SizedBox(
                       height: MediaQuery.of(context).size.height * 0.95,
                       child: DetailMessage(
                         uid: widget.uid,
@@ -76,6 +77,24 @@ class ItemMessageState extends State<ItemMessage> {
                   child: CircleAvatar(
                     radius: 30,
                     backgroundImage: NetworkImage(snapshot.data?.avatar ?? ""),
+                    child: snapshot.data!.activeStatus == "online"
+                        ? Stack(children: const [
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: CircleAvatar(
+                                radius: 11,
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: CircleAvatar(
+                                radius: 10,
+                                backgroundColor: Colors.red,
+                              ),
+                            ),
+                          ])
+                        : null,
                   ),
                 ),
                 Expanded(
@@ -106,7 +125,7 @@ class ItemMessageState extends State<ItemMessage> {
                               Text(
                                 mess?.messageText ?? '',
                                 style: const TextStyle(
-                                    fontSize: 14,
+                                  fontSize: 14,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
