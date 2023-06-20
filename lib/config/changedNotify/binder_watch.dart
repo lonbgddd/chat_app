@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:chat_app/config/data_mothes.dart';
+import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -30,7 +31,6 @@ class BinderWatch extends ChangeNotifier {
       final users = await DatabaseMethods().getAllUser(uid);
       print('List: $users');
       _listCard = users ?? [];
-
 
       return _listCard;
     } catch (e) {
@@ -78,7 +78,7 @@ class BinderWatch extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future addFollow(String followId) async {
+  Future addFollow(String followId, String token) async {
     try {
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
@@ -91,6 +91,8 @@ class BinderWatch extends ChangeNotifier {
           "users": users,
           "chatRoomId": chatRoomId,
         };
+        await FirebaseApi()
+            .sendPushMessage('Bạn có một tương hợp mới', 'Binder', token);
         await DatabaseMethods().addChatRoom(chatRoom, chatRoomId);
       }
 
@@ -138,6 +140,7 @@ class BinderWatch extends ChangeNotifier {
   void like() {
     _angle = 20;
     _offset += Offset(2 * _size.width, 0);
+    addFollow(_listCard.first.uid, _listCard.first.token);
     _nextCard();
 
     notifyListeners();
