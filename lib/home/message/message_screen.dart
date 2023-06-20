@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../../config/changedNotify/chat_item_notify.dart';
 import '../../config/changedNotify/home_watch.dart';
 import '../../config/helpers/helpers_database.dart';
-import '../../model/model.dart';
+import '../../model/user_model.dart';
 import 'detail_message.dart';
 import 'itemMessage.dart';
 

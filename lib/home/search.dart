@@ -3,7 +3,7 @@ import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../model/model.dart';
+import '../model/user_model.dart';
 
 class SearchUserChat extends StatefulWidget {
   const SearchUserChat({Key? key}) : super(key: key);

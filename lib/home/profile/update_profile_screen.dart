@@ -4,7 +4,7 @@ import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/home/profile/components/gender_radio_button.dart';
 import 'package:chat_app/home/profile/components/input_field.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,19 +40,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             ? SingingCharacter.man
             : SingingCharacter.women;
         nameController.text = currentUser!.fullName;
-        bioController.text = currentUser!.biography;
+        bioController.text = currentUser!.introduceYourself;
         birthday = DateTime.parse(currentUser!.birthday);
-        newInterests.addAll(currentUser!.interests);
+        newInterests.addAll(currentUser!.interestsList);
       });
     });
   }
 
   void update() async {
     currentUser!.fullName = nameController.text;
-    currentUser!.biography = bioController.text;
+    currentUser!.introduceYourself = bioController.text;
     currentUser!.birthday = birthday.toString();
     currentUser!.gender = character == SingingCharacter.man ? 'man' : 'women';
-    currentUser!.interests = newInterests;
+    currentUser!.interestsList = newInterests;
 
     await DatabaseMethods().updateUser(currentUser!).then((value) => showDialog(
           context: context,

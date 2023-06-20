@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../config/changedNotify/home_watch.dart';
 import '../../config/helpers/helpers_database.dart';
-import '../../model/model.dart';
+import '../../model/user_model.dart';
 import 'itemMessage.dart';
 
 class SearchMessage extends StatefulWidget {

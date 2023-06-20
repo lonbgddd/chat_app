@@ -4,7 +4,7 @@ import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/chat_user.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -33,10 +33,11 @@ class DatabaseMethods {
   }
 
   Future<List<User>> getAllUser(String uid) async {
-    final data = await FirebaseFirestore.instance
+    QuerySnapshot data = await FirebaseFirestore.instance
         .collection('users')
-        .where('uid', whereNotIn: [uid]).get();
-    return data.docs.map((e) => User.fromJson(e.data())).toList();
+        .where('uid', whereNotIn: [uid])
+        .get();
+    return data.docs.map((e) => User.fromJson(e.data() as  Map<String, dynamic>)).toList();
   }
 
   Future addChatRoom(chatRoom, chatRoomId) async {
