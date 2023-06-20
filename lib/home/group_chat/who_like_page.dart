@@ -1,7 +1,7 @@
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/model/chat_room.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

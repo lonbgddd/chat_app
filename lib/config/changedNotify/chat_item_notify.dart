@@ -1,5 +1,5 @@
 import 'package:chat_app/model/chat_user.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 

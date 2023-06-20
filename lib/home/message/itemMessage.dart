@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../config/changedNotify/chat_item_notify.dart';
 import '../../model/chat_user.dart';
-import '../../model/model.dart';
+import '../../model/user_model.dart';
 import 'detail_message.dart';
 
 class ItemMessage extends StatefulWidget {

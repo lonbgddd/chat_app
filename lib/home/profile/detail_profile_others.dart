@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -135,7 +135,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                               children: [
                                 Text('Giới thiệu bản thân', style: TextStyle(color: Colors.black,fontSize: 22,fontWeight: FontWeight.w800),),
                                 const SizedBox(height: 10),
-                                Text(snapshot.data!.biography.toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
+                                Text(snapshot.data!.introduceYourself.toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
                               ],
                             ),
                           ),
@@ -164,7 +164,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child:Wrap(
-                                    children: List.generate(snapshot.data!.interests.length , (rowIndex) {
+                                    children: List.generate(snapshot.data!.interestsList.length , (rowIndex) {
 
                                       return Padding(
                                         padding: const EdgeInsets.only(bottom: 10,  right: 10),
@@ -177,7 +177,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                                 color: Colors.grey
                                             ),
                                           ),
-                                          child: Text(snapshot.data!.interests[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
+                                          child: Text(snapshot.data!.interestsList[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
 
                                         ),
 

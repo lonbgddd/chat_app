@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../config/changedNotify/chat_item_notify.dart';
-import '../model/model.dart';
+import '../model/user_model.dart';
 
 class ChatRoomsTile extends StatelessWidget {
   String? uid;

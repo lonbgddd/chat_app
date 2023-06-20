@@ -1,7 +1,7 @@
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:go_router/go_router.dart';
@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 8.0,
                                       ),
                                       Text(
-                                        snapshot.data!.biography,
+                                        snapshot.data!.introduceYourself,
                                         style: const TextStyle(
                                             color: Color(0XFF8E8E8E),
                                             fontSize: 14),
@@ -187,10 +187,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                       Wrap(
                                         children: List.generate(
-                                            snapshot.data!.interests.length,
+                                            snapshot.data!.interestsList.length,
                                             (index) => InterestItem(
                                                 title: snapshot
-                                                    .data!.interests[index])),
+                                                    .data!.interestsList[index])),
                                       )
                                     ]),
                               ),

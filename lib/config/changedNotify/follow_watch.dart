@@ -5,7 +5,7 @@ import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../model/model.dart';
+import '../../model/user_model.dart';
 
 class FollowNotify extends ChangeNotifier {
   List<User> list = [];

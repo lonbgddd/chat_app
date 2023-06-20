@@ -1,4 +1,6 @@
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/basic_info_user.dart';
+import 'package:chat_app/model/style_of_life_user.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseServices {
@@ -23,20 +25,31 @@ class DatabaseServices {
   // }
 
   Future saveUserByEmailAndName(String email, String avatar, String uid,
-      String name, String sex, String year, String bio) async {
+      String name, String sex, String year, String bio,BasicInfoUser basicInfoUser,  StyleOfLifeUser styleOfLifeUser) async {
     data.collection('users').doc(uid).set(
           User(
               email: email,
               fullName: name,
-              biography: bio,
+              introduceYourself: bio,
               avatar: avatar,
               uid: uid,
               token: '',
-              status: 'online',
+              activeStatus: 'online',
               gender: sex,
               birthday: year,
               post: [],
-              interests: []).toJson(),
+              interestsList: [],
+              phone: '',
+              school: '',
+              datingPurpose: '',
+              company: '',
+              currentAddress: '',
+              photoList: [],
+              fluentLanguageList: [],
+              sexualOrientationList: [],
+              styleOfLifeUser: styleOfLifeUser,
+              basicInfoUser: basicInfoUser,
+          ).toJson(),
         );
   }
 

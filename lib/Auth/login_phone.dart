@@ -21,8 +21,6 @@ class LoginWithPhoneNumberState extends State<LoginWithPhoneNumber>{
   bool _isTextFieldEmpty = true;
   bool _isErrorText = false;
 
-
-
   List<Map<String, dynamic>> countryCodes = [
     {'display': 'VN', 'value': '+84'},
     {'display': 'US', 'value': '+1'},

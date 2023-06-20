@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
-import 'package:chat_app/model/model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +67,7 @@ class ProfileCard extends StatelessWidget {
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(10),
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -82,8 +82,8 @@ class ProfileCard extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
               ),
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -94,7 +94,7 @@ class ProfileCard extends StatelessWidget {
             ),
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 25),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,7 +166,7 @@ class ProfileCard extends StatelessWidget {
                               height: 2,
                             ),
                             Text(
-                              user?.biography ?? "",
+                              user?.introduceYourself ?? "",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
