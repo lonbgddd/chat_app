@@ -73,11 +73,10 @@ final GoRouter router = GoRouter(routes: [
             builder: (context, state) =>  const ConfirmProfile()),
         GoRoute(
             path: 'login',
-            builder: (context, state) => const LoginWithPhoneNumber(),
+            builder: (context, state) => LoginWithPhoneNumber(),
             routes: [
               GoRoute(
                   path: 'verify_otp',
-                  name: 'verify_otp',
                   builder: (context, state) => VerifyOTP()),
             ]),
       ])

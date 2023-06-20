@@ -63,7 +63,7 @@ dependencies:
   google_sign_in: ^6.1.4
   loading_animation_widget: ^1.2.0+4
   flutter_custom_clippers: ^2.1.0
-
+  timer_count_down: ^2.2.2
 
 
 dev_dependencies:

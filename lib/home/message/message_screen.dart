@@ -87,7 +87,7 @@ class MessageScreenState extends State<MessageScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.white,
+          color: Colors.transparent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

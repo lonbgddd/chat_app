@@ -11,7 +11,6 @@ class ItemMessage extends StatefulWidget {
   String? uid;
   String? chatRoomId;
   ChatMessage? mess;
-
   ItemMessage({super.key, this.uid, this.chatRoomId});
 
   @override
@@ -22,16 +21,12 @@ class ItemMessage extends StatefulWidget {
 
 class ItemMessageState extends State<ItemMessage> {
   ChatMessage? mess;
-  ChatMessage? mess2;
 
   @override
   Widget build(BuildContext context) {
     lassMess(context) async {
       mess = await Provider.of<ItemChatNotify>(context)
           .getLastMessage(widget.chatRoomId!);
-      setState(() {
-        mess2 = mess;
-      });
     }
 
     Future<UserModal?> getUser(context) async {
@@ -109,7 +104,7 @@ class ItemMessageState extends State<ItemMessage> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                mess2?.messageText ?? '',
+                                mess?.messageText ?? '',
                                 style: const TextStyle(
                                     fontSize: 14,
                                 ),
@@ -120,8 +115,8 @@ class ItemMessageState extends State<ItemMessage> {
                           ),
                         ),
                         Text(
-                          mess2 != null
-                              ? DateFormat('HH:mm a').format(mess2!.time)
+                          mess != null
+                              ? DateFormat('HH:mm a').format(mess!.time)
                               : '',
                           style: const TextStyle(color: Colors.grey),
                         )

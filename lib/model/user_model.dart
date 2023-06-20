@@ -9,8 +9,6 @@ import 'package:chat_app/model/style_of_life_user.dart';
 UserModal userFromJson(String str) => UserModal.fromJson(json.decode(str));
 String userToJson(UserModal data) => json.encode(data.toJson());
 
-
-
 class UserModal {
   String uid;
   String email;
