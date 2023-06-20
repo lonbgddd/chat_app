@@ -59,8 +59,8 @@ class ProfileCard extends StatelessWidget {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.shade300,
-                  spreadRadius: 2,
+                  color: Colors.grey,
+                  spreadRadius: 3,
                   blurRadius: 10,
                   offset: Offset(0, 5),
                 ),
