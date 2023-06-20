@@ -21,7 +21,7 @@ class SearchMessageState extends State<SearchMessage> {
   Stream<QuerySnapshot<Map<String, dynamic>>>? chatRooms;
   String? keyUid;
   FocusNode focusNode = FocusNode();
-  List<User> listUser = [];
+  List<UserModal> listUser = [];
   @override
   void initState() {
     // TODO: implement initState

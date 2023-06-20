@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import '../data_mothes.dart';
 
 class HomeNotify extends ChangeNotifier {
-  List<User>? listUser = [];
+  List<UserModal>? listUser = [];
 
   void initData() {
     listUser = [];

@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Scaffold(
           backgroundColor: const Color(0xFFF1F4F8),
-          body: StreamBuilder<User>(
+          body: StreamBuilder<UserModal>(
               stream: context.watch<ProfileWatch>().getUserStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

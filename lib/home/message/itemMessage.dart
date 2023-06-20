@@ -34,16 +34,16 @@ class ItemMessageState extends State<ItemMessage> {
       });
     }
 
-    Future<User?> getUser(context) async {
+    Future<UserModal?> getUser(context) async {
       lassMess(context);
-      User user = await Provider.of<ItemChatNotify>(context)
+      UserModal user = await Provider.of<ItemChatNotify>(context)
           .getUserInformation(widget.uid, widget.chatRoomId ?? "");
       return user;
     }
 
     return FutureBuilder(
       future: getUser(context),
-      builder: (context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, AsyncSnapshot<UserModal?> snapshot) {
         return GestureDetector(
           onTap: () {
             showModalBottomSheet(

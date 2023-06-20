@@ -6,12 +6,12 @@ import 'dart:convert';
 
 import 'package:chat_app/model/basic_info_user.dart';
 import 'package:chat_app/model/style_of_life_user.dart';
-User userFromJson(String str) => User.fromJson(json.decode(str));
-String userToJson(User data) => json.encode(data.toJson());
+UserModal userFromJson(String str) => UserModal.fromJson(json.decode(str));
+String userToJson(UserModal data) => json.encode(data.toJson());
 
 
 
-class User {
+class UserModal {
   String uid;
   String email;
   String phone;
@@ -35,7 +35,7 @@ class User {
   String token;
 
 
-  User({
+  UserModal({
       required this.uid,
       required this.email,
       required this.phone,
@@ -58,7 +58,7 @@ class User {
       required this.activeStatus,
       required this.token});
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory UserModal.fromJson(Map<String, dynamic> json) => UserModal(
     uid: json["uid"],
     email: json["email"],
     phone: json["phone"],

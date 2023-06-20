@@ -27,7 +27,7 @@ class DatabaseServices {
   Future saveUserByEmailAndName(String email, String avatar, String uid,
       String name, String sex, String year, String bio,BasicInfoUser basicInfoUser,  StyleOfLifeUser styleOfLifeUser) async {
     data.collection('users').doc(uid).set(
-          User(
+          UserModal(
               email: email,
               fullName: name,
               introduceYourself: bio,
@@ -53,20 +53,20 @@ class DatabaseServices {
         );
   }
 
-  Future<User> getUserInfors() async {
+  Future<UserModal> getUserInfo() async {
     return data
         .collection("users")
         .where('uid', isEqualTo: uid)
         .get()
-        .then((value) => value.docs.map((e) => User.fromJson(e.data())).single);
+        .then((value) => value.docs.map((e) => UserModal.fromJson(e.data())).single);
   }
 
-  Stream<User> getUserInforsStream() {
+  Stream<UserModal> getUserInfoStream() {
   return data
       .collection("users")
       .where('uid', isEqualTo: uid)
       .snapshots()
       .map((snapshot) =>
-          snapshot.docs.map((doc) => User.fromJson(doc.data())).single);
+          snapshot.docs.map((doc) => UserModal.fromJson(doc.data())).single);
 }
 }

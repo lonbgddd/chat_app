@@ -1,8 +1,11 @@
 import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:chat_app/model/basic_info_user.dart';
+import 'package:chat_app/model/style_of_life_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:chat_app/model/user_model.dart';
 
 class CallDataProvider extends ChangeNotifier {
   User? _userFormFirebase(User? user) {
@@ -44,7 +47,7 @@ class CallDataProvider extends ChangeNotifier {
       _userFormFirebase(user);
       return 'home';
     } else {
-      return 'confirm-screen'; // Trả về 'confirm' nếu email không tồn tại trong cơ sở dữ liệu
+      return 'confirm-screen';
     }
   }
 
@@ -52,22 +55,36 @@ class CallDataProvider extends ChangeNotifier {
   Future<void> confirmProfile(String gender, String birthday,
       List<String> interests, String biography) async {
     User? user = FirebaseAuth.instance.currentUser;
+    BasicInfoUser basicInfoUser = new BasicInfoUser(zodiac: '', academicLever: '', communicateStyle: '', languageOfLove: '', personalityType: '', familyStyle: '');
+    StyleOfLifeUser styleOfLifeUser = new StyleOfLifeUser(myPet: '', drinkingStatus: '', smokingStatus: '', sportsStatus: '', eatingStatus: '', socialNetworkStatus: '', sleepingHabits: '');
     final token =
         await HelpersFunctions().getUserTokenSharedPreference() as String;
     if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        'avatar': user.photoURL ?? 'https://antimatter.vn/wp-content/uploads/2022/10/hinh-anh-gai-xinh-de-thuong.jpg',
-        'email': user.email ?? 'admin@gmail.com',
-        'fullName': user.displayName ?? 'admin',
-        'post': [],
-        'status': 'online',
-        'token': token,
-        'gender': gender,
-        'biography': biography,
-        'uid': user.uid,
-        'interests': interests,
-        'birthday': birthday,
-      });
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+        UserModal(
+            email: user.email ?? 'admin@gmail.com',
+            fullName: user.displayName ?? 'admin',
+            introduceYourself: biography,
+            avatar: user.photoURL ?? 'https://antimatter.vn/wp-content/uploads/2022/10/hinh-anh-gai-xinh-de-thuong.jpg',
+            uid:  user.uid,
+            token: token,
+            activeStatus: '',
+            gender: gender,
+            birthday: birthday,
+            post: [],
+            interestsList: [],
+            phone: '',
+            school: '',
+            datingPurpose: '',
+            company: '',
+            currentAddress: '',
+            photoList: [],
+            fluentLanguageList: [],
+            sexualOrientationList: [],
+            styleOfLifeUser: styleOfLifeUser,
+            basicInfoUser: basicInfoUser,
+          ).toJson(),
+      );
 
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
     }

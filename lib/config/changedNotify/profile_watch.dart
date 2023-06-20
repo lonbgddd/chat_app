@@ -6,23 +6,23 @@ import 'package:flutter/cupertino.dart';
 class ProfileWatch extends ChangeNotifier {
   String? _uid;
 
-  Future<User> getUser() async {
+  Future<UserModal> getUser() async {
     try {
       _uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      return await DatabaseServices(_uid).getUserInfors();
+      return await DatabaseServices(_uid).getUserInfo();
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Stream<User> getUserStream() async* {
+  Stream<UserModal> getUserStream() async* {
     final uid = await HelpersFunctions().getUserIdUserSharedPreference();
-    yield* DatabaseServices(uid).getUserInforsStream();
+    yield* DatabaseServices(uid).getUserInfoStream();
   }
 
-  Future<User> getDetailOthers(String? idUser) async {
+  Future<UserModal> getDetailOthers(String? idUser) async {
     try {
-      return await DatabaseServices(idUser).getUserInfors();
+      return await DatabaseServices(idUser).getUserInfo();
     } catch (e) {
       throw Exception(e);
     }

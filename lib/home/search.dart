@@ -15,7 +15,7 @@ class SearchUserChat extends StatefulWidget {
 class _SearchUserChatState extends State<SearchUserChat> {
   TextEditingController searchEditingController = TextEditingController();
   final DatabaseMethods _methods = DatabaseMethods();
-  List<User> list = [];
+  List<UserModal> list = [];
 
   bool isLoading = false;
   bool haveUserSearched = false;

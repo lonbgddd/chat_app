@@ -12,9 +12,9 @@ class ChatRoomsTile extends StatelessWidget {
   ChatMessage? mess;
   ChatRoomsTile({super.key, this.uid, this.chatRoomId});
 
-  Future<User?> getUser(context) async {
+  Future<UserModal?> getUser(context) async {
     lassMess(context);
-    User user = await Provider.of<ItemChatNotify>(context)
+    UserModal user = await Provider.of<ItemChatNotify>(context)
         .getUserInformation(uid, chatRoomId ?? "");
     return user;
   }
@@ -28,7 +28,7 @@ class ChatRoomsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: getUser(context),
-      builder: (context, AsyncSnapshot<User?> snapshot) {
+      builder: (context, AsyncSnapshot<UserModal?> snapshot) {
         return GestureDetector(
           onTap: () => context.goNamed('Home-detail', queryParameters: {
             'uid': uid.toString(),
