@@ -26,13 +26,13 @@ class StyleOfLifeUser {
   });
 
   factory StyleOfLifeUser.fromJson(Map<String, dynamic> json) => StyleOfLifeUser(
-    myPet: json["myPet"],
-    drinkingStatus: json["drinkingStatus"],
-    smokingStatus: json["smokingStatus"],
-    sportsStatus: json["sportsStatus"],
-    eatingStatus: json["eatingStatus"],
-    socialNetworkStatus: json["socialNetworkStatus"],
-    sleepingHabits: json["sleepingHabits"],
+    myPet: json["myPet"]?? '',
+    drinkingStatus: json["drinkingStatus"]?? '',
+    smokingStatus: json["smokingStatus"]?? '',
+    sportsStatus: json["sportsStatus"]?? '',
+    eatingStatus: json["eatingStatus"]?? '',
+    socialNetworkStatus: json["socialNetworkStatus"]?? '',
+    sleepingHabits: json["sleepingHabits"]?? '',
       );
 
   Map<String, dynamic> toJson() => {

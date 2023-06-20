@@ -27,8 +27,8 @@ class UserModal {
   List<String> interestsList;
   List<String> fluentLanguageList;
   List<String> sexualOrientationList;
-  BasicInfoUser basicInfoUser;
-  StyleOfLifeUser styleOfLifeUser;
+  // BasicInfoUser basicInfoUser;
+  // StyleOfLifeUser styleOfLifeUser;
   String company;
   String currentAddress;
   String activeStatus;
@@ -51,34 +51,34 @@ class UserModal {
       required this.interestsList,
       required this.fluentLanguageList,
       required this.sexualOrientationList,
-      required this.basicInfoUser,
-      required this.styleOfLifeUser,
+      // required this.basicInfoUser,
+      // required this.styleOfLifeUser,
       required this.company,
       required this.currentAddress,
       required this.activeStatus,
       required this.token});
 
   factory UserModal.fromJson(Map<String, dynamic> json) => UserModal(
-    uid: json["uid"],
-    email: json["email"],
-    phone: json["phone"],
-    fullName: json["fullName"],
-    birthday: json["birthday"],
-    avatar: json["avatar"],
-    gender: json["gender"],
-    datingPurpose: json["datingPurpose"],
-    school: json["school"],
-    introduceYourself: json["introduceYourself"],
-    post: List<String>.from(json["post"].map((x) => x)),
-    photoList: List<String>.from(json["photoList"].map((x) => x)),
-    interestsList: List<String>.from(json["interestsList"].map((x) => x)),
-    fluentLanguageList: List<String>.from(json["fluentLanguageList"].map((x) => x)),
-    sexualOrientationList: List<String>.from(json["sexualOrientationList"].map((x) => x)),
-    basicInfoUser: BasicInfoUser.fromJson(json["basicInformation"]),
-    styleOfLifeUser: StyleOfLifeUser.fromJson(json["styleOfLifeUser"]),
-    company: json["company"],
-    currentAddress: json["currentAddress"],
-    activeStatus: json["activeStatus"],
+    uid: json["uid"]?? '',
+    email: json["email"]?? '',
+    phone: json["phone"]?? '',
+    fullName: json["fullName"]?? '',
+    birthday: json["birthday"]?? '',
+    avatar: json["avatar"]?? '',
+    gender: json["gender"]?? '',
+    datingPurpose: json["datingPurpose"]?? '',
+    school: json["school"]?? '',
+    introduceYourself: json["introduceYourself"]?? '',
+    post: List<String>.from(json["post"].map((x) => x)) ?? [],
+    photoList: List<String>.from(json["photoList"].map((x) => x))?? [],
+    interestsList: List<String>.from(json["interestsList"].map((x) => x))?? [],
+    fluentLanguageList: List<String>.from(json["fluentLanguageList"].map((x) => x))?? [],
+    sexualOrientationList: List<String>.from(json["sexualOrientationList"].map((x) => x))?? [],
+    // basicInfoUser: BasicInfoUser.fromJson(json["basicInformation"]),
+    // styleOfLifeUser: StyleOfLifeUser.fromJson(json["styleOfLifeUser"]),
+    company: json["company"]?? '',
+    currentAddress: json["currentAddress"]?? '',
+    activeStatus: json["activeStatus"]?? '',
     token: json["token"],
   );
 
@@ -98,8 +98,8 @@ class UserModal {
         "interestsList": List<String>.from(interestsList.map((x) => x)),
         "fluentLanguageList": List<String>.from(fluentLanguageList.map((x) => x)),
         "sexualOrientationList": List<String>.from(sexualOrientationList.map((x) => x)),
-        "basicInfoUser": basicInfoUser.toJson(),
-        "styleOfLifeUser": styleOfLifeUser.toJson(),
+        // "basicInfoUser": basicInfoUser.toJson(),
+        // "styleOfLifeUser": styleOfLifeUser.toJson(),
         "company": company,
         "currentAddress": currentAddress,
         "activeStatus": activeStatus,

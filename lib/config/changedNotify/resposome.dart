@@ -81,8 +81,8 @@ class CallDataProvider extends ChangeNotifier {
             photoList: [],
             fluentLanguageList: [],
             sexualOrientationList: [],
-            styleOfLifeUser: styleOfLifeUser,
-            basicInfoUser: basicInfoUser,
+            // styleOfLifeUser: styleOfLifeUser,
+            // basicInfoUser: basicInfoUser,
           ).toJson(),
       );
 
