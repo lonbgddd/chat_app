@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;

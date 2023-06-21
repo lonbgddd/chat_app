@@ -29,7 +29,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'Auth/login_phone.dart';
-import 'config/changedNotify/detail_message.dart';
 import 'firebase_options.dart';
 import 'home/item_chat.dart';
 import 'home/message/detail_Message.dart';
