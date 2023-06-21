@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/data_mothes.dart';
-import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:chat_app/home/message/detail_message.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
@@ -211,15 +211,21 @@ class _LikedUserCardState extends State<LikedUserCard>
                         child: Center(
                           child: IconButton(
                               onPressed: () {
-
-                                  context
-                                      .goNamed('Home-detail', queryParameters: {
-                                    'uid': widget.user!.uid,
-                                    'chatRomId': chatRoom!.chatRoomId,
-                                    'name': widget.user!.fullName,
-                                    'avatar': widget.user!.avatar
-
-                                });
+                                showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (BuildContext context) {
+                                      return SizedBox(
+                                          height: MediaQuery.of(context).size.height * 0.95,
+                                          child: DetailMessage(
+                                            uid: widget.user!.uid,
+                                            chatRoomId: chatRoom!.chatRoomId,
+                                            name: widget.user!.fullName,
+                                            avatar: widget.user!.avatar,
+                                            token: widget.user!.token,
+                                          ));
+                                    });
                               },
                               icon: const Icon(
                                 Icons.send,
