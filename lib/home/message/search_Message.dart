@@ -73,9 +73,7 @@ class SearchMessageState extends State<SearchMessage> {
                       .replaceAll(keyUid ?? "", "");
                   String chatRoomId = data['chatRoomId'];
                   if(listUser[index].fullName.toLowerCase().toString().contains(context.watch<SearchMessageProvider>().name)) {
-                    if(listUser[index].uid == uid){
                       return ItemMessage(uid: uid, chatRoomId: chatRoomId);
-                    }
                   }
                   return const SizedBox.shrink();
                 },
