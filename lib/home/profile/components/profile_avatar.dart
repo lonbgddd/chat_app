@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
     super.key,
-    required this.avataUrl,
+    required this.avatarUrl,
   });
 
-  final String avataUrl;
+  final String avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ProfileAvatar extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: NetworkImage(avataUrl), fit: BoxFit.cover)),
+                      image: NetworkImage(avatarUrl), fit: BoxFit.cover)),
             ),
           ),
           Align(

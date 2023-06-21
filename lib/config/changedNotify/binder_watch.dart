@@ -24,10 +24,11 @@ class BinderWatch extends ChangeNotifier {
     _listCard = [];
   }
 
+
   Future<List<UserModal>> allUserBinder() async {
     try {
       final uid =
-          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      await HelpersFunctions().getUserIdUserSharedPreference() as String;
       final users = await DatabaseMethods().getAllUser(uid);
       print('List: $users');
       _listCard = users ?? [];
@@ -37,6 +38,25 @@ class BinderWatch extends ChangeNotifier {
       throw Exception(e);
     }
   }
+
+  // Future<List<UserModal>> allUserBinder() async {
+  //     return _listCard;
+  // }
+  //
+  // // Inside BinderWatch class
+  // Future<void> updateList() async {
+  //   try {
+  //     if (listCard.length > 2) return;
+  //     final uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
+  //     final users = await DatabaseMethods().getAllUser(uid);
+  //     final List<UserModal> updatedUsers = [..._listCard, ...users];
+  //     _listCard = updatedUsers;
+  //     print(listCard.length);
+  //     notifyListeners();
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
   double get angle => _angle;
 

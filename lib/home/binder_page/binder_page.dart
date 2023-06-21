@@ -15,6 +15,11 @@ class BinderPage extends StatefulWidget {
 }
 
 class _BinderPageState extends State<BinderPage> {
+
+  // Future getMoreData() async {
+  //   await context.read<BinderWatch>().updateList();
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -116,30 +121,38 @@ class _BinderPageState extends State<BinderPage> {
   Widget getBody() {
     return FutureBuilder(
         future: context.read<BinderWatch>().allUserBinder(),
-        builder: (context, snapshot) => snapshot.hasData
-            ? Padding(
-                padding: const EdgeInsets.all(10),
-                child: Stack(
-                    alignment: Alignment.center,
-                    children: context
-                        .watch<BinderWatch>()
-                        .listCard
-                        .reversed
-                        .map((e) => ProfileCard(
-                              user: e,
-                              isDetail: () => context.goNamed(
-                                  'Home-detail-others',
-                                  queryParameters: {
-                                    'uid': e.uid.toString(),
-                                  }),
-                              isFont:
-                                  context.watch<BinderWatch>().listCard.first ==
-                                      e,
-                            ))
-                        .toList()),
-              )
-            : const Center(
-                child: CircularProgressIndicator(),
-              ));
+        builder: (context, snapshot) {
+
+          if (snapshot.hasData) {
+            // if (snapshot.data!.length <= 2) {
+            //   getMoreData();
+            // }
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Stack(
+                  alignment: Alignment.center,
+                  children: context
+                      .watch<BinderWatch>()
+                      .listCard
+                      .reversed
+                      .map((e) => ProfileCard(
+                            user: e,
+                            isDetail: () => context.goNamed(
+                                'Home-detail-others',
+                                queryParameters: {
+                                  'uid': e.uid.toString(),
+                                }),
+                            isFont:
+                                context.watch<BinderWatch>().listCard.first ==
+                                    e,
+                          ))
+                      .toList()),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }
