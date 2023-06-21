@@ -8,7 +8,7 @@ import '../../config/changedNotify/chat_item_notify.dart';
 import '../../config/changedNotify/home_watch.dart';
 import '../../config/helpers/helpers_database.dart';
 import '../../model/user_model.dart';
-import 'detail_message.dart';
+import 'detail_Message.dart';
 
 class MessageScreen extends StatefulWidget {
   @override
@@ -150,68 +150,6 @@ class MessageScreenState extends State<MessageScreen> {
       ),
     );
   }
-  // Widget itemMessage(){
-  //    return  Scaffold(
-  //       body:  SingleChildScrollView(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 margin: const EdgeInsets.only(left: 20,right: 20,top: 30,bottom: 15),
-  //                 child: Row(
-  //                   children: [
-  //                     const Text(
-  //                       "Messages",
-  //                       style: TextStyle(
-  //                         fontWeight: FontWeight.bold,
-  //                         fontSize: 30,
-  //                       ),
-  //                     ),
-  //                   const Spacer(),
-  //                   Container(
-  //                       decoration: BoxDecoration(
-  //                           border: Border.all(width: 1, color: Colors.grey),
-  //                           borderRadius: BorderRadius.circular(10)),
-  //                       child: IconButton(
-  //                         iconSize: 30,
-  //                         padding: const EdgeInsets.all(5),
-  //                         onPressed: () async {
-  //                           context.go('/home/search-user');
-  //                         },
-  //                         icon: const Icon(
-  //                           Icons.menu,
-  //                           color: Colors.pink,
-  //                         ),
-  //                       ))
-  //                 ],
-  //               ),
-  //             ),
-  //             Search(),
-  //             Container(
-  //               margin: const EdgeInsets.all(20),
-  //               child: const Text(
-  //                 'Activities',
-  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               height: 120,
-  //               child: chatRoomsList('horizontal'),
-  //             ),
-  //             Container(
-  //               margin: const EdgeInsets.only(left: 20),
-  //               child: const Text(
-  //                 'Messages',
-  //                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  //               ),
-  //             ),
-  //               chatRoomsList('vertical')
-  //             ],
-  //           ),
-  //       ),
-  //   );
-  // }
-
   Widget Search() {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20),

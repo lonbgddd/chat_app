@@ -1,9 +1,13 @@
+import 'dart:io';
+import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
+import 'package:provider/provider.dart';
 import '../../config/data_mothes.dart';
 import '../../model/chat_user.dart';
 
@@ -24,18 +28,17 @@ class DetailMessage extends StatefulWidget {
 }
 
 class DetailMessageState extends State<DetailMessage> {
-  bool _showEmoji = false;
   final messageController = TextEditingController();
-  Stream<QuerySnapshot>? chats;
-  String? uid = '';
-  String? name = '';
-  int? maxLines;
   final FocusNode _focusNode = FocusNode();
+  Stream<QuerySnapshot>? chats;
+  int? maxLines;
+  File? image;
+  bool _showEmoji = false;
   DateFormat timeFormat = DateFormat('HH:mm a');
   DateFormat dateFormat = DateFormat('MMM dd, HH:mm');
 
-  addMessage() {
-    if (messageController.text.isNotEmpty) {
+  addMessage() async {
+    if (messageController.text.isNotEmpty && image == null) {
       DatabaseMethods().addMessage(
           widget.chatRoomId ?? "",
           ChatMessage(
@@ -44,12 +47,46 @@ class DetailMessageState extends State<DetailMessage> {
               imageURL: '',
               time: DateTime.now()),
           widget.token ?? "");
-
       setState(() {
         messageController.text = "";
         maxLines = null;
       });
+    } else if (messageController.text.isEmpty && image != null) {
+      DateTime time = DateTime.now();
+      String url = await DatabaseMethods()
+          .pushImage(image, '${widget.uid}${time.toString()}');
+      DatabaseMethods().addMessage(
+          widget.chatRoomId ?? "",
+          ChatMessage(
+              uid: widget.uid ?? "",
+              messageText: '',
+              imageURL: url,
+              time: DateTime.now()),
+          widget.token ?? "");
+      setImageNull();
     }
+  }
+
+  Future<void> pickImage() async {
+    try {
+      final pickedFile =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        // Xử lý ảnh đã chọn ở đây
+        // Ví dụ: hiển thị ảnh trong một ImageView
+        setState(() {
+          image = File(pickedFile.path);
+        });
+      }
+    } on PlatformException catch (e) {
+      print('$e');
+    }
+  }
+
+  void setImageNull() {
+    setState(() {
+      image = null;
+    });
   }
 
   bool checkTime(DateTime dateTime) {
@@ -74,31 +111,30 @@ class DetailMessageState extends State<DetailMessage> {
     messageController.clear();
   }
 
+
   @override
   Widget build(BuildContext context) {
-    uid = widget.uid;
-    name = widget.name;
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(36), topRight: Radius.circular(36))),
-        child: Builder(builder: (context) {
-          return Column(
-            children: [
-              Head(),
-              Today(),
-              Expanded(child: ListMessage()),
-              ControllMessage(),
-              if (_showEmoji) Emoji()
-            ],
-          );
-        }),
-      ),
-    );
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(36), topRight: Radius.circular(36))),
+          child: Builder(builder: (context) {
+            return Column(
+              children: [
+                Head(),
+                Today(),
+                Expanded(child: ListMessage()),
+                ControllMessage(),
+                if (_showEmoji) Emoji()
+              ],
+            );
+          }),
+        ),
+      );
   }
 
   Widget Head() {
@@ -116,7 +152,7 @@ class DetailMessageState extends State<DetailMessage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '$name',
+                '${widget.name}',
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -189,14 +225,16 @@ class DetailMessageState extends State<DetailMessage> {
                                   ),
                                 ),
                           Align(
-                            alignment: (snapshot.data?.docs[index]['uid'] != uid
-                                ? Alignment.topLeft
-                                : Alignment.topRight),
+                            alignment:
+                                (snapshot.data?.docs[index]['uid'] != widget.uid
+                                    ? Alignment.topLeft
+                                    : Alignment.topRight),
                             child: Column(
-                              crossAxisAlignment:
-                                  snapshot.data?.docs[index]['uid'] == uid
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
+                              crossAxisAlignment: snapshot.data?.docs[index]
+                                          ['uid'] ==
+                                      widget.uid
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
                               children: [
                                 Container(
                                   width: snapshot
@@ -208,27 +246,41 @@ class DetailMessageState extends State<DetailMessage> {
                                       : null,
                                   decoration: BoxDecoration(
                                     borderRadius: snapshot.data?.docs[index]
-                                                ['uid'] ==
-                                            uid
-                                        ? const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10))
-                                        : const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
+                                                ['imageURL'] !=
+                                            ''
+                                        ? BorderRadius.all(Radius.circular(10))
+                                        : snapshot.data?.docs[index]['uid'] ==
+                                                widget.uid
+                                            ? const BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10))
+                                            : const BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
                                     color: (snapshot.data?.docs[index]['uid'] !=
-                                            uid
+                                            widget.uid
                                         ? const Color.fromARGB(
                                             255, 248, 222, 225)
                                         : Colors.grey.shade300),
                                   ),
-                                  padding: const EdgeInsets.all(16),
-                                  child: Text(
-                                    snapshot.data?.docs[index]['messageText'],
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
+                                  padding: snapshot.data?.docs[index]
+                                              ['imageURL'] !=
+                                          ''
+                                      ? EdgeInsets.zero
+                                      : const EdgeInsets.all(16),
+                                  child: snapshot.data?.docs[index]
+                                              ['imageURL'] !=
+                                          ''
+                                      ? _Image(snapshot.data!.docs[index]
+                                          ['imageURL'])
+                                      : Text(
+                                          snapshot.data?.docs[index]
+                                              ['messageText'],
+                                          style: const TextStyle(fontSize: 15),
+                                        ),
                                 ),
                                 checkTime(time)
                                     ? Padding(
@@ -269,7 +321,7 @@ class DetailMessageState extends State<DetailMessage> {
           emojiSizeMax: 32 *
               (foundation.defaultTargetPlatform == TargetPlatform.iOS
                   ? 1.30
-                  : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+                  : 1.0),
         ),
       ),
     );
@@ -292,45 +344,24 @@ class DetailMessageState extends State<DetailMessage> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: TextField(
-                          focusNode: _focusNode,
-                          controller: messageController,
-                          keyboardType: TextInputType.multiline,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value.length > 100) {
-                                maxLines = 4;
-                              } else {
-                                maxLines = null;
-                              }
-                            });
-                          },
-                          maxLines: maxLines,
-                          onTap: () {
-                            if (_showEmoji) {
-                              setState(() {
-                                _showEmoji = !_showEmoji;
-                              });
-                            }
-                          },
-                          decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(10),
-                              hintText: 'Type something...',
-                              border: InputBorder.none),
-                        ),
-                      ),
-                    ),
+                    image != null
+                        ? selectedImage()
+                        : textField_emoji(),
+                    image != null
+                        ? const Spacer()
+                        : Container(),
                     IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _showEmoji = !_showEmoji;
-                            FocusScope.of(context).unfocus();
-                          });
+                        padding: EdgeInsets.all(0),
+                        onPressed: () async {
+                          await pickImage();
+                          if (_showEmoji) {
+                            setState(() {
+                              _showEmoji = !_showEmoji;
+                            });
+                          }
                         },
                         icon: const Icon(
-                          Icons.emoji_emotions,
+                          Icons.image,
                         ))
                   ],
                 ),
@@ -348,6 +379,106 @@ class DetailMessageState extends State<DetailMessage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget textField_emoji() {
+    return  Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: TextField(
+                  focusNode: _focusNode,
+                  controller: messageController,
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value.length > 100) {
+                        maxLines = 4;
+                      } else {
+                        maxLines = null;
+                      }
+                    });
+                  },
+                  maxLines: maxLines,
+                  onTap: () {
+                    if (_showEmoji) {
+                      setState(() {
+                        _showEmoji = !_showEmoji;
+                      });
+                    }
+                  },
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      hintText: 'Type something...',
+                      border: InputBorder.none),
+                ),
+              ),
+            ),
+            IconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  setState(() {
+                    _showEmoji = !_showEmoji;
+                    FocusScope.of(context).unfocus();
+                  });
+                },
+                icon: const Icon(
+                  Icons.emoji_emotions,
+                ))
+          ],
+        ),
+    );
+  }
+
+  Widget selectedImage() {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: Image.file(image!,
+                fit: BoxFit.cover),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          child: InkWell(
+              onTap: () {
+                setImageNull();
+              },
+              child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 1),
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.grey,
+                  ),
+                  child: const Icon(
+                    Icons.clear,
+                    color: Colors.white,
+                  ))),
+        )
+      ],
+    );
+  }
+
+  Widget _Image(String url) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        width: 150,
+        height: 200,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(url), // Đường dẫn tới ảnh
+            fit: BoxFit.cover, // Cách ảnh sẽ được hiển thị trong Container
+          ),
         ),
       ),
     );
