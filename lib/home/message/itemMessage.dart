@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../config/changedNotify/chat_item_notify.dart';
 import '../../model/chat_user.dart';
 import '../../model/user_model.dart';
-import 'detail_message.dart';
+import 'detail_Message.dart';
 
 class ItemMessage extends StatefulWidget {
   String? uid;
@@ -40,7 +40,8 @@ class ItemMessageState extends State<ItemMessage> {
     return FutureBuilder(
       future: getUser(context),
       builder: (context, AsyncSnapshot<UserModal?> snapshot) {
-        return GestureDetector(
+        return snapshot.hasData
+            ? GestureDetector(
           onTap: () {
             showModalBottomSheet(
                 isScrollControlled: true,
@@ -146,7 +147,7 @@ class ItemMessageState extends State<ItemMessage> {
               ],
             ),
           ),
-        );
+        ) : Container();
       },
     );
   }
