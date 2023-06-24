@@ -59,12 +59,6 @@ class MessageScreenState extends State<MessageScreen> {
                     : AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = snapshot.data?.docs[index];
-                  // return ChatRoomsTile(
-                  //     uid: data!['chatRoomId']
-                  //         .toString()
-                  //         .replaceAll("_", "")
-                  //         .replaceAll(keyUid ?? "", ""),
-                  //     chatRoomId: data['chatRoomId']);
                   String uid = data!['chatRoomId']
                       .toString()
                       .replaceAll("_", "")
@@ -150,6 +144,7 @@ class MessageScreenState extends State<MessageScreen> {
       ),
     );
   }
+
   Widget Search() {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20),

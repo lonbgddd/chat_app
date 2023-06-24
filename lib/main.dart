@@ -13,9 +13,9 @@ import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
-import 'package:chat_app/home/chat_screen.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
+import 'package:chat_app/home/message/itemMessage.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/router/router.dart';
@@ -30,8 +30,7 @@ import 'package:provider/provider.dart';
 
 import 'Auth/login_phone.dart';
 import 'firebase_options.dart';
-import 'home/item_chat.dart';
-import 'home/message/detail_Message.dart';
+import 'home/message/detail_message.dart';
 import 'home/message/search_Message.dart';
 
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -173,7 +172,11 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(
         create: (context) => HomeNotify(),
-        child: const ChatScreen(),
+        child: const DetailMessage(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ItemChatNotify(),
+        child: ItemMessage(),
       ),
       ChangeNotifierProvider(
         create: (context) => FollowNotify(),
@@ -182,10 +185,6 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),
         child: const WelcomeScreen(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => ItemChatNotify(),
-        child: ChatRoomsTile(),
       ),
       ChangeNotifierProvider(
         create: (context) => SearchMessageProvider(),
@@ -197,7 +196,7 @@ Future<void> main() async {
       ),
       ChangeNotifierProvider(
         create: (context) => DetailMessageProvider(),
-        child: DetailMessage(),
+        child: const DetailMessage(),
       ),
     ],
     child: const MyApp(),
