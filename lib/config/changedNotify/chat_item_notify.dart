@@ -9,7 +9,8 @@ class ItemChatNotify extends ChangeNotifier {
         .collection('users')
         .where('uid', isEqualTo: uid)
         .get()
-        .then((value) => value.docs.map((e) => UserModal.fromJson(e.data())).single);
+        .then((value) =>
+            value.docs.map((e) => UserModal.fromJson(e.data())).single);
     return user;
   }
 
