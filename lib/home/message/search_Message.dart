@@ -28,14 +28,14 @@ class SearchMessageState extends State<SearchMessage> {
     super.initState();
     focusNode.requestFocus();
     getUserChat();
-    Provider.of<HomeNotify>(context, listen: false);
+
   }
 
   getUserChat() async {
 
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
 
-    await context.read<HomeNotify>().getUserChats()?.then(
+    await Provider.of<HomeNotify>(context, listen: false).getUserChats()?.then(
       (value) async {
         setState(() {
           chatRooms = value;
@@ -73,7 +73,9 @@ class SearchMessageState extends State<SearchMessage> {
                       .replaceAll(keyUid ?? "", "");
                   String chatRoomId = data['chatRoomId'];
                   if(listUser[index].fullName.toLowerCase().toString().contains(context.watch<SearchMessageProvider>().name)) {
+                    if(listUser[index].uid == uid){
                       return ItemMessage(uid: uid, chatRoomId: chatRoomId);
+                    }
                   }
                   return const SizedBox.shrink();
                 },
