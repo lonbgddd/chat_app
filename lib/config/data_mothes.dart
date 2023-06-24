@@ -34,8 +34,8 @@ class DatabaseMethods {
   Future<List<UserModal>> getAllUser(String uid) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
-        .where('uid', whereNotIn: [uid])
-        .get();
+        .where('uid', whereNotIn: [uid]).get();
+    print(data);
     return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
   }
 
@@ -186,8 +186,8 @@ class DatabaseMethods {
 
   Future<List<UserModal>> getListUserChat(String uid) async {
     List<String> listUid = [];
-    List<UserModal> userList =[];
-    try{
+    List<UserModal> userList = [];
+    try {
       await FirebaseFirestore.instance
           .collection("chatRoom")
           .where('users', arrayContains: uid)
@@ -207,13 +207,14 @@ class DatabaseMethods {
             .get()
             .then((QuerySnapshot querySnapshot) {
           userList = querySnapshot.docs.map((doc) {
-            UserModal user = UserModal.fromJson(doc.data() as Map<String, dynamic>);
+            UserModal user =
+                UserModal.fromJson(doc.data() as Map<String, dynamic>);
             return user;
           }).toList();
         });
       });
       return userList;
-    }catch(error){
+    } catch (error) {
       print(error);
     }
     return userList;

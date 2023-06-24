@@ -43,9 +43,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void dispose() {
     // TODO: implement dispose
     WidgetsBinding.instance.removeObserver(this);
-    print('dispose called.............');
     super.dispose();
-
     context.read<HomeState>().setStateUser('offline');
   }
 
