@@ -194,6 +194,10 @@ Future<void> main() async {
         create: (context) => LoginPhoneProvider(),
         child: LoginWithPhoneNumber(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => DetailMessageProvider(),
+        child: DetailMessage(),
+      ),
     ],
     child: const MyApp(),
   ));
