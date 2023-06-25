@@ -1,6 +1,7 @@
 import 'package:chat_app/Auth/login_phone.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
+import 'package:chat_app/home/binder_page/compnents/show_me.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/search_Message.dart';
 import 'package:chat_app/home/profile/detail_profile_others.dart';
@@ -37,6 +38,10 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
           path: 'search-message',
           builder: (context, state) => SearchMessage(),
+        ),
+        GoRoute(
+          path: 'show-me',
+          builder: (context, state) => ShowMe(),
         )
       ]),
   GoRoute(

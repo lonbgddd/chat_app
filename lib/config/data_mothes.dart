@@ -31,12 +31,19 @@ class DatabaseMethods {
     return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
   }
 
-  Future<List<UserModal>> getAllUser(String uid) async {
-    final data = await FirebaseFirestore.instance
+  Future<List<UserModal>> getUserHasFilter(String uid, String? gender) async {
+    Query query = FirebaseFirestore.instance
         .collection('users')
-        .where('uid', whereNotIn: [uid])
-        .get();
-    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
+        .where('uid', whereNotIn: [uid]);
+
+    if (gender != 'everyone') {
+      query = query.where('gender', isEqualTo: gender);
+    }
+    final QuerySnapshot snapshot = await query.get();
+
+    return snapshot.docs.map<UserModal>((DocumentSnapshot e) {
+      return UserModal.fromJson(e.data() as Map<String, dynamic>);
+    }).toList();
   }
 
   Future addChatRoom(chatRoom, chatRoomId) async {
@@ -186,8 +193,8 @@ class DatabaseMethods {
 
   Future<List<UserModal>> getListUserChat(String uid) async {
     List<String> listUid = [];
-    List<UserModal> userList =[];
-    try{
+    List<UserModal> userList = [];
+    try {
       await FirebaseFirestore.instance
           .collection("chatRoom")
           .where('users', arrayContains: uid)
@@ -207,13 +214,14 @@ class DatabaseMethods {
             .get()
             .then((QuerySnapshot querySnapshot) {
           userList = querySnapshot.docs.map((doc) {
-            UserModal user = UserModal.fromJson(doc.data() as Map<String, dynamic>);
+            UserModal user =
+                UserModal.fromJson(doc.data() as Map<String, dynamic>);
             return user;
           }).toList();
         });
       });
       return userList;
-    }catch(error){
+    } catch (error) {
       print(error);
     }
     return userList;

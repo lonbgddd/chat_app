@@ -1,5 +1,7 @@
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
+import 'package:chat_app/home/binder_page/compnents/discovery_setting.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
+import 'package:chat_app/home/binder_page/compnents/range_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +20,7 @@ class _BinderPageState extends State<BinderPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<BinderWatch>(context, listen: false).allUserBinder();
+    Provider.of<BinderWatch>(context, listen: false).allUserBinder;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final size = MediaQuery.of(context).size;
       final provider = Provider.of<BinderWatch>(context, listen: false);
@@ -26,96 +28,129 @@ class _BinderPageState extends State<BinderPage> {
     });
   }
 
-  bool hasNotification = false;
+  bool hasNotification = true;
+  bool isRefresh = false;
+  void _showBottomDialog() async {
+    String? result = await showModalBottomSheet(
+      isScrollControlled: true,
+      isDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          child: DiscoverySetting(),
+        );
+      },
+    );
+    print(result);
+    if (result == 'refresh') {
+      setState(() {
+        isRefresh = true;
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isRefresh) {
+      final provider = context.read<BinderWatch>();
+      provider.allUserBinder(provider.selectedOption.toLowerCase());
+      setState(() {
+        isRefresh = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Row(
-            children: [
-              SvgPicture.asset(
-                AppAssets.iconTinder,
-                width: 30,
-                height: 30,
-                fit: BoxFit.contain,
-                colorFilter: const ColorFilter.mode(
-                    Color.fromRGBO(223, 54, 64, 100), BlendMode.srcIn),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              const Text(
-                "Binder",
-                style: TextStyle(
-                  fontFamily: 'Grandista',
-                  fontSize: 24,
-                  color: Color.fromRGBO(223, 54, 64, 100),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 3),
-              child: Stack(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.notifications,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                  ),
-                  if (hasNotification)
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        child: const Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+    final provider = context.read<BinderWatch>();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          children: [
+            SvgPicture.asset(
+              AppAssets.iconTinder,
+              width: 30,
+              height: 30,
+              fit: BoxFit.contain,
+              colorFilter: const ColorFilter.mode(
+                  Color.fromRGBO(223, 54, 64, 100), BlendMode.srcIn),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.tune,
-                color: Colors.grey,
+            const SizedBox(
+              width: 5,
+            ),
+            const Text(
+              "Binder",
+              style: TextStyle(
+                fontFamily: 'Grandista',
+                fontSize: 24,
+                color: Color.fromRGBO(223, 54, 64, 100),
               ),
             ),
           ],
         ),
-        backgroundColor: Colors.white,
-        body: getBody(),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Stack(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.notifications,
+                    color: Colors.grey,
+                    size: 25,
+                  ),
+                ),
+                if (hasNotification)
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: const Text(
+                        '1',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              _showBottomDialog();
+            },
+            icon: const Icon(
+              Icons.tune,
+              color: Colors.grey,
+            ),
+          ),
+        ],
       ),
+      backgroundColor: Colors.white,
+      body: getBody(provider.selectedOption),
     );
   }
 
-  Widget getBody() {
+  Widget getBody(String gender) {
     return FutureBuilder(
-        future: context.read<BinderWatch>().allUserBinder(),
+        future: context.read<BinderWatch>().allUserBinder(gender.toLowerCase()),
         builder: (context, snapshot) => snapshot.hasData
             ? Padding(
                 padding: const EdgeInsets.all(10),

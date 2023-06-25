@@ -12,10 +12,19 @@ class BinderWatch extends ChangeNotifier {
   Offset _offset = Offset.zero;
   bool _isDragging = false;
   double _angle = 0;
+  String _selectedOption = 'Everyone';
+  bool _showPeopleInRangeDistance = false;
+  bool _showPeopleInRangeAge = false;
 
   Offset get position => _offset;
 
+  String get selectedOption => _selectedOption;
+
   bool get isDragging => _isDragging;
+
+  bool get showPeopleInRangeDistance => _showPeopleInRangeDistance;
+
+  bool get showPeopleInRangeAge => _showPeopleInRangeAge;
   Size _size = Size.zero;
 
   List<UserModal> get listCard => _listCard;
@@ -24,12 +33,27 @@ class BinderWatch extends ChangeNotifier {
     _listCard = [];
   }
 
-  Future<List<UserModal>> allUserBinder() async {
+  void setSwitchPeopleInRangeAge(bool option) {
+    _showPeopleInRangeAge = option;
+    notifyListeners();
+  }
+
+  void setSwitchPeopleInRangeDistance(bool option) {
+    _showPeopleInRangeDistance = option;
+    notifyListeners();
+  }
+
+  void setSelectedOption(String option) {
+    _selectedOption = option;
+    notifyListeners();
+  }
+
+  Future<List<UserModal>> allUserBinder(String gender) async {
     try {
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      final users = await DatabaseMethods().getAllUser(uid);
-      print('List: $users');
+      final users = await DatabaseMethods().getUserHasFilter(uid, gender);
+      print('Your list has ${users.length} elements');
       _listCard = users ?? [];
 
       return _listCard;
