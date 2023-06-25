@@ -2,9 +2,11 @@ import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
+import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
+import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
@@ -13,6 +15,7 @@ import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
+import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
@@ -196,6 +199,10 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => DetailMessageProvider(),
         child: const DetailMessage(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => LikedUserCardProvider(),
+        child: const LikedUserCard(),
       ),
     ],
     child: const MyApp(),
