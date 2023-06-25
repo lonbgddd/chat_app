@@ -1,21 +1,42 @@
+import 'dart:io';
+
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/update_watch.dart';
+import 'package:chat_app/home/profile/components/infor_row.dart';
+import 'package:chat_app/home/profile/components/interest_item.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final imagePick = ImagePicker();
+  File? imageGallery;
+
+  getImageGallery() async {
+    await imagePick.pickImage(source: ImageSource.gallery).then((image) {
+      if (image != null) {
+        setState(() {
+          imageGallery = File(image.path);
+        });
+        Provider.of<UpdateNotify>(context, listen: false)
+            .updateImageAvatar(imageGallery);
+      }
+    });
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,14 +66,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             color: const Color.fromRGBO(229, 58, 69, 100),
                             child: GestureDetector(
                               onTap: () {
-                                context.go('/home/update-avatar');
+                                getImageGallery();
                               },
                               child: Center(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     ProfileAvatar(
-                                      avataUrl: snapshot.data!.avatar,
+                                      avatarUrl: snapshot.data!.avatar,
                                     ),
                                     const SizedBox(
                                       height: 16.0,
@@ -239,71 +260,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   return Container();
                 }
               })),
-    );
-  }
-}
-
-class InterestItem extends StatelessWidget {
-  const InterestItem({
-    super.key,
-    required this.title,
-  });
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 8.0, top: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-      decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            const Color.fromRGBO(229, 58, 69, 100).withOpacity(0.4),
-            const Color.fromRGBO(229, 58, 69, 100).withOpacity(0.8)
-          ]),
-          borderRadius: BorderRadius.circular(15)),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 12, color: Colors.white),
-      ),
-    );
-  }
-}
-
-class InforRow extends StatelessWidget {
-  const InforRow({
-    super.key,
-    required this.title,
-    required this.content,
-  });
-
-  final String title;
-  final String content;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 16.0),
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1.0, color: const Color(0XFFC6C6C6))),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 14,
-          ),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Text(
-          content,
-          style: const TextStyle(color: Color(0XFF8E8E8E), fontSize: 14),
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
-      ]),
     );
   }
 }

@@ -56,7 +56,7 @@ class ProfileCard extends StatelessWidget {
   cardProfile() => Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey,
@@ -175,7 +175,7 @@ class ProfileCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 40,
                         height: 40,
                         child: FloatingActionButton(
