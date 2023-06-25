@@ -16,7 +16,6 @@ class _WhoLikePageState extends State<WhoLikePage> {
   @override
   void initState() {
     super.initState();
-    context.read<FollowNotify>().userFollowYou();
   }
 
   @override
@@ -50,39 +49,36 @@ class _WhoLikePageState extends State<WhoLikePage> {
                 indent: 20,
                 endIndent: 20,
               ),
-              StreamBuilder(
-                  stream: context.watch<FollowNotify>().userFollowYouStream,
-                  builder: (context,
-                      AsyncSnapshot<List<Map<UserModal, ChatRoom?>>> snapshot) {
-                    if (snapshot.hasData) {
-                      return GridView.builder(
-                        itemCount: snapshot.data!.length,
-                        shrinkWrap: true,
-                        addAutomaticKeepAlives: false,
-                        physics: const ScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 16,
-                                crossAxisSpacing: 16,
-                                mainAxisExtent: 250),
-                        itemBuilder: (context, index) {
-                          Map<UserModal, ChatRoom?> userMap = snapshot.data![index];
-                          return LikedUserCard(
-                            user: userMap.keys.elementAt(0),
-                            chatRoom: userMap.values.elementAt(0),
-                            onDislikeCallback: () {
-                              context
-                                  .read<FollowNotify>()
-                                  .removeFollow(userMap.keys.elementAt(0).uid);
-                            },
-                          );
-                        },
-                      );
-                    } else {
+              FutureBuilder(
+                  future: context.watch<FollowNotify>().userFollowYou(),
+                  builder: (context, AsyncSnapshot<List<UserModal>> snapshot) {
+                    if (snapshot.data == null) {
                       return Container();
+                    } else {
+                      return snapshot.hasData
+                          ? GridView.builder(
+                              itemCount: snapshot.data!.length,
+                              shrinkWrap: true,
+                              addAutomaticKeepAlives: false,
+                              physics: const ScrollPhysics(),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 16,
+                                      crossAxisSpacing: 16,
+                                      mainAxisExtent: 250),
+                              itemBuilder: (context, index) {
+                                UserModal user = snapshot.data![index];
+                                return LikedUserCard(
+                                  user: user,
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(),
+                            );
                     }
                   })
             ],

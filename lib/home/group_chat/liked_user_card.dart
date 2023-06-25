@@ -1,75 +1,27 @@
 import 'dart:ui';
 
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
+import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/home/message/detail_message.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/user_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class LikedUserCard extends StatefulWidget {
-  const LikedUserCard({
-    super.key,
-    this.user,
-    this.chatRoom,
-    required this.onDislikeCallback,
-  });
+class LikedUserCard extends StatelessWidget {
+  const LikedUserCard({super.key, this.user});
+
   final UserModal? user;
-  final ChatRoom? chatRoom;
-  final VoidCallback onDislikeCallback;
-
-  @override
-  State<LikedUserCard> createState() => _LikedUserCardState();
-}
-
-class _LikedUserCardState extends State<LikedUserCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _opacityAnimation;
-  ChatRoom? chatRoom;
-
-  @override
-  void initState() {
-    super.initState();
-    chatRoom = widget.chatRoom;
-
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
-
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOutQuart,
-      ),
-    );
-
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _animationController.reverse();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _toggleFavorite() {
-    if (_animationController.isAnimating) return;
-    _animationController.forward();
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.goNamed('Home-detail-others',queryParameters: { 'uid': widget.user!.uid});
+        context
+            .goNamed('Home-detail-others', queryParameters: {'uid': user!.uid});
       },
       child: Container(
         decoration: BoxDecoration(
@@ -88,8 +40,8 @@ class _LikedUserCardState extends State<LikedUserCard>
               decoration: BoxDecoration(
                   color: Colors.white,
                   image: DecorationImage(
-                    image: widget.user!.avatar.isNotEmpty
-                        ? NetworkImage(widget.user!.avatar)
+                    image: user!.avatar.isNotEmpty
+                        ? NetworkImage(user!.avatar)
                         : const NetworkImage(
                             "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"),
                     fit: BoxFit.cover,
@@ -104,158 +56,148 @@ class _LikedUserCardState extends State<LikedUserCard>
                     stops: const [0.6, 1]),
                 borderRadius: BorderRadius.circular(15)),
           ),
-          if (chatRoom == null)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: Text(
-                      "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
-                      style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(bottom: Radius.circular(15)),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.2),
-                            borderRadius: const BorderRadius.vertical(
-                                bottom: Radius.circular(15))),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          FutureBuilder(
+              future: context
+                  .watch<LikedUserCardProvider>()
+                  .checkMatched(user!.uid),
+              builder: (context, snapshot) {
+                return snapshot.hasData
+                    ? Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            IconButton(
-                                onPressed: () {
-                                  widget.onDislikeCallback();
-                                },
-                                icon: const Icon(
-                                  Icons.clear,
-                                  color: Colors.white,
-                                )),
-                            Container(
-                              width: 1,
-                              height: 20, // Adjust height as needed
-                              color: Colors.white,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16.0),
+                              child: Text(
+                                "${user!.fullName}, ${calculateAge(user!.birthday)}",
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
-                            IconButton(
-                                onPressed: () async {
-                                  _toggleFavorite();
-                                  await context
-                                      .read<FollowNotify>()
-                                      .addFollow(widget.user!.uid)
-                                      .then((value) {
-                                    DatabaseMethods()
-                                        .getChatRoom(widget.user!.uid)
-                                        .then((chatRoom) {
-                                      setState(() {
-                                        this.chatRoom = chatRoom;
-                                      });
-                                    });
-                                  });
-                                },
-                                icon: const Icon(
-                                  Icons.favorite,
-                                  color: Colors.white,
-                                ))
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  bottom: Radius.circular(15)),
+                              child: BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.2),
+                                      borderRadius: const BorderRadius.vertical(
+                                          bottom: Radius.circular(15))),
+                                  child: Center(
+                                    child: IconButton(
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              builder: (BuildContext context) {
+                                                return SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.95,
+                                                    child: DetailMessage(
+                                                      uid: user!.uid,
+                                                      chatRoomId: snapshot
+                                                          .data!.chatRoomId,
+                                                      name: user!.fullName,
+                                                      avatar: user!.avatar,
+                                                      token: user!.token,
+                                                    ));
+                                              });
+                                        },
+                                        icon: const Icon(
+                                          Icons.send,
+                                          color: Colors.white,
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          if (chatRoom != null) const MatchedLabel(),
-          if (chatRoom != null)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: Text(
-                      "${widget.user!.fullName}, ${calculateAge(widget.user!.birthday)}",
-                      style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  ClipRRect(
-                    borderRadius:
-                        const BorderRadius.vertical(bottom: Radius.circular(15)),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.2),
-                            borderRadius: const BorderRadius.vertical(
-                                bottom: Radius.circular(15))),
-                        child: Center(
-                          child: IconButton(
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (BuildContext context) {
-                                      return SizedBox(
-                                          height: MediaQuery.of(context).size.height * 0.95,
-                                          child: DetailMessage(
-                                            uid: widget.user!.uid,
-                                            chatRoomId: chatRoom!.chatRoomId,
-                                            name: widget.user!.fullName,
-                                            avatar: widget.user!.avatar,
-                                            token: widget.user!.token,
-                                          ));
-                                    });
-                              },
-                              icon: const Icon(
-                                Icons.send,
-                                color: Colors.white,
-                              )),
+                      )
+                    : Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 16.0),
+                              child: Text(
+                                "${user!.fullName}, ${calculateAge(user!.birthday)}",
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  bottom: Radius.circular(15)),
+                              child: BackdropFilter(
+                                filter:
+                                    ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.2),
+                                      borderRadius: const BorderRadius.vertical(
+                                          bottom: Radius.circular(15))),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      IconButton(
+                                          onPressed: () async {
+                                            await context
+                                                .read<LikedUserCardProvider>()
+                                                .removeFollow(user!.uid);
+                                          },
+                                          icon: const Icon(
+                                            Icons.clear,
+                                            color: Colors.white,
+                                          )),
+                                      Container(
+                                        width: 1,
+                                        height: 20, // Adjust height as needed
+                                        color: Colors.white,
+                                      ),
+                                      IconButton(
+                                          onPressed: () {
+                                            context
+                                                .read<LikedUserCardProvider>()
+                                                .addFollow(user!.uid);
+                                          },
+                                          icon: const Icon(
+                                            Icons.favorite,
+                                            color: Colors.white,
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          AnimatedBuilder(
-            animation: _opacityAnimation,
-            builder: (context, child) {
-              return Opacity(
-                opacity: _opacityAnimation.value,
-                child: const Align(
-                  alignment: Alignment.center,
-                  child: Center(
-                    child: Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+                      );
+              })
+
+          // if (snapshot.hasData) const MatchedLabel(),
+          //
         ]),
       ),
     );
