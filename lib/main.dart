@@ -113,32 +113,16 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   if (!kIsWeb) {
     await setupFlutterNotifications();
-  }
-  final messaging = FirebaseMessaging.instance;
-
-  final settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  if (kDebugMode) {
-    print('Permission granted: ${settings.authorizationStatus}');
   }
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
   await FirebaseApi().PemissionKey();
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {});
+  await FirebaseApi().checkPermissionLocation();
+  await FirebaseApi().checkPermissionNotification();
 
   runApp(MultiProvider(
     providers: [
