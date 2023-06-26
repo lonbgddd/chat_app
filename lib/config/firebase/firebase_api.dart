@@ -4,6 +4,7 @@ import 'package:chat_app/config/firebase/key.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class FirebaseApi {
@@ -13,6 +14,41 @@ class FirebaseApi {
     await HelpersFunctions.saveTokenUserSharedPreference(token!);
     if (kDebugMode) {
       print('Registration Token=$token');
+    }
+  }
+
+  Future checkPermissionLocation() async {
+    bool _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!_serviceEnabled) {
+      return Future.error('Location enabled');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location enabled');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location không cho lấy');
+    }
+  }
+
+  Future checkPermissionNotification() async {
+    final messaging = FirebaseMessaging.instance;
+
+    final settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (kDebugMode) {
+      print('Permission granted: ${settings.authorizationStatus}');
     }
   }
 
