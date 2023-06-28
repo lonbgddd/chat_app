@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     print('dispose called.............');
     super.dispose();
 
-    // context.read<HomeState>().setStateUser('offline');
+    context.read<HomeState>().setStateUser('offline');
   }
 
   @override

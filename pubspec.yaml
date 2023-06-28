@@ -64,7 +64,8 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   flutter_custom_clippers: ^2.1.0
   timer_count_down: ^2.2.2
-  carousel_slider: ^4.2.1
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
