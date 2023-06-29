@@ -1,15 +1,15 @@
 import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/foundation.dart' as foundation;
 
 import '../../domain/entities/chat_message_entity.dart';
 
 class DetailMessage extends StatefulWidget {
-  DetailMessage(
+  const DetailMessage(
       {super.key,
       this.uid,
       this.chatRoomId,
@@ -122,7 +122,7 @@ class _DetailMessageState extends State<DetailMessage> {
   }
 
   Widget today() {
-    return const Row(
+    return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         // Căn giữa theo chiều ngang
         children: [

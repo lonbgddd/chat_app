@@ -4,6 +4,7 @@ import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
 import '../bloc/detail_message/detail_message_bloc.dart';
 import 'detail_Message.dart';
 
@@ -17,7 +18,7 @@ class MyItemMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ChatItemBloc, ChatItemState>(
       listenWhen: (previous, current) => current is ChatItemActionState,
-      buildWhen: (previous, current) => current is !ChatItemActionState,
+      buildWhen: (previous, current) => current is! ChatItemActionState,
       listener: (context, state) {
         if (state is ChatItemClicked) {
           showModalBottomSheet(
@@ -26,27 +27,27 @@ class MyItemMessage extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return BlocProvider<DetailMessageBloc>(
-                  create: (context) => sl()..add(GetMessageList(chatRoomId!)),
-                  child:
-                   SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.95,
-                      child: DetailMessage(
-                        uid: uid,
-                        chatRoomId: chatRoomId,
-                        name: state.user.fullName,
-                        avatar: state.user.avatar,
-                        token: state.user.token,
-                      ))
-                );
+                    create: (context) => sl()..add(GetMessageList(chatRoomId!)),
+                    child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.95,
+                        child: DetailMessage(
+                          uid: uid,
+                          chatRoomId: chatRoomId,
+                          name: state.user.fullName,
+                          avatar: state.user.avatar,
+                          token: state.user.token,
+                        )));
               });
-          BlocProvider.of<ChatItemBloc>(context).add(GetChatItem(uid!, chatRoomId!));
+          BlocProvider.of<ChatItemBloc>(context)
+              .add(GetChatItem(uid!, chatRoomId!));
         }
       },
       builder: (context, state) {
         if (state is ChatItemLoaded) {
           return GestureDetector(
             onTap: () {
-              BlocProvider.of<ChatItemBloc>(context).add(ShowDetail(state.user));
+              BlocProvider.of<ChatItemBloc>(context)
+                  .add(ShowDetail(state.user));
             },
             child: Container(
               color: Colors.transparent,
@@ -68,15 +69,15 @@ class MyItemMessage extends StatelessWidget {
                       radius: 30,
                       backgroundImage: NetworkImage(state.user.avatar ?? ""),
                       child: state.user.activeStatus == "online"
-                          ? const Stack(children: [
-                              Align(
+                          ? Stack(children: [
+                              const Align(
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
                                   radius: 11,
                                   backgroundColor: Colors.white,
                                 ),
                               ),
-                              Align(
+                              const Align(
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
                                   radius: 10,

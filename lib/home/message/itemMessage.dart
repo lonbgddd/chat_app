@@ -42,112 +42,115 @@ class ItemMessageState extends State<ItemMessage> {
       builder: (context, AsyncSnapshot<UserModal?> snapshot) {
         return snapshot.hasData
             ? GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                backgroundColor: Colors.transparent,
-                builder: (BuildContext context) {
-                  return SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.95,
-                      child: DetailMessage(
-                        uid: widget.uid,
-                        chatRoomId: widget.chatRoomId,
-                        name: snapshot.data?.fullName,
-                        avatar: snapshot.data?.avatar,
-                        token: snapshot.data?.token,
-                      ));
-                });
-          },
-          child: Container(
-            color: Colors.transparent,
-            margin: const EdgeInsets.only(left: 20, bottom: 20),
-            width: 60,
-            height: 60,
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 2,
-                    ),
-                  ),
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(snapshot.data?.avatar ?? ""),
-                    child: snapshot.data!.activeStatus == "online"
-                        ? Stack(children: const [
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: CircleAvatar(
-                                radius: 11,
-                                backgroundColor: Colors.white,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: CircleAvatar(
-                                radius: 10,
-                                backgroundColor: Colors.red,
-                              ),
-                            ),
-                          ])
-                        : null,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10, right: 20),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.grey,
-                          width: 1.0,
+                onTap: () {
+                  showModalBottomSheet(
+                      isScrollControlled: true,
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      builder: (BuildContext context) {
+                        return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.95,
+                            child: DetailMessage(
+                              uid: widget.uid,
+                              chatRoomId: widget.chatRoomId,
+                              name: snapshot.data?.fullName,
+                              avatar: snapshot.data?.avatar,
+                              token: snapshot.data?.token,
+                            ));
+                      });
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  margin: const EdgeInsets.only(left: 20, bottom: 20),
+                  width: 60,
+                  height: 60,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.red,
+                            width: 2,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage:
+                              NetworkImage(snapshot.data?.avatar ?? ""),
+                          child: snapshot.data!.activeStatus == "online"
+                              ? Stack(children: const [
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CircleAvatar(
+                                      radius: 11,
+                                      backgroundColor: Colors.white,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CircleAvatar(
+                                      radius: 10,
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  ),
+                                ])
+                              : null,
                         ),
                       ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10, right: 20),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                          child: Row(
                             children: [
-                              Text(
-                                snapshot.data?.fullName ?? "",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 14),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      snapshot.data?.fullName ?? "",
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      mess?.messageText ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                                ),
                               ),
                               Text(
-                                mess?.messageText ?? '',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                mess != null
+                                    ? DateFormat('HH:mm a').format(mess!.time)
+                                    : '',
+                                style: const TextStyle(color: Colors.grey),
                               )
                             ],
                           ),
                         ),
-                        Text(
-                          mess != null
-                              ? DateFormat('HH:mm a').format(mess!.time)
-                              : '',
-                          style: const TextStyle(color: Colors.grey),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          ),
-        ) : Container();
+                ),
+              )
+            : Container();
       },
     );
   }
