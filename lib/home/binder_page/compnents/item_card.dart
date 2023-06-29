@@ -6,7 +6,6 @@ import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/home/binder_page/compnents/photo_item_card.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +89,6 @@ class ProfileCard extends StatelessWidget {
                     ),
             ),
           ),
-
           Positioned(
             bottom: 0,
             left: 0,
@@ -301,7 +299,6 @@ class ProfileCard extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       );
 
