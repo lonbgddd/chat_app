@@ -1,17 +1,19 @@
 import 'dart:ui';
 
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
+import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../binder_page/compnents/photo_item_card.dart';
+
 class DetailProfileOthersScreen extends StatefulWidget {
-
   final String? uid;
-
   const DetailProfileOthersScreen({Key? key, this.uid}) : super(key: key);
 
   @override
@@ -24,7 +26,6 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
     super.initState();
     Provider.of<ProfileWatch>(context, listen: false).getUser();
   }
-
   @override
   Widget build(BuildContext context) {
     final EdgeInsets padding = MediaQuery.of(context).padding;
@@ -42,10 +43,14 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: MediaQuery.of(context).size.height / 1.55,
+                            height: MediaQuery.of(context).size.height / 1.47,
                             child: Stack(
                               children: [
-                                Container(
+                                (snapshot.data!.photoList.length != 0) ? Container(
+                                    height: MediaQuery.of(context).size.height / 1.55,
+                                    child: PhotoGallery(photoList: snapshot.data!.photoList,scrollPhysics: AlwaysScrollableScrollPhysics(),))
+                                    : Container(
+                                  height: MediaQuery.of(context).size.height / 1.55,
                                   margin: EdgeInsets.only(bottom: 30),
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
@@ -58,14 +63,21 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                 Positioned(
                                     bottom: 0,
                                     right: 20,
-                                    child: FloatingActionButton(
-                                      backgroundColor: Color.fromRGBO(234, 64, 128, 100),
-                                      elevation: 3,
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Icon(Icons.arrow_downward_rounded),
-                                    ),
+                                    child: GestureDetector(
+                                      onTap:  () => Navigator.pop(context),
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          gradient: LinearGradient(
+                                            colors: [const Color.fromRGBO(234, 64, 128, 1), const Color.fromRGBO(238, 128, 95, 1)],
+                                          ),
+                                        ),
+                                        child:  Image.asset(AppAssets.iconArrowDown),
+                                      ),
+                                    )
                                 ),
                                 //
                               ],
@@ -76,20 +88,27 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(snapshot.data!.fullName,
-                                      style: TextStyle(fontSize: 32, color: Colors.black, fontWeight: FontWeight.w700),),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(snapshot.data!.fullName,
+                                        style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.w700),
+                                      overflow: TextOverflow.ellipsis,),
+                                    ),
                                     const SizedBox(width: 8),
-                                    Text((DateTime.now().year -
-                                          int.parse(snapshot.data!.birthday.substring(0, 4)))
-                                          .toString(),
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 32,
-                                          fontWeight: FontWeight.w400),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text((DateTime.now().year -
+                                            int.parse(snapshot.data!.birthday.substring(0, 4)))
+                                            .toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     )
                                   ],
                                 ),
@@ -99,7 +118,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                   children: [
                                     Icon(Icons.check_circle, color: Colors.blue,),
                                     const SizedBox(width: 5),
-                                    Text('Đã xác minh', style: TextStyle(fontSize:16 , color: Colors.blue,fontWeight: FontWeight.w600),)
+                                    Text('Đã xác minh', style: TextStyle(fontSize:16 , color: Colors.blue,fontWeight: FontWeight.w500),)
                                   ],
                                 ),
                                 const SizedBox(height: 5),
@@ -107,25 +126,25 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                   children: [
                                     Icon(Icons.person, color: Colors.grey,),
                                     const SizedBox(width: 5),
-                                    Text(snapshot.data!.gender.toString() == 'man' ? 'Nam' : 'Nữ', style: TextStyle(fontSize:16 , color: Colors.grey,),)
+                                    Text(snapshot.data!.gender.toString(), style: TextStyle(fontSize:16 , color: Colors.grey,),)
                                   ],
                                 ),
 
                               ],
                             ),
                           ),
-                          const SizedBox(height: 30),
+                          const SizedBox(height: 20),
                           Container(
                             width: MediaQuery.of(context).size.height,
                             padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
                             decoration: BoxDecoration(
                               border: Border(
                                 top: BorderSide(
-                                  color: Colors.grey.shade300,
+                                  color: Colors.grey.shade200,
                                   width: 1.0,
                                 ),
                                 bottom: BorderSide(
-                                  color: Colors.grey.shade300,
+                                  color: Colors.grey.shade200,
                                   width: 1.0,
                                 ),
                               ),
@@ -133,7 +152,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Giới thiệu bản thân', style: TextStyle(color: Colors.black,fontSize: 22,fontWeight: FontWeight.w800),),
+                                Text('Giới thiệu bản thân', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
                                 const SizedBox(height: 10),
                                 Text(snapshot.data!.introduceYourself.toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
                               ],
@@ -151,7 +170,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                   width: 1.0,
                                 ),
                                 bottom: BorderSide(
-                                  color: Colors.grey.shade300,
+                                  color: Colors.grey.shade200,
                                   width: 1.0,
                                 ),
                               ),
@@ -159,17 +178,16 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Sở thích', style: TextStyle(color: Colors.black,fontSize: 22,fontWeight: FontWeight.w800),),
+                                Text('Sở thích', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
                                 const SizedBox(height: 10),
                                 SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child:Wrap(
                                     children: List.generate(snapshot.data!.interestsList.length , (rowIndex) {
-
                                       return Padding(
                                         padding: const EdgeInsets.only(bottom: 10,  right: 10),
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+                                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(50),
                                             border: Border.all(
@@ -177,11 +195,8 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                                 color: Colors.grey
                                             ),
                                           ),
-                                          child: Text(snapshot.data!.interestsList[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
-
+                                          child: Text(snapshot.data!.interestsList[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 17,),textAlign: TextAlign.start,),
                                         ),
-
-
                                       );
 
                                     },
@@ -205,11 +220,11 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                               decoration: BoxDecoration(
                                 border: Border(
                                   top: BorderSide(
-                                    color: Colors.grey.shade300,
+                                    color: Colors.grey.shade200,
                                     width: 1.0,
                                   ),
                                   bottom: BorderSide(
-                                    color: Colors.grey.shade300,
+                                    color: Colors.grey.shade200,
                                     width: 1.0,
                                   ),
                                 ),
@@ -224,8 +239,6 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                               ),
                             ),
                           ),
-
-
 
 
 
@@ -293,33 +306,11 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FloatingActionButton(
-                backgroundColor: Colors.white,
-                elevation: 5,
-                onPressed: () {
-                  // Xử lý sự kiện khi nhấn nút
-                },
-                child:Icon(
-                  Icons.close_rounded,
-                  color: Colors.red,
-                  size: 40,
-                ),
-              ),
-
+              buildFloatingButton(55,55,15,AppAssets.iconDelete,(){}),
               const SizedBox(width: 20),
-              FloatingActionButton(
-                backgroundColor: Colors.white,
-                elevation: 5,
-                onPressed: () {
-                  // Xử lý sự kiện khi nhấn nút
-                },
-                child:Icon(
-                  CupertinoIcons.heart_fill,
-                  color: Colors.green,
-                  size: 40,
-                ),
-              ),
-
+              buildFloatingButton(40,40,10,AppAssets.iconStar,(){}),
+              const SizedBox(width: 20),
+              buildFloatingButton(55,55,10,AppAssets.iconHeart,(){}),
             ],
           ),
         ),
@@ -327,4 +318,32 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
 
     );
   }
+
+  Widget buildFloatingButton(double width,double height,double padding, String icon,onTap) {
+    return InkWell(
+            onTap: onTap,
+            child: Container(
+              width: width,
+              height: height,
+              padding: EdgeInsets.all(padding),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.shade200,
+                    spreadRadius: 3,
+                    blurRadius: 2,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: SvgPicture.asset(icon, fit: BoxFit.contain,
+              ),
+          ),
+      );
+  }
+
+
+
 }

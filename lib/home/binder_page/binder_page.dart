@@ -3,6 +3,7 @@ import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/helpers/app_assets.dart';
@@ -15,11 +16,6 @@ class BinderPage extends StatefulWidget {
 }
 
 class _BinderPageState extends State<BinderPage> {
-
-  // Future getMoreData() async {
-  //   await context.read<BinderWatch>().updateList();
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -47,8 +43,6 @@ class _BinderPageState extends State<BinderPage> {
                 width: 30,
                 height: 30,
                 fit: BoxFit.contain,
-                colorFilter: const ColorFilter.mode(
-                    Color.fromRGBO(223, 54, 64, 100), BlendMode.srcIn),
               ),
               const SizedBox(
                 width: 5,
@@ -121,38 +115,31 @@ class _BinderPageState extends State<BinderPage> {
   Widget getBody() {
     return FutureBuilder(
         future: context.read<BinderWatch>().allUserBinder(),
-        builder: (context, snapshot) {
-
-          if (snapshot.hasData) {
-            // if (snapshot.data!.length <= 2) {
-            //   getMoreData();
-            // }
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: Stack(
-                  alignment: Alignment.center,
-                  children: context
-                      .watch<BinderWatch>()
-                      .listCard
-                      .reversed
-                      .map((e) => ProfileCard(
-                            user: e,
-                            isDetail: () => context.goNamed(
-                                'Home-detail-others',
-                                queryParameters: {
-                                  'uid': e.uid.toString(),
-                                }),
-                            isFont:
-                                context.watch<BinderWatch>().listCard.first ==
-                                    e,
-                          ))
-                      .toList()),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+        builder: (context, snapshot) => snapshot.hasData
+            ? Padding(
+                padding: const EdgeInsets.all(10),
+                child: Stack(
+                    alignment: Alignment.center,
+                    children: context
+                        .watch<BinderWatch>()
+                        .listCard
+                        .reversed
+                        .map((e) => ProfileCard(
+                              user: e,
+                              isDetail: () => context.goNamed('Home-detail-others',
+                                  queryParameters: {
+                                    'uid': e.uid.toString(),
+                                  }),
+                              isFont:
+                                  context.watch<BinderWatch>().listCard.first ==
+                                      e,
+                            ))
+                        .toList()),
+              )
+            :  Center(
+                  child: LoadingAnimationWidget.dotsTriangle(color: Color.fromRGBO(234, 64, 128, 100),
+                    size: 70,),
+              ),
+    );
   }
 }

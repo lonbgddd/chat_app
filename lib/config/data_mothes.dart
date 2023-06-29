@@ -7,6 +7,7 @@ import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseMethods {
   Future<List<UserModal>> searchByName(String searchField) async {
@@ -117,6 +118,29 @@ class DatabaseMethods {
     }
   }
 
+  Future<List<String>> pushListImage(List<File?> images, String uid) async {
+    try {
+      final storageRef = FirebaseStorage.instance.ref();
+      final List<String> downloadURLs = [];
+      final uuid = Uuid();
+
+      for (File? image in images) {
+        if (image != null) {
+          final fileName = '${uuid.v4()}.${image.path.split('.').last}';
+          final uploadTask = storageRef.child('images/$uid/$fileName').putFile(image);
+          final snapshot = await uploadTask.whenComplete(() {});
+          final downloadURL = await snapshot.ref.getDownloadURL();
+          downloadURLs.add(downloadURL);
+        }
+      }
+
+      return downloadURLs;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+
   Future updateAvatar(String avatar, String uid) async {
     try {
       await FirebaseFirestore.instance
@@ -219,4 +243,9 @@ class DatabaseMethods {
     }
     return userList;
   }
+
+
+
+
+
 }

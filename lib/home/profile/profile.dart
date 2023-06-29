@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/home/profile/components/infor_row.dart';
 import 'package:chat_app/home/profile/components/interest_item.dart';
@@ -177,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 8.0,
                                       ),
                                       Text(
-                                        snapshot.data!.introduceYourself,
+                                        snapshot.data!.introduceYourself ?? '',
                                         style: const TextStyle(
                                             color: Color(0XFF8E8E8E),
                                             fontSize: 14),
@@ -224,11 +224,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        context
-                                            .read<CallDataProvider>()
-                                            .signOut();
-                                        GoRouter.of(context).pushReplacement(
-                                            '/login-home-screen');
+                                        context.read<CallDataProvider>().signOut();
+                                        GoRouter.of(context).go('/login-home-screen');
                                       },
                                       style: const ButtonStyle(
                                           backgroundColor:

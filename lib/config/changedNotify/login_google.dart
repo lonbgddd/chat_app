@@ -1,9 +1,9 @@
 import 'package:chat_app/config/helpers/helpers_database.dart';
-import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:chat_app/model/user_model.dart';
 
 class CallDataProvider extends ChangeNotifier {
   User? _userFormFirebase(User? user) {
@@ -13,11 +13,9 @@ class CallDataProvider extends ChangeNotifier {
       return user;
     }
   }
-
   Future<String> loginWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     if (gUser == null) {
-      print(">>>>>>>>>>>>>>>>>LOG: Mày click ra ngoài Google Sign-in dialog");
       return 'false';
     }
 
@@ -28,6 +26,7 @@ class CallDataProvider extends ChangeNotifier {
     );
 
     await FirebaseAuth.instance.signInWithCredential(credential);
+
     User? user = FirebaseAuth.instance.currentUser;
     QuerySnapshot dataUserSave = await FirebaseFirestore.instance
         .collection('users')
@@ -50,57 +49,40 @@ class CallDataProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> confirmProfile(String gender, String birthday,
-      List<String> interests, String biography) async {
+
+  Future<void> confirmProfile(String name,String gender,String request, String birthday,
+      List<String> interests,String datingPurpose, List<String> photoList,List<String> sexualOrientationList,) async {
     User? user = FirebaseAuth.instance.currentUser;
     final token =
         await HelpersFunctions().getUserTokenSharedPreference() as String;
     if (user != null) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
-            UserModal(
-                    email: user.email ?? 'admin@gmail.com',
-                    fullName: user.displayName ?? 'admin',
-                    introduceYourself: biography,
-                    avatar: user.photoURL ??
-                        'https://antimatter.vn/wp-content/uploads/2022/10/hinh-anh-gai-xinh-de-thuong.jpg',
-                    uid: user.uid,
-                    token: token,
-                    activeStatus: '',
-                    gender: gender,
-                    birthday: birthday,
-                    followersList: [],
-                    interestsList: [],
-                    phone: '',
-                    school: '',
-                    datingPurpose: '',
-                    company: '',
-                    currentAddress: '',
-                    photoList: [],
-                    fluentLanguageList: [],
-                    sexualOrientationList: [],
-                    zodiac: '',
-                    academicLever: '',
-                    communicateStyle: '',
-                    languageOfLove: '',
-                    personalityType: '',
-                    familyStyle: '',
-                    myPet: '',
-                    drinkingStatus: '',
-                    smokingStatus: '',
-                    sportsStatus: '',
-                    eatingStatus: '',
-                    socialNetworkStatus: '',
-                    sleepingHabits: '')
-                .toJson(),
-          );
-
+        UserModal(
+            email: user.email ?? 'admin@gmail.com',
+            fullName: name,
+            avatar: photoList.first,
+            uid:  user.uid,
+            token: token,
+            gender: gender,
+            requestToShow: request,
+            birthday: birthday,
+            followersList: [],
+            interestsList: interests,
+            phone: '',
+            datingPurpose: datingPurpose,
+            photoList: photoList,
+            sexualOrientationList: sexualOrientationList,
+          ).toJson(),
+      );
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
+
     }
   }
 
   Stream<User?>? get user {
     return FirebaseAuth.instance.authStateChanges().map(_userFormFirebase);
   }
+
 
   Future<String?> loginWithEmailAndPass(String email, String password) async {
     String? key = 'success';
@@ -113,11 +95,11 @@ class CallDataProvider extends ChangeNotifier {
           .where('uid', isEqualTo: credential.user!.uid)
           .get();
       print(dataUserSave.docs.single['email']);
+
       await HelpersFunctions.saveIdUserSharedPreference(credential.user!.uid);
-      await HelpersFunctions.saveNameUserSharedPreference(
-          dataUserSave.docs.single['name']);
-      await HelpersFunctions.saveAvatarUserSharedPreference(
-          dataUserSave.docs.single['avatar']);
+      await HelpersFunctions.saveNameUserSharedPreference(dataUserSave.docs.single['name']);
+      await HelpersFunctions.saveAvatarUserSharedPreference(dataUserSave.docs.single['avatar']);
+
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         key = 'user-not-found';
@@ -132,13 +114,7 @@ class CallDataProvider extends ChangeNotifier {
     }
     return key;
   }
-
   Future<void> signOut() async {
-    final uid = await HelpersFunctions().getUserIdUserSharedPreference();
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid.toString())
-        .update({'activeStatus': 'offline'});
     await HelpersFunctions.saveIdUserSharedPreference('');
     _userFormFirebase(null);
     await GoogleSignIn().signOut();
@@ -169,4 +145,5 @@ class CallDataProvider extends ChangeNotifier {
 //     print(e);
 //   }
 // }
+
 }

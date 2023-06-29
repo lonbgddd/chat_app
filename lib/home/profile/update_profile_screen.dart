@@ -40,7 +40,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             ? SingingCharacter.man
             : SingingCharacter.women;
         nameController.text = currentUser!.fullName;
-        bioController.text = currentUser!.introduceYourself;
+        bioController.text = currentUser!.introduceYourself ?? '';
         birthday = DateTime.parse(currentUser!.birthday);
         newInterests.addAll(currentUser!.interestsList);
       });

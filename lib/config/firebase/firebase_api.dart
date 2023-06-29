@@ -8,7 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 class FirebaseApi {
-  Future<void> PemissionKey() async {
+  Future<void> permissionKey() async {
     final _message = FirebaseMessaging.instance;
     String? token = await _message.getToken();
     await HelpersFunctions.saveTokenUserSharedPreference(token!);
