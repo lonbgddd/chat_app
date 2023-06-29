@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../helpers/helpers_validators.dart';
+import '../helpers/helpers_user_and_validators.dart';
 
 class LoginPhoneProvider extends ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  var textEditingController = TextEditingController();
+  TextEditingController textEditingController = TextEditingController();
   bool isTextFieldEmpty = true;
   bool isErrorText = false;
   bool isErrorSms = false;
@@ -30,10 +30,12 @@ class LoginPhoneProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nhapCode(String newValue) {
+  void inputCode(String newValue) {
     smsCode = newValue;
     notifyListeners();
   }
+
+
   void Resend(bool value) {
     resend = value;
     notifyListeners();
@@ -44,23 +46,22 @@ class LoginPhoneProvider extends ChangeNotifier {
   }
 
   Future<void> onSubmitPhone(BuildContext context) async {
-    // if(!HelpersValidators.isValidPhoneNumber(textEditingController.text)){
-    //   onTextFieldError();
-    //   textEditingController.clear();
-    //   notifyListeners();
-    // }else {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-        phoneNumber: '$country ${textEditingController.text}',
-        verificationCompleted: (PhoneAuthCredential credential) {},
-        verificationFailed: (FirebaseAuthException e) {
-          print('${e.message}');
-        },
-        codeSent: (String verificationId, int? resendToken) {
-          codeVerify = verificationId;
-          context.go('/login/verify_otp');
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {});
-
+    if(!HelpersUserAndValidators.isValidPhoneNumber(textEditingController.text)){
+      onTextFieldError();
+      textEditingController.clear();
+    }else {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber: '$country ${textEditingController.text}',
+          verificationCompleted: (PhoneAuthCredential credential) {},
+          verificationFailed: (FirebaseAuthException e) {
+            print('${e.message}');
+          },
+          codeSent: (String verificationId, int? resendToken) {
+            codeVerify = verificationId;
+            context.go('/login-home-screen/loginPhone/verify_otp');
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {});
+    }
   }
 
   Future<void> verify(BuildContext context) async {
@@ -70,7 +71,7 @@ class LoginPhoneProvider extends ChangeNotifier {
         smsCode: smsCode,
       );
       await auth.signInWithCredential(credential);
-      context.go('/confirm-screen');
+      context.go('/login-home-screen/confirm-screen');
     } catch (e) {
       smsError(true);
       print('Lỗi xác minh số điện thoại: $e');

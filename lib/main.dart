@@ -2,6 +2,7 @@ import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
+import 'package:chat_app/config/changedNotify/confirm_profile_watch.dart';
 import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
@@ -9,7 +10,7 @@ import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
@@ -31,7 +32,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
-import 'Auth/login_phone.dart';
+import 'Auth/login_phone_screen.dart';
+import 'config/changedNotify/detail_message.dart';
 import 'firebase_options.dart';
 import 'home/message/detail_message.dart';
 import 'home/message/search_Message.dart';
@@ -115,14 +117,31 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   if (!kIsWeb) {
     await setupFlutterNotifications();
+  }
+  final messaging = FirebaseMessaging.instance;
+
+  final settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (kDebugMode) {
+    print('Permission granted: ${settings.authorizationStatus}');
   }
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
-  await FirebaseApi().PemissionKey();
+  await FirebaseApi().permissionKey();
   await FirebaseApi().checkPermissionLocation();
   await FirebaseApi().checkPermissionNotification();
 
@@ -131,6 +150,10 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),
         child: const LoginScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => PageDataConfirmProfileProvider(),
+        child: const ConfirmProfile(),
       ),
       ChangeNotifierProvider(
         create: (context) => BinderWatch(),

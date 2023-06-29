@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chat_app/config/changedNotify/resposome.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +11,16 @@ import 'package:provider/provider.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     final checkLogin = context.watch<CallDataProvider>();
+
     return StreamBuilder<User?>(
       stream: checkLogin.user,
       builder: (context, AsyncSnapshot<User?> snapshot) {
+        Timer(Duration(seconds: 3), () {
+          snapshot.data == null ? context.go('/login-home-screen') : context.go('/home');
+        });
         if (snapshot.connectionState == ConnectionState.active) {
           return Scaffold(
             body: Container(
@@ -25,11 +28,7 @@ class WelcomeScreen extends StatelessWidget {
                 gradient: const LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromRGBO(238, 128, 95, 100),
-                      Color.fromRGBO(234, 64, 128, 100),
-
-                    ]),
+                    colors: [ const Color.fromRGBO(238, 128, 95, 1) ,const Color.fromRGBO(234, 64, 128, 1)],),
               ),
               child: Center(
                 child: Column(
@@ -39,7 +38,6 @@ class WelcomeScreen extends StatelessWidget {
                     Container(
                       child: Column(
                         children: [
-                          const SizedBox(height: 80),
                           SvgPicture.asset(
                             AppAssets.iconTinder,
                             width: 100,
@@ -60,38 +58,13 @@ class WelcomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                  InkWell(
-                    onTap: () {
-                      snapshot.data == null
-                          ? context.pushReplacement('/login-home-screen')
-                          : context.go('/home');
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(12),
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(
-                          width: 2,
-                          color: Colors.white
-                        ),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Center(
-                        child: Text('Hẹn hò ngay',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
-                        ),
-                      ),
-                    ),
-                  ),
                   ],
                 ),
               ),
             ),
           );
-        }
-        {
+
+        }{
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),

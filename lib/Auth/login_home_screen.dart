@@ -1,4 +1,4 @@
-import 'package:chat_app/Auth/widget/button_custom.dart';
+import 'package:chat_app/Auth/widget/button_custom_login_home.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../config/changedNotify/resposome.dart';
-import '../config/changedNotify/resposome.dart';
+import '../../config/changedNotify/login_google.dart';
+import '../config/changedNotify/login_google.dart';
 
 class HomeScreenLogin extends StatefulWidget {
   const HomeScreenLogin({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
       } else if (loginResult == 'home') {
         context.go('/home');
       } else if (loginResult == 'confirm-screen') {
-        context.go('/confirm-screen');
+        context.go('/login-home-screen/confirm-screen');
       }
 
       setState(() {
@@ -59,10 +59,7 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
           gradient: const LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color.fromRGBO(238, 128, 95, 100),
-                Color.fromRGBO(234, 64, 128, 100),
-              ]),
+              colors:  [ const Color.fromRGBO(238, 128, 95, 1) ,const Color.fromRGBO(234, 64, 128, 1)],),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -135,7 +132,7 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
                   ButtonCustom(
                     text: "Đăng nhập với số điện thoại",
                     image: AppAssets.iconPhone,
-                    onPressed: () => context.go('/login'),
+                    onPressed: () => context.go('/login-home-screen/loginPhone'),
                   ),
                 ],
               ),
