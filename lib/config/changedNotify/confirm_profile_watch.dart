@@ -186,7 +186,7 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
 
 
   Future<void> confirmUser(BuildContext context) async {
-    // isLoading = true;
+    isLoading = true;
     print('Số lượng ảnh: ${photosList.length}');
     final signUp = context.read<CallDataProvider>();
     List<String> urlImages = [];
@@ -194,8 +194,7 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
     if(user != null){
       urlImages = await DatabaseMethods().pushListImage(photosList, user.uid);
     }
-    await signUp.confirmProfile(nameController.text, selectedGender, selectedRequestToShow, birthday,  newInterestsList, newDatingPurpose, urlImages, newSexualOrientationList);
-     // isLoading = false;
+    await signUp.confirmProfile(nameController.text, selectedGender, selectedRequestToShow, birthday,  newInterestsList, newDatingPurpose, urlImages, newSexualOrientationList).whenComplete(() =>  isLoading = false);
     context.go('/home');
 
   }
