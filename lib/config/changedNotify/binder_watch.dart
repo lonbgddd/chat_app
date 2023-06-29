@@ -1,11 +1,11 @@
 import 'dart:math';
+
 import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
-import '../../model/user_model.dart';
 
 class BinderWatch extends ChangeNotifier {
   List<UserModal> _listCard = [];
@@ -24,13 +24,11 @@ class BinderWatch extends ChangeNotifier {
     _listCard = [];
   }
 
-
   Future<List<UserModal>> allUserBinder() async {
     try {
       final uid =
-      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
       final users = await DatabaseMethods().getAllUser(uid);
-      print('List: $users');
       _listCard = users ?? [];
 
       return _listCard;
