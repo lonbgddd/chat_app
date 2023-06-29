@@ -2,6 +2,7 @@ import 'package:chat_app/Auth/widget/button_submit_page_view.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
 import '../../../config/helpers/helpers_user_and_validators.dart';
@@ -14,9 +15,13 @@ class AddPhotoListPageSection extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     final double itemHeight = (size.height - 210) / 2;
     final double itemWidth = size.width / 2;
-    final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
+    final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context, listen: true);
 
-    return SingleChildScrollView(
+    return pageProvider.isLoading ? Center(
+      child: LoadingAnimationWidget.threeArchedCircle(
+        color: Color.fromRGBO(234, 64, 128, 1), size: 90,
+      ),
+    ) :  SingleChildScrollView(
       child: Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height,
@@ -138,10 +143,11 @@ class AddPhotoListPageSection extends StatelessWidget {
               ),
             ),
             ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
-                color: pageProvider.imageCount >= 2 ? Colors.transparent : Colors.grey,
-                onPressed: () {
-                  pageProvider.imageCount >= 2 ? pageProvider.confirmUser(context) : null;
-                }),
+                    color: pageProvider.imageCount >= 2 ? Colors.transparent : Colors.grey,
+                    onPressed: () {
+                      pageProvider.imageCount >= 2 ? pageProvider.confirmUser(context) : null;
+                    }),
+
           ],
         ),
       ),

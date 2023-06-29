@@ -15,7 +15,12 @@ class BinderPage extends StatefulWidget {
   State<BinderPage> createState() => _BinderPageState();
 }
 
-class _BinderPageState extends State<BinderPage> {
+class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateMixin{
+  late Animation _animation;
+  late AnimationController _animationController;
+  var listRadius = [50.0,100.0,150.0,200.0];
+
+
   @override
   void initState() {
     super.initState();
@@ -25,9 +30,21 @@ class _BinderPageState extends State<BinderPage> {
       final provider = Provider.of<BinderWatch>(context, listen: false);
       provider.setScreenSize(size);
     });
+    _animationController = AnimationController(vsync: this, duration: Duration(seconds: 2), lowerBound: 0.5);
+    _animationController.addListener(() {
+      setState(() {
+
+      });
+    });
+    _animationController.forward();
   }
 
   bool hasNotification = false;
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,31 +132,47 @@ class _BinderPageState extends State<BinderPage> {
   Widget getBody() {
     return FutureBuilder(
         future: context.read<BinderWatch>().allUserBinder(),
-        builder: (context, snapshot) => snapshot.hasData
-            ? Padding(
-                padding: const EdgeInsets.all(10),
-                child: Stack(
-                    alignment: Alignment.center,
-                    children: context
-                        .watch<BinderWatch>()
-                        .listCard
-                        .reversed
-                        .map((e) => ProfileCard(
-                              user: e,
-                              isDetail: () => context.goNamed('Home-detail-others',
-                                  queryParameters: {
-                                    'uid': e.uid.toString(),
-                                  }),
-                              isFont:
-                                  context.watch<BinderWatch>().listCard.first ==
-                                      e,
-                            ))
-                        .toList()),
-              )
-            :  Center(
-                  child: LoadingAnimationWidget.dotsTriangle(color: Color.fromRGBO(234, 64, 128, 100),
-                    size: 70,),
+        builder: (context, snapshot)  {
+          print('Builder called');
+          return Container(
+            child: snapshot.hasData
+                ?  Padding(
+              padding: const EdgeInsets.all(10),
+              child: Stack(
+                  alignment: Alignment.center,
+                  children: context.watch<BinderWatch>().listCard.reversed.map((e) => ProfileCard(
+                    user: e,
+                    isDetail: () => context.goNamed('Home-detail-others', queryParameters: {
+                      'uid': e.uid.toString(),}),
+                    isFont:
+                    context.watch<BinderWatch>().listCard.first == e,)).toList()),
+            ) :  Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children:[
+                  buildLoadingContainer(listRadius[0]),
+                  buildLoadingContainer(listRadius[1]),
+                  buildLoadingContainer(listRadius[2]),
+                  buildLoadingContainer(listRadius[3]),
+                ],
               ),
+            ),
+          );
+
+        }
+
     );
   }
+
+  Widget buildLoadingContainer(radius){
+    return Container(
+      width: radius * _animationController.value,
+      height: radius * _animationController.value,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color.fromRGBO(234, 64, 128, 1.0 - _animationController.value)),
+      );
+  }
+
+
 }
