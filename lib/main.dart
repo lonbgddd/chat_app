@@ -14,6 +14,8 @@ import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
+import 'package:chat_app/features/message/presentation/bloc/message/message_bloc.dart';
+import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/group_chat/liked_user_card.dart';
@@ -22,6 +24,7 @@ import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
+import 'package:chat_app/injection_container.dart';
 import 'package:chat_app/router/router.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -29,6 +32,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
@@ -114,6 +118,8 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -144,7 +150,7 @@ Future<void> main() async {
   await FirebaseApi().permissionKey();
   await FirebaseApi().checkPermissionLocation();
   await FirebaseApi().checkPermissionNotification();
-
+  initializeDependencies();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
@@ -211,6 +217,14 @@ Future<void> main() async {
         create: (context) => LikedUserCardProvider(),
         child: const LikedUserCard(),
       ),
+      BlocProvider<MessageBloc>(
+        create: (context) => sl()..add(const GetChatRooms()),
+        child: const MyMessageScreen(),
+      ),
+      // BlocProvider<ChatItemBloc>(
+      //   create: (context) => sl(),
+      //   child: MyItemMessage(),
+      // ),
     ],
     child: const MyApp(),
   ));
