@@ -55,8 +55,8 @@ class MessageScreenState extends State<MessageScreen> {
                 shrinkWrap: true,
                 itemCount: snapshot.data?.docs.length,
                 physics: direction == 'vertical'
-                    ? NeverScrollableScrollPhysics()
-                    : AlwaysScrollableScrollPhysics(),
+                    ? const NeverScrollableScrollPhysics()
+                    : const AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = snapshot.data?.docs[index];
                   String uid = data!['chatRoomId']
@@ -180,13 +180,7 @@ class MessageScreenState extends State<MessageScreen> {
   }
 
   Widget itemActivities(String uid, String chatRoomId) {
-    // ChatMessage? mess;
-    // lassMess(context) async {
-    //   mess =
-    //   await Provider.of<ItemChatNotify>(context).getLastMessage(chatRoomId ?? '');
-    // }
     Future<UserModal?> getUser(context) async {
-      //lassMess(context);
       UserModal user = await Provider.of<ItemChatNotify>(context)
           .getUserInformation(uid, chatRoomId ?? "");
       return user;

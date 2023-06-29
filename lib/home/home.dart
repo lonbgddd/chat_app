@@ -1,5 +1,6 @@
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
+import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/message/message_screen.dart';
@@ -29,10 +30,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     FirebaseMessaging.instance.getInitialMessage().then(
           (value) => setState(
             () {
-              initialMessage = value?.data.toString();
-            },
-          ),
-        );
+          initialMessage = value?.data.toString();
+        },
+      ),
+    );
     _selectedIndex != 1
         ? FirebaseMessaging.onMessage.listen(showFlutterNotification)
         : null;
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   static final List<Widget> _widgetOptions = <Widget>[
     BinderPage(),
-    MessageScreen(),
+    MyMessageScreen(),
     WhoLikePage(),
     ProfileScreen()
   ];
