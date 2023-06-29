@@ -8,9 +8,9 @@ import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
@@ -37,23 +37,15 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'Auth/login_phone_screen.dart';
-import 'config/changedNotify/detail_message.dart';
 import 'firebase_options.dart';
 import 'home/message/detail_message.dart';
 import 'home/message/search_Message.dart';
 
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   print('Handling a background message ${message.messageId}');
-// }
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
-  showFlutterNotification(message);
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  print('Handling a background message ${message.messageId}');
+  // showFlutterNotification(message);
 }
 
 late AndroidNotificationChannel channel;
@@ -74,17 +66,11 @@ Future<void> setupFlutterNotifications() async {
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  /// Create an Android Notification Channel.
-  ///
-  /// We use this channel in the `AndroidManifest.xml` file to override the
-  /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
-
-  /// Update the iOS foreground notification presentation options to allow
-  /// heads up notifications.
+//ios notification access
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
@@ -243,7 +229,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routerConfig: router,
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
     );
   }
 }
