@@ -9,19 +9,19 @@ class DatabaseServices {
   DatabaseServices(this.uid);
 
 
-  Future<UserModal> getUserInfo() async {
+  Future<UserModel> getUserInfo() async {
     return data
         .collection("users")
         .where('uid', isEqualTo: uid)
         .get()
-        .then((value) => value.docs.map((e) => UserModal.fromJson(e.data())).single);
+        .then((value) => value.docs.map((e) => UserModel.fromJson(e.data())).single);
   }
 
-  Stream<UserModal> getUserInfoStream() {
+  Stream<UserModel> getUserInfoStream() {
   return data
       .collection("users")
       .where('uid', isEqualTo: uid)
       .snapshots()
-      .map((snapshot) => snapshot.docs.map((doc) => UserModal.fromJson(doc.data())).single);
+      .map((snapshot) => snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).single);
 }
 }

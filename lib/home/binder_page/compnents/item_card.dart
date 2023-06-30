@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class ProfileCard extends StatelessWidget {
   const ProfileCard({Key? key, this.user, this.isDetail, this.isFont})
       : super(key: key);
-  final UserModal? user;
+  final UserModel? user;
   final bool? isFont;
   final Function()? isDetail;
 
@@ -105,7 +105,7 @@ class ProfileCard extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Colors.transparent, Colors.black.withOpacity(1)],
-                  stops: const [0.6, 1],
+                  stops: const [0.25, 1],
                 ),
               ),
               child: Padding(

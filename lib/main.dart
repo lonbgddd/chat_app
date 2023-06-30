@@ -142,7 +142,6 @@ Future<void> main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
   await FirebaseApi().permissionKey();
-  await FirebaseApi().checkPermissionLocation();
   await FirebaseApi().checkPermissionNotification();
 
   runApp(MultiProvider(

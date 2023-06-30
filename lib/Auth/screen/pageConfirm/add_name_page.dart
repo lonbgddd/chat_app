@@ -29,7 +29,7 @@ class AddNamePageSection extends StatelessWidget {
                   icon: Icon(Icons.west, color: Colors.grey, size: 30,),
                 ),
                 const SizedBox(height: 15,),
-                const Text('Tên của bạn là gì ?',
+                const Text('What is your name?',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 28
@@ -46,7 +46,7 @@ class AddNamePageSection extends StatelessWidget {
                     constraints: BoxConstraints(
                       maxHeight: 40,
                     ),
-                    hintText: 'Nhập tên của bạn',
+                    hintText: 'Enter your name',
                     hintStyle: TextStyle(color: Colors.grey),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey,width: 1.5),
@@ -60,7 +60,7 @@ class AddNamePageSection extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 10,),
-                const Text('Đây là nội dung sẽ hiển thị trên hồ sơ của bạn.\nHãy đặt tên đúng của bạn nhé. ',
+                const Text('This is the content that will be displayed on your profile.\nPlease use your real name.',
                   style: TextStyle(
                       fontSize: 15,color: Colors.grey,fontWeight: FontWeight.w500
                   ),
@@ -69,12 +69,12 @@ class AddNamePageSection extends StatelessWidget {
               ],
             ),
           ),
-          ButtonSubmitPageView(text: 'Tiếp theo', marginBottom: 20,
-            color: pageProvider.isTextFieldNameEmpty ? Colors.grey : Colors.transparent ,
-            onPressed: () {
-            !pageProvider.isTextFieldNameEmpty ? pageProvider.nextPage() : null;
-            print('Tên: ${pageProvider.nameController.text}');
-          }),
+          ButtonSubmitPageView(text: 'Next', marginBottom: 20,
+              color: pageProvider.isTextFieldNameEmpty ? Colors.grey : Colors.transparent ,
+              onPressed: () {
+                !pageProvider.isTextFieldNameEmpty ? pageProvider.nextPage() : null;
+                print('Name: ${pageProvider.nameController.text}');
+              }),
         ],
       ),
     );

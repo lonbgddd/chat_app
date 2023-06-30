@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,38 +7,68 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app_assets.dart';
 
 class HelpersUserAndValidators {
-
-  static  List<String> sexualOrientationList = [
-    'Dị tính',
-    'Đồng tính',
-    'Đồng tính nữ',
-    'Song tính',
-    'Vô tính',
-    'Á tính',
-    'Toàn tính',
+  static List<String> sexualOrientationList = [
+    'Heterosexual',
+    'Homosexual',
+    'Lesbian',
+    'Bisexual',
+    'Asexual',
+    'Pansexual',
+    'Demisexual',
     'Queer',
-    'Chưa xác định rõ khuynh hướng',
+    'Undefined or unsure about orientation',
   ];
 
-
-  static  List<String> datingPurposeList = [
-    'Người yêu',
-    'Bạn hẹn hò lâu dài',
-    'Bất kì điều gì có thể',
-    'Quan hệ không ràng buộc',
-    'Những người bạn mới',
-    'Mình cũng chưa rõ lắm',
+  static List<String> datingPurposeList = [
+    'Long-term relationship',
+    'Casual dating',
+    'Open to anything',
+    'Non-committed relationship',
+    'Making new friends',
+    'Not sure yet',
   ];
 
-  static  List<String> interestsList = [
-    'Mua sắm', 'Đá bóng','Bóng bàn','Triễn lãm nghệ thuật','TikTok','Thể thao điện tử','Tiệc tùng','Cosplay','Xe hơi','Nhạc hiện đại',
-    'Nhạc cổ điển','Thời trang','Xe máy','Chăm sóc bản thân','Netflix','Ẩm thực','Nhiếp ảnh','Bắn cung','Trà sữa',
-    'Hoạt động ngoài trời','Giày Sneaker','Game Online','Rượu bia','Đạp xe','Karaoke','Phim ngôn tình','Phim kinh dị',
-    'Cắm trại','Lướt sóng','Viết blog','Leo núi','Instagram','Giải đố','Văn học','Chơi trống','Bất động sản','Khởi nghiệp'
+  static List<String> interestsList = [
+    'Shopping',
+    'Football',
+    'Table tennis',
+    'Art exhibitions',
+    'TikTok',
+    'E-sports',
+    'Parties',
+    'Cosplay',
+    'Cars',
+    'Modern music',
+    'Classical music',
+    'Fashion',
+    'Motorcycles',
+    'Self-care',
+    'Netflix',
+    'Cuisine',
+    'Photography',
+    'Archery',
+    'Bubble tea',
+    'Outdoor activities',
+    'Sneakers',
+    'Online gaming',
+    'Alcoholic beverages',
+    'Cycling',
+    'Karaoke',
+    'Romantic movies',
+    'Horror movies',
+    'Camping',
+    'Surfing',
+    'Writing blogs',
+    'Mountain climbing',
+    'Instagram',
+    'Puzzles',
+    'Literature',
+    'Playing drums',
+    'Real estate',
+    'Entrepreneurship'
   ];
 
-
-  static  List<String> emojiDatingPurposeList = [
+  static List<String> emojiDatingPurposeList = [
     AppAssets.emojiLoveArrow,
     AppAssets.emojiInLove,
     AppAssets.emojiWine,
@@ -58,22 +90,19 @@ class HelpersUserAndValidators {
     return regExp.hasMatch(phoneNumber);
   }
 
-  static String isValidBirthday(String day,String month,String year){
+  static String isValidBirthday(String day, String month, String year) {
     DateTime now = DateTime.now();
     int currentYear = now.year;
-    if(day.isEmpty || month.isEmpty || year.isEmpty){
-      return 'Hãy nhập đủ ngày tháng năm sinh';
-    } else if(int.parse(day) < 0 && int.parse(day) > 31){
-      return 'Ngày sinh đã vượt quá! Hãy nhập lại';
-    }else if(int.parse(month) < 0 && int.parse(day) > 12){
-      return 'Tháng sinh đã vượt quá! Hãy nhập lại';
-    }else if(int.parse(year) < 1900 && int.parse(year) > currentYear){
-      return 'Năm sinh đã vượt quá! Hãy nhập lại';
+    if (day.isEmpty || month.isEmpty || year.isEmpty) {
+      return 'Please enter your date of birth';
+    } else if (int.parse(day) < 0 || int.parse(day) > 31) {
+      return 'Invalid day! Please enter a valid day';
+    } else if (int.parse(month) < 0 || int.parse(month) > 12) {
+      return 'Invalid month! Please enter a valid month';
+    } else if (int.parse(year) < 1900 || int.parse(year) > currentYear) {
+      return 'Invalid year! Please enter a valid year';
     }
-    return 'Hãy nhập đủ dữ liệu.';
+    return 'Please enter all the required information';
   }
-
-
-
 
 }

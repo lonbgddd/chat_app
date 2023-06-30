@@ -4,10 +4,10 @@
 
 import 'dart:convert';
 
-UserModal userFromJson(String str) => UserModal.fromJson(json.decode(str));
-String userToJson(UserModal data) => json.encode(data.toJson());
+UserModel userFromJson(String str) => UserModel.fromJson(json.decode(str));
+String userToJson(UserModel data) => json.encode(data.toJson());
 
-class UserModal {
+class UserModel {
   String uid;
   String email;
   String phone;
@@ -24,12 +24,14 @@ class UserModal {
   List<String> interestsList;
   List<String>? fluentLanguageList;
   List<String> sexualOrientationList;
+  List<String> position;
   bool? isHighlighted;
   String? highlightTime;
   String? company;
   String? currentAddress;
   String? activeStatus;
   String token;
+
 
 
 
@@ -50,7 +52,8 @@ class UserModal {
   String? socialNetworkStatus;
   String? sleepingHabits;
 
-  UserModal({
+  UserModel({
+    required this.position,
     required this.uid,
     required this.email,
     required this.phone,
@@ -87,7 +90,7 @@ class UserModal {
      this.socialNetworkStatus,
      this.sleepingHabits});
 
-  factory UserModal.fromJson(Map<String, dynamic> json) => UserModal(
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     uid: json["uid"]?? '',
     email: json["email"]?? '',
     phone: json["phone"]?? '',
@@ -104,6 +107,7 @@ class UserModal {
     interestsList: List<String>.from(json["interestsList"].map((x) => x)) ?? [],
     fluentLanguageList: List<String>.from(json["fluentLanguageList"].map((x) => x))?? [],
     sexualOrientationList: List<String>.from(json["sexualOrientationList"].map((x) => x))?? [],
+    position: List<String>.from(json["position"].map((x) => x))?? [],
     isHighlighted: json["isHighlighted"]?? false,
     highlightTime: json["highlightTime"]?? null,
     company: json["company"]?? '',
@@ -143,6 +147,7 @@ class UserModal {
         "interestsList": List<String>.from(interestsList.map((x) => x))?? [],
         "fluentLanguageList": [],
         "sexualOrientationList": List<String>.from(sexualOrientationList.map((x) => x))?? [],
+        "position": List<String>.from(position.map((x) => x))?? [],
         "isHighlighted": isHighlighted ?? false,
         "highlightTime": highlightTime ?? '',
         "company": company?? '',

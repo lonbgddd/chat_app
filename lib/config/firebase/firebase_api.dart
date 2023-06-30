@@ -17,22 +17,29 @@ class FirebaseApi {
     }
   }
 
-  Future checkPermissionLocation() async {
-    bool _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!_serviceEnabled) {
-      return Future.error('Location enabled');
+  Future<String?> checkPermissionLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return "isNotEnable";
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location enabled');
+        return "isDenied";
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location không cho lấy');
+      return "isDeniedForever";
     }
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      return "isOnlyThisTime";
+    }
+
+
+    return null;
   }
 
   Future checkPermissionNotification() async {

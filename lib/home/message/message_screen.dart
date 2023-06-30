@@ -185,16 +185,16 @@ class MessageScreenState extends State<MessageScreen> {
     //   mess =
     //   await Provider.of<ItemChatNotify>(context).getLastMessage(chatRoomId ?? '');
     // }
-    Future<UserModal?> getUser(context) async {
+    Future<UserModel?> getUser(context) async {
       //lassMess(context);
-      UserModal user = await Provider.of<ItemChatNotify>(context)
+      UserModel user = await Provider.of<ItemChatNotify>(context)
           .getUserInformation(uid, chatRoomId ?? "");
       return user;
     }
 
     return FutureBuilder(
         future: getUser(context),
-        builder: (context, AsyncSnapshot<UserModal?> snapshot) {
+        builder: (context, AsyncSnapshot<UserModel?> snapshot) {
           return GestureDetector(
             onTap: () {
               showModalBottomSheet(

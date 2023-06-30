@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 class LikedUserCard extends StatelessWidget {
   const LikedUserCard({super.key, this.user});
 
-  final UserModal? user;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {

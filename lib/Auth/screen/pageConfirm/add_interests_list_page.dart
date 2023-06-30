@@ -39,21 +39,21 @@ class AddInterestsListPageSection extends StatelessWidget {
                           pageProvider.nextPage();
                           pageProvider.newInterestsList.clear();
                           pageProvider.isInterestsEmpty = true;
-                          print('Sở thích ${pageProvider.newInterestsList}');
+                          print('Interests: ${pageProvider.newInterestsList}');
                         },
-                        child: Text('Bỏ qua', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
+                        child: Text('Skip', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
                       )
                     ],
                   ),
                   const SizedBox(height: 15,),
-                  const Text('Sở thích của bạn ?',
+                  const Text('Your Interests',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 10,),
-                  const Text('Bạn có sở thích riêng của mình. Hãy cho mọi người cùng biết nhé.',
+                  const Text('Share your interests with others.',
                     style: TextStyle(
                         fontSize: 16
                     ),
@@ -61,6 +61,7 @@ class AddInterestsListPageSection extends StatelessWidget {
 
                 ],
               ),
+
             ),
             const SizedBox(height: 10,),
             Container(

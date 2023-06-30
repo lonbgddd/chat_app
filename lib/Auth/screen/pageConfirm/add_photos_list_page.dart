@@ -40,14 +40,14 @@ class AddPhotoListPageSection extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Thêm ảnh của bạn gần đây',
+                        const Text('Add recent photos of yourself',
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 28
                           ),
                         ),
                         const SizedBox(height: 10,),
-                        const Text('Tải lên 2 ảnh để bắt đầu tìm người tâm đầu ý hợp. Thêm nhiều ảnh hơn nữa giúp hồ sơ của bạn thật nổi bật với người khác.',
+                        const Text('Upload 2 photos to start finding like-minded people. Adding more photos will make your profile stand out.',
                           style: TextStyle(
                               fontSize: 16
                           ),
@@ -137,7 +137,7 @@ class AddPhotoListPageSection extends StatelessWidget {
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+            ButtonSubmitPageView(text: 'Finish',marginBottom: 70,
                 color: pageProvider.imageCount >= 2 ? Colors.transparent : Colors.grey,
                 onPressed: () {
                   pageProvider.imageCount >= 2 ? pageProvider.confirmUser(context) : null;
