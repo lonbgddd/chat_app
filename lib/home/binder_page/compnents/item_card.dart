@@ -6,7 +6,6 @@ import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/home/binder_page/compnents/photo_item_card.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -17,13 +16,11 @@ class ProfileCard extends StatelessWidget {
   final bool? isFont;
   final Function()? isDetail;
 
-
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(child: isFont! ? buildCard(context) : cardProfile(context));
+    return SizedBox.expand(
+        child: isFont! ? buildCard(context) : cardProfile(context));
   }
-
-
 
   Widget buildCard(context) => GestureDetector(
         onPanStart: (details) {
@@ -67,7 +64,7 @@ class ProfileCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey,
+                  color: Colors.grey.shade300,
                   spreadRadius: 3,
                   blurRadius: 10,
                   offset: Offset(0, 5),
@@ -77,19 +74,21 @@ class ProfileCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: (user!.photoList.length != 0)
-                  ? PhotoGallery(photoList: user!.photoList,scrollPhysics: NeverScrollableScrollPhysics(),)
+                  ? PhotoGallery(
+                      photoList: user!.photoList,
+                      scrollPhysics: const NeverScrollableScrollPhysics(),
+                    )
                   : Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(user?.avatar ??
-                        'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(user?.avatar ??
+                              'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
             ),
           ),
-
           Positioned(
             bottom: 0,
             left: 0,
@@ -109,7 +108,7 @@ class ProfileCard extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.only(left: 10,right: 10, bottom: 8),
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,24 +122,27 @@ class ProfileCard extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              (user!.activeStatus.toString().contains('online')) ? Container(
-                                decoration: BoxDecoration(
-                                  color: Color.fromRGBO(109,229,181, 1),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 4.0, horizontal: 10),
-                                  child: Text(
-                                    'Đang hoạt động',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ) : Container(),
+                              (user!.activeStatus.toString().contains('online'))
+                                  ? Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            109, 229, 181, 1),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 4.0, horizontal: 10),
+                                        child: Text(
+                                          'Đang hoạt động',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
                               const SizedBox(
                                 height: 5,
                               ),
@@ -166,8 +168,8 @@ class ProfileCard extends StatelessWidget {
                                     flex: 2,
                                     child: Text(
                                       (DateTime.now().year -
-                                              int.parse(
-                                                  user!.birthday.substring(0, 4)))
+                                              int.parse(user!.birthday
+                                                  .substring(0, 4)))
                                           .toString(),
                                       style: const TextStyle(
                                           color: Colors.white,
@@ -182,7 +184,7 @@ class ProfileCard extends StatelessWidget {
                               ),
                               Text(
                                 user?.introduceYourself ?? "",
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
                                 ),
@@ -195,25 +197,101 @@ class ProfileCard extends StatelessWidget {
                           child: Container(
                             width: 30,
                             height: 30,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
                             ),
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Image.asset(AppAssets.iconArrowUp),
                           ),
                         )
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        buildFloatingButton(40, 40, 10,SvgPicture.asset(AppAssets.iconLoop, fit: BoxFit.contain,), Colors.transparent, Color.fromRGBO(243,214,119, 1), (){}),
-                        buildFloatingButton(55, 55, 15,SvgPicture.asset(AppAssets.iconDelete, fit: BoxFit.contain,),Colors.transparent, Color.fromRGBO(217,74,56, 1), (){}),
-                        buildFloatingButton(40, 40, 10,SvgPicture.asset(AppAssets.iconStar, fit: BoxFit.contain,),Colors.transparent, Color.fromRGBO(98,186,243, 1), (){}),
-                        buildFloatingButton(55, 55, 15,SvgPicture.asset(AppAssets.iconHeart, fit: BoxFit.contain,), Colors.transparent,Color.fromRGBO(109,229,181, 1), (){}),
-                        buildFloatingButton(40, 40, 10,SvgPicture.asset(AppAssets.iconLightning, fit: BoxFit.contain,), Colors.transparent,Color.fromRGBO(170,84,234, 1), (){}),
+                        buildFloatingButton(
+                            40,
+                            40,
+                            10,
+                            SvgPicture.asset(
+                              AppAssets.iconLoop,
+                              fit: BoxFit.contain,
+                            ),
+                            Colors.transparent,
+                            const Color.fromRGBO(243, 214, 119, 1),
+                            () {}),
+                        buildFloatingButton(
+                            55,
+                            55,
+                            15,
+                            SvgPicture.asset(
+                              AppAssets.iconDelete,
+                              fit: BoxFit.contain,
+                              color: Provider.of<BinderWatch>(context)
+                                          .getStatus() ==
+                                      StatusCard.dislike
+                                  ? Colors.white
+                                  : Colors.redAccent,
+                            ),
+                            Provider.of<BinderWatch>(context).getStatus() ==
+                                    StatusCard.dislike
+                                ? Colors.red
+                                : Colors.transparent,
+                            Provider.of<BinderWatch>(context).getStatus() ==
+                                    StatusCard.dislike
+                                ? Colors.white
+                                : Colors.red,
+                            () =>
+                                Provider.of<BinderWatch>(context, listen: false)
+                                    .disLike()),
+                        buildFloatingButton(
+                            40,
+                            40,
+                            10,
+                            SvgPicture.asset(
+                              AppAssets.iconStar,
+                              fit: BoxFit.contain,
+                            ),
+                            Colors.transparent,
+                            const Color.fromRGBO(98, 186, 243, 1),
+                            () {}),
+                        buildFloatingButton(
+                            55,
+                            55,
+                            15,
+                            SvgPicture.asset(
+                              AppAssets.iconHeart,
+                              fit: BoxFit.contain,
+                              color: Provider.of<BinderWatch>(context)
+                                          .getStatus() ==
+                                      StatusCard.like
+                                  ? Colors.white
+                                  : const Color.fromRGBO(109, 229, 181, 1),
+                            ),
+                            Provider.of<BinderWatch>(context).getStatus() ==
+                                    StatusCard.like
+                                ? const Color.fromRGBO(109, 229, 181, 1)
+                                : Colors.transparent,
+                            Provider.of<BinderWatch>(context).getStatus() ==
+                                    StatusCard.like
+                                ? Colors.white
+                                : const Color.fromRGBO(109, 229, 181, 1),
+                            () => Provider.of<BinderWatch>(context).like()),
+                        buildFloatingButton(
+                            40,
+                            40,
+                            10,
+                            SvgPicture.asset(
+                              AppAssets.iconLightning,
+                              fit: BoxFit.contain,
+                            ),
+                            Colors.transparent,
+                            const Color.fromRGBO(170, 84, 234, 1),
+                            () {}),
                       ],
                     )
                   ],
@@ -221,11 +299,11 @@ class ProfileCard extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       );
 
-  Widget buildFloatingButton(double width,double height,double padding, SvgPicture icon, Color colorBg, Color colorBorder, onTap) {
+  Widget buildFloatingButton(double width, double height, double padding,
+      SvgPicture icon, Color colorBg, Color colorBorder, onTap) {
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -245,9 +323,7 @@ class ProfileCard extends StatelessWidget {
     );
   }
 
-
-
-
+// animation card left or right
   Widget buildStamps(context) {
     final provider = Provider.of<BinderWatch>(context);
     final status = provider.getStatus();

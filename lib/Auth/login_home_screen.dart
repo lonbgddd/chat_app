@@ -62,7 +62,7 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
       body: isLoading
           ? Center(
         child: LoadingAnimationWidget.threeArchedCircle(
-          color: Color.fromRGBO(234, 64, 128, 100),
+          color: Color.fromRGBO(234, 64, 128, 1),
           size: 100,
         ),
       )

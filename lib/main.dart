@@ -8,12 +8,14 @@ import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
+import 'package:chat_app/features/message/presentation/bloc/message/message_bloc.dart';
+import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/group_chat/liked_user_card.dart';
@@ -22,6 +24,7 @@ import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
+import 'package:chat_app/injection_container.dart';
 import 'package:chat_app/router/router.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -29,27 +32,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'Auth/login_phone_screen.dart';
-import 'config/changedNotify/detail_message.dart';
 import 'firebase_options.dart';
 import 'home/message/detail_message.dart';
 import 'home/message/search_Message.dart';
 
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   print('Handling a background message ${message.messageId}');
-// }
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
-  showFlutterNotification(message);
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  print('Handling a background message ${message.messageId}');
+  // showFlutterNotification(message);
 }
 
 late AndroidNotificationChannel channel;
@@ -70,17 +66,11 @@ Future<void> setupFlutterNotifications() async {
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  /// Create an Android Notification Channel.
-  ///
-  /// We use this channel in the `AndroidManifest.xml` file to override the
-  /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
-
-  /// Update the iOS foreground notification presentation options to allow
-  /// heads up notifications.
+//ios notification access
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
@@ -114,6 +104,8 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -143,7 +135,7 @@ Future<void> main() async {
   );
   await FirebaseApi().permissionKey();
   await FirebaseApi().checkPermissionNotification();
-
+  initializeDependencies();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
@@ -210,6 +202,14 @@ Future<void> main() async {
         create: (context) => LikedUserCardProvider(),
         child: const LikedUserCard(),
       ),
+      BlocProvider<MessageBloc>(
+        create: (context) => sl()..add(const GetChatRooms()),
+        child: const MyMessageScreen(),
+      ),
+      // BlocProvider<ChatItemBloc>(
+      //   create: (context) => sl(),
+      //   child: MyItemMessage(),
+      // ),
     ],
     child: const MyApp(),
   ));
@@ -228,7 +228,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routerConfig: router,
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
     );
   }
 }

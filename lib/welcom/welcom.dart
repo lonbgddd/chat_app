@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -67,9 +68,11 @@ class WelcomeScreen extends StatelessWidget {
           );
 
         }{
-          return const Scaffold(
+          return Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: LoadingAnimationWidget.threeArchedCircle(
+              color: Color.fromRGBO(234, 64, 128, 1), size: 100,
+              ),
             ),
           );
         }

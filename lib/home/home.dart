@@ -1,15 +1,13 @@
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
+import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
-import 'package:chat_app/home/message/message_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
-import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,24 +17,47 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  String? initialMessage;
   int _selectedIndex = 0;
+
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    if (message.data['type'] == 'chat') {
+      print('Chuyển tới màn chat thành công');
+    }
+  }
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
-    FirebaseMessaging.instance.getInitialMessage().then(
-          (value) => setState(
-            () {
-              initialMessage = value?.data.toString();
-            },
-          ),
-        );
-    _selectedIndex != 1
-        ? FirebaseMessaging.onMessage.listen(showFlutterNotification)
-        : null;
+    setupInteractedMessage();
+    // FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    // _selectedIndex != 1
+    //     ? FirebaseMessaging.onMessage.listen(showFlutterNotification)
+    //     : null;
     context.read<HomeState>().setStateUser('online');
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -56,12 +77,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       context.read<HomeState>().setStateUser('online');
     }
-    print('AppLifecycleState: $state');
   }
 
   static final List<Widget> _widgetOptions = <Widget>[
     BinderPage(),
-    MessageScreen(),
+    MyMessageScreen(),
     WhoLikePage(),
     ProfileScreen()
   ];
@@ -98,7 +118,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 0
-                        ? Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 100)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
@@ -116,7 +136,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 1
-                        ? Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 100)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
@@ -134,7 +154,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 2
-                        ? Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 100)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
@@ -152,14 +172,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 3
-                        ? Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 100)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
             )),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Color.fromRGBO(223, 54, 64, 100),
+      selectedItemColor: const Color.fromRGBO(223, 54, 64, 100),
       type: BottomNavigationBarType.fixed,
       onTap: _onItemTapped,
     );
