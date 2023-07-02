@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../config/helpers/app_assets.dart';
 import '../../config/helpers/helpers_database.dart';
+import 'compnents/discovery_setting.dart';
 
 class BinderPage extends StatefulWidget {
   const BinderPage({Key? key}) : super(key: key);
@@ -21,6 +22,28 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
   late Animation _animation;
   late AnimationController _animationController;
   var listRadius = [50.0,100.0,150.0,200.0];
+  bool isRefresh = false;
+  bool hasNotification = true;
+
+  void _showBottomDialog() async {
+    String? result = await showModalBottomSheet(
+      isScrollControlled: true,
+      isDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          child: DiscoverySetting(),
+        );
+      },
+    );
+    print(result);
+    if (result == 'refresh') {
+      setState(() {
+        isRefresh = true;
+      });
+    }
+  }
 
   Future<List<String>> _savePositionUser() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -31,7 +54,6 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
         [position.latitude.toString(), position.longitude.toString()]);
     return [position.longitude.toString(), position.latitude.toString()];
   }
-
 
   @override
   void initState() {
@@ -54,12 +76,32 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
     _animationController.forward();
   }
 
-  bool hasNotification = false;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (isRefresh) {
+      final provider = context.read<BinderWatch>();
+      provider.allUserBinder(provider.selectedOption, provider.currentAgeValue,
+          provider.showPeopleInRangeDistance, provider.distancePreference);
+      setState(() {
+        isRefresh = false;
+      });
+      _animationController = AnimationController(
+          vsync: this, duration: Duration(seconds: 2), lowerBound: 0.5);
+      _animationController.addListener(() {
+        setState(() {});
+      });
+      _animationController.forward();
+    }
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +172,7 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: _showBottomDialog,
               icon: const Icon(
                 Icons.tune,
                 color: Colors.grey,
