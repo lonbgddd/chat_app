@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ProfileAvatar extends StatelessWidget {
   const ProfileAvatar({
-    super.key,
+    Key? key,
     required this.avatarUrl,
-  });
+  }) : super(key: key);
 
   final String avatarUrl;
 

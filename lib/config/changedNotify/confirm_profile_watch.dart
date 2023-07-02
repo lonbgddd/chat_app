@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -194,7 +195,9 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
     if(user != null){
       urlImages = await DatabaseMethods().pushListImage(photosList, user.uid);
     }
-    await signUp.confirmProfile(nameController.text, selectedGender, selectedRequestToShow, birthday,  newInterestsList, newDatingPurpose, urlImages, newSexualOrientationList).whenComplete(() =>  isLoading = false);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    await signUp.confirmProfile(nameController.text, selectedGender, selectedRequestToShow, birthday,  newInterestsList, newDatingPurpose, urlImages, newSexualOrientationList,   [position.longitude.toString(), position.latitude.toString()]).whenComplete(() =>  isLoading = false);
     context.go('/home');
 
   }

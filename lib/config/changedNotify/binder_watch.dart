@@ -8,34 +8,48 @@ import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
 class BinderWatch extends ChangeNotifier {
-  List<UserModal> _listCard = [];
+  List<UserModel> _listCard = [];
   Offset _offset = Offset.zero;
   bool _isDragging = false;
   double _angle = 0;
+  String _selectedOption = 'Everyone';
+  bool _showPeopleInRangeDistance = false;
+  double _distancePreference = 2;
+  bool _showPeopleInRangeAge = false;
+  List<double> _currentAgeValue = [18, 22];
 
+  String get selectedOption => _selectedOption;
+
+  double get distancePreference => _distancePreference;
+
+  List<double> get currentAgeValue => _currentAgeValue;
+
+  bool get showPeopleInRangeDistance => _showPeopleInRangeDistance;
+
+  bool get showPeopleInRangeAge => _showPeopleInRangeAge;
   Offset get position => _offset;
 
   bool get isDragging => _isDragging;
   Size _size = Size.zero;
 
-  List<UserModal> get listCard => _listCard;
+  List<UserModel> get listCard => _listCard;
 
   void initData() {
     _listCard = [];
   }
 
-  Future<List<UserModal>> allUserBinder() async {
-    try {
-      final uid =
-          await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      final users = await DatabaseMethods().getAllUser(uid);
-      _listCard = users ?? [];
-      print('List user card: ${_listCard.length}');
-      return _listCard;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+  // Future<List<UserModel>> allUserBinder() async {
+  //   try {
+  //     final uid =
+  //         await HelpersFunctions().getUserIdUserSharedPreference() as String;
+  //     final users = await DatabaseMethods().getAllUser(uid);
+  //     _listCard = users ?? [];
+  //     print('List user card: ${_listCard.length}');
+  //     return _listCard;
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
 
   // Future<List<UserModal>> allUserBinder() async {
   //     return _listCard;
@@ -56,6 +70,77 @@ class BinderWatch extends ChangeNotifier {
   //   }
   // }
 
+  void setDistancePreference(double value){
+    _distancePreference=value;
+    notifyListeners();
+  }
+
+  void setCurrentAgeValue(List<double> value) {
+    _currentAgeValue = value;
+    notifyListeners();
+  }
+
+  void setSwitchPeopleInRangeAge(bool option) {
+    _showPeopleInRangeAge = option;
+    notifyListeners();
+  }
+
+  void setSwitchPeopleInRangeDistance(bool option) {
+    _showPeopleInRangeDistance = option;
+    notifyListeners();
+  }
+
+  Future<void> initializeSelectedOption() async {
+    try {
+      _selectedOption = await discoverSetting() as String;
+      notifyListeners();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  void setSelectedOption(String option) {
+    _selectedOption = option;
+    notifyListeners();
+  }
+  Future<void> updateRequestToShow() async {
+    await DatabaseMethods().updateRequestToShow(_selectedOption);
+  }
+  Future<void> updatePositionUser(List<String> position) async {
+    await DatabaseMethods().updatePosition(position);
+  }
+  Future<List<UserModel>> allUserBinder(String gender, List<double> age,bool isInDistanceRange,double kilometres) async {
+    try {
+      final uid =
+      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      final List<UserModel> users;
+      if(isInDistanceRange)
+      {
+        users = await DatabaseMethods()
+            .getUserHasFilterKm(uid, gender, [age.first, age.last],kilometres);
+      }
+      else {
+        users = await DatabaseMethods()
+            .getUserHasFilter(uid, gender, [age.first, age.last]);
+      }
+      print('Your list has ${users.length} elements');
+      _listCard = users ?? [];
+
+      return _listCard;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  Future<String?> discoverSetting() async {
+    try {
+      final uid =
+      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      final users = await DatabaseMethods().getDiscoverUserSetting(uid);
+      return users;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
   double get angle => _angle;
 
   void setScreenSize(Size size) => _size = size;
@@ -99,7 +184,7 @@ class BinderWatch extends ChangeNotifier {
   Future addFollow(String followId, String token) async {
     try {
       final uid =
-          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      await HelpersFunctions().getUserIdUserSharedPreference() as String;
       await DatabaseMethods().addFollow(uid, followId);
       String check = await DatabaseMethods().checkFollow(uid, followId);
       if (check == "follow") {
