@@ -180,15 +180,15 @@ class MessageScreenState extends State<MessageScreen> {
   }
 
   Widget itemActivities(String uid, String chatRoomId) {
-    Future<UserModal?> getUser(context) async {
-      UserModal user = await Provider.of<ItemChatNotify>(context)
+    Future<UserModel?> getUser(context) async {
+      UserModel user = await Provider.of<ItemChatNotify>(context)
           .getUserInformation(uid, chatRoomId ?? "");
       return user;
     }
 
     return FutureBuilder(
         future: getUser(context),
-        builder: (context, AsyncSnapshot<UserModal?> snapshot) {
+        builder: (context, AsyncSnapshot<UserModel?> snapshot) {
           return GestureDetector(
             onTap: () {
               showModalBottomSheet(
