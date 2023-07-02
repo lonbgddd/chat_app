@@ -51,7 +51,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
               ),
               FutureBuilder(
                   future: context.watch<FollowNotify>().userFollowYou(),
-                  builder: (context, AsyncSnapshot<List<UserModal>> snapshot) {
+                  builder: (context, AsyncSnapshot<List<UserModel>> snapshot) {
                     if (snapshot.data == null) {
                       return Container();
                     } else {
@@ -70,7 +70,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
                                       crossAxisSpacing: 16,
                                       mainAxisExtent: 250),
                               itemBuilder: (context, index) {
-                                UserModal user = snapshot.data![index];
+                                UserModel user = snapshot.data![index];
                                 return LikedUserCard(
                                   user: user,
                                 );

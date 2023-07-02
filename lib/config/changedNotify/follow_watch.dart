@@ -8,18 +8,18 @@ import 'package:flutter/cupertino.dart';
 import '../../model/user_model.dart';
 
 class FollowNotify extends ChangeNotifier {
-  final StreamController<List<Map<UserModal, ChatRoom?>>>
+  final StreamController<List<Map<UserModel, ChatRoom?>>>
       _userFollowYouController =
-      StreamController<List<Map<UserModal, ChatRoom?>>>.broadcast();
+      StreamController<List<Map<UserModel, ChatRoom?>>>.broadcast();
 
-  Stream<List<Map<UserModal, ChatRoom?>>> get userFollowYouStream =>
+  Stream<List<Map<UserModel, ChatRoom?>>> get userFollowYouStream =>
       _userFollowYouController.stream;
 
-  Future<List<UserModal>> userFollowYou() async {
+  Future<List<UserModel>> userFollowYou() async {
     try {
       String uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      List<UserModal> userFollow = await DatabaseMethods().getUserFollow(uid);
+      List<UserModel> userFollow = await DatabaseMethods().getUserFollow(uid);
       notifyListeners();
       return userFollow;
       // _userFollowYouController.add(result);

@@ -12,9 +12,9 @@ class SearchMessageProvider extends ChangeNotifier{
     this.name = name;
     notifyListeners();
   }
-  Future<List<UserModal>> getListUserChat(String uid) async {
+  Future<List<UserModel>> getListUserChat(String uid) async {
     try {
-      List<UserModal> users = await DatabaseMethods().getListUserChat(uid);
+      List<UserModel> users = await DatabaseMethods().getListUserChat(uid);
       notifyListeners();
       return users;
     } catch (e) {

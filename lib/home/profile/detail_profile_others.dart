@@ -31,7 +31,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
     final EdgeInsets padding = MediaQuery.of(context).padding;
     return Scaffold(
       extendBody: true,
-        body: FutureBuilder<UserModal>(
+        body: FutureBuilder<UserModel>(
             future: context.read<ProfileWatch>().getDetailOthers(widget.uid),
             builder: (context, snapshot) {
               return snapshot.hasData

@@ -47,35 +47,35 @@ class RulersPageSection extends StatelessWidget {
 
                   ),
                   const SizedBox(height: 10,),
-                  const Text('Chào mừng đến với Binder.',
+                  const Text('Welcome to Binder.',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 25
                     ),
                   ),
                   const SizedBox(height: 10,),
-                  const Text('Vui lòng tuân thủ các Quy tắc chung này.',
+                  const Text('Please abide by these general rules.',
                     style: TextStyle(
                         fontSize: 15
                     ),
                   ),
 
                   const SizedBox(height: 30,),
-                  const Text('Hãy là chính bạn.',
+                  const Text('Be yourself.',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18
                     ),
                   ),
                   const SizedBox(height: 8,),
-                  const Text('Đảm bảo ảnh, độ tuổi và tiểu sử của bạn đều là thật.',
+                  const Text('Ensure that your photos, age, and bio are all genuine.',
                     style: TextStyle(
                         fontSize: 14
                     ),
                   ),
 
                   const SizedBox(height: 20,),
-                  const Text('Đảm bảo an toàn.',
+                  const Text('Ensure safety.',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18
@@ -85,12 +85,14 @@ class RulersPageSection extends StatelessWidget {
                   RichText(
                     textAlign: TextAlign.start,
                     text:TextSpan(
-                      text: 'Đừng vội vàng chia sẻ thông tin cá nhân. ',
+                      text: 'Do not rush to share personal information. ',
                       style: TextStyle(color: Colors.black,fontSize: 14, ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Hẹn hò an toàn.',
-                          style: TextStyle(decoration: TextDecoration.underline,color: Colors.blue),
+                          text: 'Practice safe dating.',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline, fontWeight: FontWeight.bold,
+                              color: Colors.blue),
                         ),
                       ],
 
@@ -98,27 +100,27 @@ class RulersPageSection extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 20,),
-                  const Text('Cư xử chuẩn mực.',
+                  const Text('Behave properly.',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18
                     ),
                   ),
                   const SizedBox(height: 8,),
-                  const Text('Tôn trọng người khác và đối xử với họ như cách bạn muốn mọi người thể hiện với bạn.',
+                  const Text('Respect others and treat them the way you want to be treated.',
                     style: TextStyle(
                         fontSize: 14
                     ),
                   ),
                   const SizedBox(height: 20,),
-                  const Text('Hãy luôn chủ động.',
+                  const Text('Always be proactive.',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18
                     ),
                   ),
                   const SizedBox(height: 8,),
-                  const Text('Luôn báo cáo hành vi xấu.',
+                  const Text('Always report bad behavior.',
                     style: TextStyle(
                         fontSize: 14
                     ),
@@ -126,7 +128,7 @@ class RulersPageSection extends StatelessWidget {
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70, color: Colors.transparent, onPressed: () => pageProvider.nextPage(),),
+            ButtonSubmitPageView(text: 'Next',marginBottom: 70, color: Colors.transparent, onPressed: () => pageProvider.nextPage(),),
           ],
         ),
       ),

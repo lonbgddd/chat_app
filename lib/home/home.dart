@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     // TODO: implement dispose
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-    context.read<HomeState>().setStateUser('offline');
+    // context.read<HomeState>().setStateUser('offline');
   }
 
   @override

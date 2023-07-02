@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -10,15 +12,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
 class DatabaseMethods {
-  Future<List<UserModal>> searchByName(String searchField) async {
+  Future<List<UserModel>> searchByName(String searchField) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: searchField)
         .get();
-    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
+    return data.docs.map((e) => UserModel.fromJson(e.data())).toList();
   }
 
-  Future<List<UserModal>> getUserFollow(String uid) async {
+  Future<List<UserModel>> getUserFollow(String uid) async {
     QuerySnapshot list = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
@@ -29,15 +31,161 @@ class DatabaseMethods {
         .collection('users')
         .where('uid', whereIn: listId)
         .get();
-    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
+    return data.docs.map((e) => UserModel.fromJson(e.data())).toList();
   }
 
-  Future<List<UserModal>> getAllUser(String uid) async {
+  Future<List<UserModel>> getUserHasFilter(
+      String uid, String? gender, List<double> age) async {
+    Query query = FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', whereNotIn: [uid]);
+    QuerySnapshot snapshot;
+
+    if (gender != 'Everyone') {
+      query = query.where('gender', isEqualTo: gender);
+    }
+
+    if (age.first == 18 || age.first != 18) {
+      query = query.where('birthday', isNotEqualTo: null);
+      snapshot = await query.get();
+      final List<UserModel> userModals = [];
+
+      for (var e in snapshot.docs) {
+        final userData = e.data() as Map<String, dynamic>;
+        final birthday = userData['birthday'];
+        String yyyy = birthday.toString().substring(0, 4);
+        int userAge = DateTime.now().year - int.parse(yyyy);
+        // input[22,20,20,23,20]
+        //condition   22<=age <=30
+        if ((userAge >= age.first - 1 && userAge <= age.last) || age.first == userAge) {
+          print('${userData['email'].toString().split(" ").first} is $userAge years old. not in range');
+
+          final userModal = UserModel.fromJson(userData);
+          userModals.add(userModal);
+        }
+      }
+
+      return userModals;
+    }
+
+    snapshot = await query.get();
+
+    return snapshot.docs.map<UserModel>((DocumentSnapshot e) {
+      return UserModel.fromJson(e.data() as Map<String, dynamic>);
+    }).toList();
+  }
+
+  Future<List<UserModel>> getUserHasFilterKm(
+      String uid, String? gender, List<double> age, double kilometres) async {
+    Query query = FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', whereNotIn: [uid]);
+    QuerySnapshot snapshot;
+
+    if (gender != 'Everyone') {
+      query = query.where('gender', isEqualTo: gender);
+    }
+
+
+    if (age.first == 18 || age.first != 18) {
+      query = query.where('birthday', isNotEqualTo: null);
+      snapshot = await query.get();
+      final List<UserModel> userModals = [];
+
+      String? getPosition =
+      await HelpersFunctions().getPositionTokenSharedPreference();
+      List<String>? splitPosition = getPosition?.split('|');
+      double userLatitude = double.parse(splitPosition!.first);
+      double userLongitude = double.parse(splitPosition.last);
+
+      // Using for loop to query database
+      for (var e in snapshot.docs) {
+        final userData = e.data() as Map<String, dynamic>;
+        final birthday = userData['birthday'];
+        final position = userData['position'];
+        String yyyy = birthday.toString().substring(0, 4);
+        int userAge = DateTime.now().year - int.parse(yyyy);
+
+        // Default input [18,22]
+
+
+        double userPositionLatitude = double.parse(position!.first);
+        double userPositionLongitude = double.parse(position.last);
+
+        double distance = _calculateDistance(
+          userLatitude,
+          userLongitude,
+          userPositionLatitude,
+          userPositionLongitude,
+        );
+
+        print(
+            '${userData['fullName'].toString()} is ${distance.round()}km away');
+        if (distance.round() <= kilometres) {
+          print("${distance.round()} < $kilometres");
+          print(
+              '${userData['fullName'].toString()} is $userAge >= ${age.first} && <= ${age.last}');
+          if (userAge >= age!.first || userAge <= age.last) {
+
+            final userModal = UserModel.fromJson(userData);
+            userModals.add(userModal);
+          }
+        }
+      }
+
+      return userModals;
+    }
+
+    snapshot = await query.get();
+
+    return snapshot.docs.map<UserModel>((DocumentSnapshot e) {
+      return UserModel.fromJson(e.data() as Map<String, dynamic>);
+    }).toList();
+  }
+
+
+
+
+
+  Future<String?> getDiscoverUserSetting(String uid) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
-        .where('uid', whereNotIn: [uid]).get();
-    print(data);
-    return data.docs.map((e) => UserModal.fromJson(e.data())).toList();
+        .where('uid', isEqualTo: uid)
+        .get();
+
+    if (data.docs.isNotEmpty) {
+      final userData = data.docs.first.data();
+      final requestToShow = userData['requestToShow'];
+      return requestToShow;
+    } else {
+      print("not found");
+    }
+  }
+  Future<void> updatePosition(List<String> position) async {
+    try {
+      final uid =
+      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'position': [position.last,position.first]});
+    } catch (e) {
+      print('Error: $e');
+      throw Exception(e);
+    }
+  }
+  Future<void> updateRequestToShow(String requestToShow) async {
+    try {
+      final uid =
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'requestToShow': requestToShow});
+    } catch (e) {
+      print('Error: $e');
+      throw Exception(e);
+    }
   }
 
   Future addChatRoom(chatRoom, chatRoomId) async {
@@ -99,13 +247,13 @@ class DatabaseMethods {
     });
   }
 
-  Future<UserModal> getToken(String uid) async {
+  Future<UserModel> getToken(String uid) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
         .limit(1)
         .get();
-    return UserModal.fromJson(data.docs.first.data());
+    return UserModel.fromJson(data.docs.first.data());
   }
 
   Future<String> pushImage(File? image, String uid) async {
@@ -127,7 +275,8 @@ class DatabaseMethods {
       for (File? image in images) {
         if (image != null) {
           final fileName = '${uuid.v4()}.${image.path.split('.').last}';
-          final uploadTask = storageRef.child('images/$uid/$fileName').putFile(image);
+          final uploadTask =
+              storageRef.child('images/$uid/$fileName').putFile(image);
           final snapshot = await uploadTask.whenComplete(() {});
           final downloadURL = await snapshot.ref.getDownloadURL();
           downloadURLs.add(downloadURL);
@@ -140,7 +289,6 @@ class DatabaseMethods {
     }
   }
 
-
   Future updateAvatar(String avatar, String uid) async {
     try {
       await FirebaseFirestore.instance
@@ -152,7 +300,7 @@ class DatabaseMethods {
     }
   }
 
-  Future updateUser(UserModal user) async {
+  Future updateUser(UserModel user) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -208,9 +356,9 @@ class DatabaseMethods {
     return false;
   }
 
-  Future<List<UserModal>> getListUserChat(String uid) async {
+  Future<List<UserModel>> getListUserChat(String uid) async {
     List<String> listUid = [];
-    List<UserModal> userList = [];
+    List<UserModel> userList = [];
     try {
       await FirebaseFirestore.instance
           .collection("chatRoom")
@@ -231,8 +379,8 @@ class DatabaseMethods {
             .get()
             .then((QuerySnapshot querySnapshot) {
           userList = querySnapshot.docs.map((doc) {
-            UserModal user =
-                UserModal.fromJson(doc.data() as Map<String, dynamic>);
+            UserModel user =
+                UserModel.fromJson(doc.data() as Map<String, dynamic>);
             return user;
           }).toList();
         });
@@ -244,8 +392,29 @@ class DatabaseMethods {
     return userList;
   }
 
+  double _calculateDistance(
+      double lat1, double lon1, double lat2, double lon2) {
+    const double earthRadius = 6371; // Bán kính trái đất trong kilômét
 
+    // Đổi độ sang radian
+    double lat1Rad = _toRadians(lat1);
+    double lon1Rad = _toRadians(lon1);
+    double lat2Rad = _toRadians(lat2);
+    double lon2Rad = _toRadians(lon2);
 
+    // Tính khoảng cách giữa các vị trí
+    double deltaLat = lat2Rad - lat1Rad;
+    double deltaLon = lon2Rad - lon1Rad;
+    double a = pow(sin(deltaLat / 2), 2) +
+        cos(lat1Rad) * cos(lat2Rad) * pow(sin(deltaLon / 2), 2);
 
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double distance = earthRadius * c;
 
+    return distance;
+  }
+
+  double _toRadians(double degree) {
+    return degree * pi / 180;
+  }
 }

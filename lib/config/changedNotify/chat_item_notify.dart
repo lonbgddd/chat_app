@@ -4,13 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 
 class ItemChatNotify extends ChangeNotifier {
-  Future<UserModal> getUserInformation(String? uid, String chatRoomId) async {
+  Future<UserModel> getUserInformation(String? uid, String chatRoomId) async {
     final user = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
         .get()
         .then((value) =>
-            value.docs.map((e) => UserModal.fromJson(e.data())).single);
+            value.docs.map((e) => UserModel.fromJson(e.data())).single);
     return user;
   }
 

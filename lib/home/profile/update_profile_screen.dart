@@ -18,7 +18,7 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
-  UserModal? currentUser;
+  UserModel? currentUser;
   SingingCharacter? character = SingingCharacter.man;
   TextEditingController nameController = TextEditingController();
   TextEditingController bioController = TextEditingController();

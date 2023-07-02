@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:chat_app/config/changedNotify/login_google.dart';
+import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';

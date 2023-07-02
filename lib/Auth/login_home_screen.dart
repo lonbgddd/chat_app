@@ -8,20 +8,18 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/changedNotify/login_google.dart';
-import '../config/changedNotify/login_google.dart';
+import '../config/firebase/firebase_api.dart';
 
 class HomeScreenLogin extends StatefulWidget {
   const HomeScreenLogin({Key? key}) : super(key: key);
-
-
 
   @override
   State<StatefulWidget> createState() {
     return HomeScreenLoginState();
   }
-
 }
-class HomeScreenLoginState extends State<HomeScreenLogin>{
+
+class HomeScreenLoginState extends State<HomeScreenLogin> {
   bool isLoading = false;
 
   Future<void> isLoginGoogle() async {
@@ -30,19 +28,33 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
     });
     final login = context.read<CallDataProvider>();
     String loginResult = await login.loginWithGoogle();
-      if (loginResult == 'false') {
-        context.go('/login-home-screen');
-      } else if (loginResult == 'home') {
-        context.go('/home');
-      } else if (loginResult == 'confirm-screen') {
-        context.go('/login-home-screen/confirm-screen');
-      }
+    if (loginResult == 'false') {
+      context.go('/login-home-screen');
+    } else if (loginResult == 'home') {
+      context.go('/home');
+    } else if (loginResult == 'confirm-screen') {
+      context.go('/login-home-screen/confirm-screen');
+    }
 
-      setState(() {
-        isLoading = false;
-      });
+    setState(() {
+      isLoading = false;
+    });
   }
 
+  void _requestPermission() async {
+    String? result = await FirebaseApi().checkPermissionLocation();
+    print(result);
+    if (result == 'isDenied' || result == null || result == 'isDeniedForever') {
+      context.pushReplacement('/request-permission-screen');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _requestPermission();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +66,23 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
           size: 100,
         ),
       )
-          :  Container(
+          : Container(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors:  [ const Color.fromRGBO(238, 128, 95, 1) ,const Color.fromRGBO(234, 64, 128, 1)],),
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color.fromRGBO(238, 128, 95, 1),
+              const Color.fromRGBO(234, 64, 128, 1)
+            ],
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
               margin: const EdgeInsets.only(top: 40),
-              child:  Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -75,9 +91,12 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
                     width: 50,
                     height: 50,
                     fit: BoxFit.contain,
-                    colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    colorFilter:
+                    ColorFilter.mode(Colors.white, BlendMode.srcIn),
                   ),
-                  const SizedBox(width: 10,),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     "Binder",
                     style: TextStyle(
@@ -89,50 +108,59 @@ class HomeScreenLoginState extends State<HomeScreenLogin>{
                 ],
               ),
             ),
-
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   RichText(
                     textAlign: TextAlign.center,
-                    text:TextSpan(
-                      text: 'Khi bấm Đăng nhập, bạn đồng ý với ',
-                      style: TextStyle(color: Colors.white,fontSize: 16, ),
+                    text: TextSpan(
+                      text: 'When you tap Log in, you agree to our ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Điều khoản',
-                          style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic, fontSize: 17),
+                          text: 'Terms and Conditions',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              fontSize: 17),
                         ),
-                        TextSpan(text: ' của chúng tôi. Tìm hiều về cách chúng tôi xử lý dữ liệu của bạn trong '),
                         TextSpan(
-                          text: 'Chính sách quyền riêng tư',
-                          style: TextStyle(decoration: TextDecoration.underline,fontWeight: FontWeight.w600,fontStyle: FontStyle.italic, fontSize: 17),
+                            text:
+                            '. Learn more about how we handle your data in our '),
+                        TextSpan(
+                          text: 'Privacy Policy',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              fontSize: 17),
                         ),
-                        TextSpan(text: ' của chúng tôi.'),
+                        TextSpan(text: '.'),
                       ],
-
                     ),
                   ),
                   const SizedBox(
                     height: 25,
                   ),
                   ButtonCustom(
-                      text: "Đăng nhập với Google",
+                      text: "Log in with Google",
                       image: AppAssets.iconGG,
-                      onPressed: ()  {
+                      onPressed: () {
                         isLoginGoogle();
                       }),
                   const SizedBox(
                     height: 15,
                   ),
                   ButtonCustom(
-                    text: "Đăng nhập với số điện thoại",
+                    text: "Log in with phone number",
                     image: AppAssets.iconPhone,
-                    onPressed: () => context.go('/login-home-screen/loginPhone'),
+                    onPressed: () =>
+                        context.go('/login-home-screen/loginPhone'),
                   ),
                 ],
               ),

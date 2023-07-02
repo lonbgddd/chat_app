@@ -1,11 +1,13 @@
 import 'package:chat_app/Auth/login_phone_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
+import 'package:chat_app/home/binder_page/compnents/show_me.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/search_Message.dart';
 import 'package:chat_app/home/profile/detail_profile_others.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/profile/update_profile_screen.dart';
+import 'package:chat_app/welcom/request_position.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,12 +39,20 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
           path: 'search-message',
           builder: (context, state) => SearchMessage(),
+        ),
+        GoRoute(
+          path: 'show-me',
+          builder: (context, state) => ShowMe(),
         )
       ]),
   GoRoute(
       path: '/',
       builder: (context, state) => const WelcomeScreen(),
-    ),
+      routes: [
+        GoRoute(
+            path: 'request-permission-screen',
+            builder: (context, state) => RequestPosition()),
+      ]),
   GoRoute(
       path: '/login-home-screen',
       builder: (context, state) => const HomeScreenLogin(),
@@ -58,6 +68,4 @@ final GoRouter router = GoRouter(routes: [
                   path: 'verify_otp', builder: (context, state) => VerifyOTP()),
             ]),
       ])
-
-
 ]);

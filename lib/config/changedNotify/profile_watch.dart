@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 class ProfileWatch extends ChangeNotifier {
   String? _uid;
 
-  Future<UserModal> getUser() async {
+  Future<UserModel> getUser() async {
     try {
       _uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
       return await DatabaseServices(_uid).getUserInfo();
@@ -15,12 +15,12 @@ class ProfileWatch extends ChangeNotifier {
     }
   }
 
-  Stream<UserModal> getUserStream() async* {
+  Stream<UserModel> getUserStream() async* {
     final uid = await HelpersFunctions().getUserIdUserSharedPreference();
     yield* DatabaseServices(uid).getUserInfoStream();
   }
 
-  Future<UserModal> getDetailOthers(String? idUser) async {
+  Future<UserModel> getDetailOthers(String? idUser) async {
     try {
       return await DatabaseServices(idUser).getUserInfo();
     } catch (e) {
