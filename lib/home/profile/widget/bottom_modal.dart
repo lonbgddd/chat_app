@@ -47,7 +47,7 @@ class _BottomModalState extends State<BottomModal> {
                 },
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
@@ -69,7 +69,7 @@ class _BottomModalState extends State<BottomModal> {
             const SizedBox(
               height: 30,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 children: [

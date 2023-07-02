@@ -1,12 +1,8 @@
 import 'dart:ui';
 
-import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
-import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/home/message/detail_message.dart';
-import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/user_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
