@@ -7,7 +7,7 @@ class UserRepositoryImpl extends UserRepository {
 
   UserRepositoryImpl(this._userService);
   @override
-  Future<UserModal> getUserInformation(String uid) {
+  Future<MyUserModal> getUserInformation(String uid) {
     return _userService.getUserInformation(uid);
   }
 
