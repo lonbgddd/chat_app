@@ -1,6 +1,6 @@
+import 'package:chat_app/home/profile/components/slider.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/home/profile/widget/custom_card.dart';
-import 'package:chat_app/home/profile/components/slider.dart';
 import 'package:flutter/material.dart';
 
 class BodyBuyPremium extends StatefulWidget {
@@ -53,19 +53,19 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
                     },
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
-                      Text(
+                      const Text(
                         "My boosts",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
-                      Text(
+                      const Text(
                         "Be a top profile in your area for 30 minutes to\nget more matches.",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
@@ -76,7 +76,7 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
                 const SizedBox(
                   height: 30,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     children: [

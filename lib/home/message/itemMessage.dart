@@ -1,10 +1,10 @@
+import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/changedNotify/chat_item_notify.dart';
 import '../../model/chat_user.dart';
-import '../../model/user_model.dart';
 import 'detail_Message.dart';
 
 class ItemMessage extends StatefulWidget {
