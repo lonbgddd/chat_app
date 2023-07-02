@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -195,7 +196,11 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
       urlImages = await DatabaseMethods().pushListImage(photosList, user.uid);
     }
     await signUp.confirmProfile(nameController.text, selectedGender, selectedRequestToShow, birthday,  newInterestsList, newDatingPurpose, urlImages, newSexualOrientationList).whenComplete(() =>  isLoading = false);
-    context.go('/home');
+    if(FirebaseApi.enablePermission){
+      context.go('/home');
+    }else{
+      context.goNamed('location-screen');
+    }
 
   }
 

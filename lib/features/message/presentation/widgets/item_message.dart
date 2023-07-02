@@ -27,7 +27,7 @@ class MyItemMessage extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return BlocProvider<DetailMessageBloc>(
-                    create: (context) => sl()..add(GetMessageList(chatRoomId!)),
+                    create: (context) => sl()..add(GetMessageList(uid!,chatRoomId!)),
                     child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.95,
                         child: DetailMessage(
@@ -69,15 +69,15 @@ class MyItemMessage extends StatelessWidget {
                       radius: 30,
                       backgroundImage: NetworkImage(state.user.avatar ?? ""),
                       child: state.user.activeStatus == "online"
-                          ? Stack(children: [
-                              const Align(
+                          ? Stack(children: const [
+                              Align(
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
                                   radius: 11,
                                   backgroundColor: Colors.white,
                                 ),
                               ),
-                              const Align(
+                              Align(
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
                                   radius: 10,

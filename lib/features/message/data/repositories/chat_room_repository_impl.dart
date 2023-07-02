@@ -1,4 +1,7 @@
+import 'package:chat_app/features/message/data/models/user_time_model.dart';
 import 'package:chat_app/features/message/domain/entities/chat_message_entity.dart';
+import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
+import 'package:chat_app/features/message/domain/entities/user_time_entity.dart';
 
 import '../../domain/repositories/chat_room_repository.dart';
 import '../datasources/chat_room_service.dart';
@@ -29,4 +32,16 @@ class ChatRoomRepositoryImpl implements ChatRoomRepository {
   Future<void> addMessage(String uid, String chatRoomId, String messageContent, String imageUrl, String token) {
     return _chatRoomApi.addMessage(uid, chatRoomId, messageContent, imageUrl, token);
   }
+
+  @override
+  Future<void> compareUserTime(String chatRoomId, String uid) {
+    return _chatRoomApi.compareUserTimeSelf(uid, chatRoomId);
+  }
+
+  @override
+  Stream<ChatRoomModel> getChatRoom(String uid, String chatRoomId) {
+    return _chatRoomApi.getChatRoom(uid, chatRoomId);
+  }
+
+
 }

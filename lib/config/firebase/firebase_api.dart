@@ -6,8 +6,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:geocoding/geocoding.dart';
 
 class FirebaseApi {
+  static bool enablePermission = false;
+  static String address ='';
   Future<void> permissionKey() async {
     final _message = FirebaseMessaging.instance;
     String? token = await _message.getToken();
@@ -18,22 +21,52 @@ class FirebaseApi {
   }
 
   Future checkPermissionLocation() async {
-    bool _serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!_serviceEnabled) {
-      return Future.error('Location enabled');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location enabled');
+      // Xử lý khi quyền bị từ chối
+    } else if (permission == LocationPermission.deniedForever) {
+      // Xử lý khi quyền bị từ chối mãi mãi
+    } else {
+      enablePermission = true;
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude,position.longitude);
+      Placemark placemark = placemarks[0];
+      if (placemark.subThoroughfare != null) {
+        address += '${placemark.subThoroughfare}, ';
       }
+      if (placemark.thoroughfare != null) {
+        address += '${placemark.thoroughfare}, ';
+      }
+      if (placemark.subAdministrativeArea != null) {
+        address += '${placemark.subAdministrativeArea }, ';
+      }
+      if (placemark.administrativeArea != null) {
+        address += '${placemark.administrativeArea }, ';
+      }
+      if (placemark.country != null) {
+        address += '${placemark.country}';
+      }
+      print('Địa chỉ: $placemark');
     }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location không cho lấy');
-    }
+    //bool _serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    // if (!_serviceEnabled) {
+    //   return Future.error('Location enabled');
+    // }
+    //
+    // LocationPermission permission = await Geolocator.checkPermission();
+    // if (permission == LocationPermission.denied) {
+    //   permission = await Geolocator.requestPermission();
+    //   if (permission == LocationPermission.denied) {
+    //     return Future.error('Location enabled');
+    //   }
+    // }
+    // if (permission == LocationPermission.deniedForever) {
+    //   return Future.error('Location không cho lấy');
+    // }
   }
+
 
   Future checkPermissionNotification() async {
     final messaging = FirebaseMessaging.instance;

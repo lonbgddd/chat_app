@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
+import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/home/profile/components/infor_row.dart';
 import 'package:chat_app/home/profile/components/interest_item.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
@@ -13,6 +14,9 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../config/data_mothes.dart';
+import '../../config/helpers/helpers_database.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -34,13 +38,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             .updateImageAvatar(imageGallery);
       }
     });
-
   }
 
   @override
   void initState() {
     super.initState();
     // Provider.of<ProfileWatch>(context, listen: false).getUser();
+  }
+  Future<void> updateAddressNull() async {
+    String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
+    await DatabaseMethods().updateAddressUser(uid!, '');
   }
 
   @override
@@ -52,6 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               stream: context.watch<ProfileWatch>().getUserStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+
                   String dateString = snapshot.data!.birthday;
                   DateTime dateTime = DateTime.parse(dateString);
                   String formattedDate = DateFormat.yMMMMd().format(dateTime);
@@ -152,6 +160,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               InforRow(
                                 title: "Birthday",
                                 content: formattedDate,
+                              ),
+                              InkWell(
+                                onTap: (){
+                                  if(!FirebaseApi.enablePermission)context.goNamed('location-screen');
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(top: 16.0),
+                                  padding: const EdgeInsets.all(16.0),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                          width: 1.0,
+                                          color: const Color(0XFFC6C6C6))),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "Address",
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 8.0,
+                                        ),
+                                        Text(
+                                          snapshot.data!.currentAddress!,
+                                          style: const TextStyle(
+                                              color: Color(0XFF8E8E8E),
+                                              fontSize: 14),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ]),
+                                ),
                               ),
                               Container(
                                 margin: const EdgeInsets.only(top: 16.0),

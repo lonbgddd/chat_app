@@ -32,6 +32,7 @@ class MyMessageScreen extends StatelessWidget {
         }
 
         if (state is ChatRoomsLoaded) {
+
           return SingleChildScrollView(
             child: Container(
               color: Colors.transparent,

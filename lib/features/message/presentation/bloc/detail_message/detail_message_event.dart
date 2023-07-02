@@ -8,9 +8,9 @@ abstract class DetailMessageEvent extends Equatable {
 }
 
 class GetMessageList extends DetailMessageEvent {
+  final String uid;
   final String chatRoomId;
-
-  const GetMessageList(this.chatRoomId);
+  const GetMessageList(this.uid ,this.chatRoomId);
 }
 
 class AddMessage extends DetailMessageEvent {
@@ -23,6 +23,22 @@ class AddMessage extends DetailMessageEvent {
   const AddMessage(this.uid,this.chatRoomId, this.content, this.imageUrl, this.token);
 }
 
+class CompareUserTime extends DetailMessageEvent {
+  final String uid;
+  final String chatRoomId;
+  const CompareUserTime(this.uid,this.chatRoomId);
+}
+
 class ShowEmojiPicker extends DetailMessageEvent {
   const ShowEmojiPicker();
 }
+
+class WatchTimeEvent extends DetailMessageEvent{
+  const WatchTimeEvent();
+}
+// class GetChatRoom extends DetailMessageEvent {
+//   final String uid;
+//   final String chatRoomId;
+//   const GetChatRoom(this.uid,this.chatRoomId);
+// }
+

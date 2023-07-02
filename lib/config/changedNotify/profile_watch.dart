@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 class ProfileWatch extends ChangeNotifier {
   String? _uid;
 
+
   Future<UserModal> getUser() async {
     try {
       _uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;

@@ -21,9 +21,13 @@ class MessageListLoading extends DetailMessageState {
 
 class MessageListLoaded extends DetailMessageState {
   final Stream<List<ChatMessageEntity>> messagesList;
-  const MessageListLoaded(this.messagesList);
+  final Stream<ChatRoomEntity> chatRoom;
+  const MessageListLoaded(this.chatRoom,this.messagesList);
 }
 
 class EmojiPickerShow extends DetailMessageState {
   const EmojiPickerShow();
+}
+class WatchTimeState extends DetailMessageState{
+  const WatchTimeState();
 }

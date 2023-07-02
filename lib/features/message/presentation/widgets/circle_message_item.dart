@@ -26,7 +26,7 @@ class CircleMessageItem extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return BlocProvider<DetailMessageBloc>(
-                    create: (context) => sl()..add(GetMessageList(chatRoomId!)),
+                    create: (context) => sl()..add(GetMessageList(uid,chatRoomId!)),
                     child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.95,
                         child: DetailMessage(

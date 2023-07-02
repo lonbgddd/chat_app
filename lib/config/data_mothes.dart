@@ -9,6 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
+import '../features/message/data/models/user_time_model.dart';
+import '../model/user_time.dart';
+
 class DatabaseMethods {
   Future<List<UserModal>> searchByName(String searchField) async {
     final data = await FirebaseFirestore.instance
@@ -245,7 +248,61 @@ class DatabaseMethods {
   }
 
 
+  Future<void> updateUserTime(String uid, String chatRoomId,String time) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection("chatRoom").doc(chatRoomId).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        List<dynamic> userTimes = data['userTimes'];
+        List<dynamic> list = [];
+        for(dynamic index in userTimes){
+          UserTime userTime = UserTime.fromJson(index);
+          if(userTime.uid == uid){
+            Map<String, dynamic> myObject = {'uid': uid,'time': time};
+            list.add(myObject);
+          }else{
+            list.add(index);
+          }
+        }
+        await FirebaseFirestore.instance
+            .collection("chatRoom")
+            .doc(chatRoomId)
+            .update({
+          "userTimes": list
+        });
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  Future<String> getUserTime(String uid, String chatRoomId) async {
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection("chatRoom").doc(chatRoomId).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        List<dynamic> userTimes = data['userTimes'];
+        for(dynamic index in userTimes){
+          UserTime userTime = UserTime.fromJson(index);
+          if(userTime.uid == uid){
+            return userTime.time;
+          }
+        }
+      }
+      return '';
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
-
+  Future updateAddressUser(String uid,String address) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'currentAddress': address});
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
 }

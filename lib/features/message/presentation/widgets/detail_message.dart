@@ -1,11 +1,15 @@
 import 'package:chat_app/config/changedNotify/detail_message.dart';
+import 'package:chat_app/features/message/data/models/user_time_model.dart';
+import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../config/helpers/helpers_database.dart';
 import '../../domain/entities/chat_message_entity.dart';
 
 class DetailMessage extends StatefulWidget {
@@ -29,11 +33,16 @@ class DetailMessage extends StatefulWidget {
 
 class _DetailMessageState extends State<DetailMessage> {
   final TextEditingController messageController = TextEditingController();
+  String keyUid ='';
+  Future<void> getKeyUid() async {
+    keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
+  }
 
   // Stream<List<ChatMessageEntity>>? messages;
 
   @override
   Widget build(BuildContext context) {
+    getKeyUid();
     return BlocConsumer<DetailMessageBloc, DetailMessageState>(
       listener: (context, state) {
         // if (state is MessageListLoaded) {
@@ -62,7 +71,7 @@ class _DetailMessageState extends State<DetailMessage> {
                   today(),
                   // messages != null
                   state is MessageListLoaded
-                      ? Expanded(child: listMessage(state.messagesList))
+                      ? Expanded(child: listMessage(state.messagesList,state.chatRoom))
                       : const CircularProgressIndicator(),
                   controlMessage(context),
                   if (state is ShowEmojiPicker) emoji(context)
@@ -125,114 +134,162 @@ class _DetailMessageState extends State<DetailMessage> {
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         // Căn giữa theo chiều ngang
-        children: [
+        children: const [
           Expanded(
             child: Divider(color: Colors.black), // Đường viền
           ),
         ]);
   }
 
-  Widget listMessage(Stream<List<ChatMessageEntity>> messageListStream) {
+
+  Widget listMessage(Stream<List<ChatMessageEntity>> messageListStream,Stream<ChatRoomEntity> chatRoom) {
     DateFormat timeFormat = DateFormat('HH:mm a');
     DateFormat dateFormat = DateFormat('MMM dd, HH:mm');
+    String userTime ='';
+    bool checkTime(DateTime dateTime) {
+      DateTime timeCurrent = DateTime.now();
+      String date = DateFormat('yyyy-MM-dd').format(dateTime);
+      String dateCurrent = DateFormat('yyyy-MM-dd').format(timeCurrent);
+      if (date == dateCurrent) {
+        return true;
+      }
+      return false;
+    }
+
+    bool checkDuration(DateTime dateTime1, DateTime dateTime2) {
+      if (dateTime1.difference(dateTime2).inMinutes > 5) {
+        return true;
+      }
+      return false;
+    }
     return StreamBuilder(
-        stream: messageListStream,
+        stream: chatRoom,
         builder: (context, snapshot) {
-          return snapshot.hasData
-              ? ListView.builder(
-                  itemCount: snapshot.data?.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  reverse: true,
-                  padding: const EdgeInsets.only(top: 10),
-                  physics: const ScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    DateTime time = DateTime.parse(
-                        snapshot.data?[index].time.toString() ?? "");
-                    return Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
-                      child: Column(
-                        children: [
-                          checkTime(time)
-                              ? const SizedBox.shrink()
-                              : Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    dateFormat.format(time),
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                ),
-                          Align(
-                            alignment: (snapshot.data?[index].uid != widget.uid
-                                ? Alignment.topLeft
-                                : Alignment.topRight),
-                            child: Column(
-                              crossAxisAlignment:
-                                  snapshot.data?[index].uid == widget.uid
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: snapshot.data![index].messageText
-                                              .toString()
-                                              .length >
-                                          20
-                                      ? MediaQuery.of(context).size.width / 2
-                                      : null,
-                                  decoration: BoxDecoration(
-                                    borderRadius: snapshot
-                                                .data?[index].imageURL !=
-                                            ''
-                                        ? const BorderRadius.all(
-                                            Radius.circular(10))
-                                        : snapshot.data?[index].uid ==
-                                                widget.uid
-                                            ? const BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10))
-                                            : const BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                    color:
-                                        (snapshot.data?[index].uid != widget.uid
-                                            ? const Color.fromARGB(
-                                                255, 248, 222, 225)
-                                            : Colors.grey.shade300),
-                                  ),
-                                  padding: snapshot.data?[index].imageURL != ''
-                                      ? EdgeInsets.zero
-                                      : const EdgeInsets.all(16),
-                                  child: snapshot.data?[index].imageURL != ''
-                                      ? image(snapshot.data![index].imageURL!)
-                                      : Text(
-                                          snapshot.data![index].messageText!,
-                                          style: const TextStyle(fontSize: 15),
+          if (snapshot.hasData) {
+            var userTimes = snapshot.data?.userTimes as List<dynamic>;
+            for (var index in userTimes) {
+              if (index.uid == widget.uid) {
+                userTime = index.time!.toString();
+              }
+            }
+          }
+          return StreamBuilder(
+              stream: messageListStream,
+              builder: (context, snapshot) {
+                BlocProvider.of<DetailMessageBloc>(context)
+                    .add(CompareUserTime(keyUid!, widget.chatRoomId!));
+                return snapshot.hasData
+                    ? ListView.builder(
+                        itemCount: snapshot.data?.length,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        reverse: true,
+                        padding: const EdgeInsets.only(top: 10),
+                        physics: const ScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          DateTime time = DateTime.parse(
+                              snapshot.data?[index].time.toString() ?? "");
+                          // return BlocConsumer<DetailMessageBloc, DetailMessageState>(
+                          //   listenWhen: (previous, current) => current is ChatItemActionState,
+                          //   buildWhen: (previous, current) => current is! ChatItemActionState,
+                          //   listener: (context, state) {},
+                          //     builder: (context, state) {
+                          //
+                          //      return
+                          //
+                            return Container(
+                              color: Colors.white,
+                              padding: const EdgeInsets.only(
+                                  left: 14, right: 14, top: 10, bottom: 10),
+                              child: Column(
+                                children: [
+                                  if (checkTime(time))
+                                    Column(children: [
+                                      if (index != snapshot.data!.length - 1 && checkDuration(time, DateTime.parse(snapshot.data?[index + 1].time.toString() ?? '')))
+                                        dateTimeFormat(timeFormat, time)
+                                      else if (index == snapshot.data!.length - 1)
+                                        dateTimeFormat(timeFormat, time)
+                                      else if (context.watch<DetailMessageProvider>().detailTime == time.toString())
+                                        dateTimeFormat(timeFormat, time)
+                                    ])
+                                  else
+                                    Column(
+                                      children: [
+                                        if (index != snapshot.data!.length - 1 && checkDuration(time, DateTime.parse(snapshot.data?[index + 1].time.toString() ?? '')))
+                                          dateTimeFormat(dateFormat, time)
+                                        else if (index == snapshot.data!.length - 1)
+                                          dateTimeFormat(dateFormat, time)
+                                        else if (context.watch<DetailMessageProvider>().detailTime == time.toString())
+                                          dateTimeFormat(dateFormat, time)
+                                      ],
+                                    ),
+                                  Align(
+                                    alignment:
+                                        (snapshot.data?[index].uid != widget.uid ? Alignment.topLeft : Alignment.topRight),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          snapshot.data?[index].uid == widget.uid ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            if(context.read<DetailMessageProvider>().detailTime == ''){
+                                              context.read<DetailMessageProvider>().setDetailTime(time.toString());
+                                            }else{
+                                              context.read<DetailMessageProvider>().setDetailTime('');
+                                            }
+                                          },
+                                          child: Container(
+                                            width: snapshot.data![index].messageText.toString().length > 20 ? MediaQuery.of(context).size.width / 2 : null,
+                                            decoration: BoxDecoration(
+                                              borderRadius: snapshot.data?[index].imageURL != '' ? const BorderRadius.all(Radius.circular(10))
+                                                  : snapshot.data?[index].uid ==
+                                                          widget.uid
+                                                      ? const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(10),
+                                                          topRight:
+                                                              Radius.circular(10),
+                                                          bottomLeft:
+                                                              Radius.circular(10))
+                                                      : const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(10),
+                                                          topRight:
+                                                              Radius.circular(10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                              color: (snapshot.data![index].uid != widget.uid
+                                                  ? const Color.fromARGB(255, 248, 222, 225)
+                                                  : Colors.grey.shade300),
+                                            ),
+                                            padding:
+                                                snapshot.data?[index].imageURL != ''
+                                                    ? EdgeInsets.zero
+                                                    : const EdgeInsets.all(16),
+                                            child:
+                                                snapshot.data![index].imageURL != ''
+                                                    ? image(snapshot.data![index].imageURL!, context)
+                                                    : Text(snapshot.data?[index].messageText ?? '', style: const TextStyle(fontSize: 15)),
+                                          ),
                                         ),
-                                ),
-                                checkTime(time)
-                                    ? Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          timeFormat.format(time),
-                                          style: const TextStyle(
-                                              color: Colors.grey),
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                )
-              : Container();
+                                      ],
+                                    ),
+                                  ),
+                                  if (userTime.isNotEmpty)
+                                    (time.compareTo(DateTime.parse(userTime)) > 0)
+                                        ? Container()
+                                        : DateTime.parse(userTime) == time
+                                            ? Align(alignment: Alignment.bottomRight, child: avatarMini())
+                                            : Container()
+                                ],
+                              ),
+                            );
+                        })
+
+
+                    : Container();
+               });
         });
   }
 
@@ -347,6 +404,16 @@ class _DetailMessageState extends State<DetailMessage> {
     );
   }
 
+  Widget dateTimeFormat(DateFormat dateFormat, DateTime time) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        dateFormat.format(time),
+        style: const TextStyle(color: Colors.grey),
+      ),
+    );
+  }
+
   Widget selectedImage(BuildContext context) {
     return Stack(
       children: [
@@ -380,29 +447,55 @@ class _DetailMessageState extends State<DetailMessage> {
     );
   }
 
-  Widget image(String url) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        width: 150,
-        height: 200,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(url), // Đường dẫn tới ảnh
-            fit: BoxFit.cover, // Cách ảnh sẽ được hiển thị trong Container
+  Widget image(String url, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        context.goNamed('image-message', queryParameters: {
+          'url': url,
+        });
+      },
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          width: 150,
+          height: 200,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(url), // Đường dẫn tới ảnh
+              fit: BoxFit.cover, // Cách ảnh sẽ được hiển thị trong Container
+            ),
           ),
         ),
       ),
     );
   }
 
-  bool checkTime(DateTime dateTime) {
-    DateTime timeCurrent = DateTime.now();
-    String date = DateFormat('yyyy-MM-dd').format(dateTime);
-    String dateCurrent = DateFormat('yyyy-MM-dd').format(timeCurrent);
-    if (date == dateCurrent) {
-      return true;
-    }
-    return false;
+  // Widget image(String url) {
+  //   return ClipRRect(
+  //     borderRadius: BorderRadius.circular(10),
+  //     child: Container(
+  //       width: 150,
+  //       height: 200,
+  //       decoration: BoxDecoration(
+  //         image: DecorationImage(
+  //           image: NetworkImage(url), // Đường dẫn tới ảnh
+  //           fit: BoxFit.cover, // Cách ảnh sẽ được hiển thị trong Container
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
+
+  Widget avatarMini() {
+    return Container(
+      padding: const EdgeInsets.only(top: 5),
+      child: CircleAvatar(
+        radius: 8,
+        backgroundImage: NetworkImage(widget.avatar.toString()),
+      ),
+    );
   }
+
 }
