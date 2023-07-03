@@ -10,6 +10,7 @@ import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
+import 'package:chat_app/config/changedNotify/notification_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
@@ -22,6 +23,7 @@ import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
+import 'package:chat_app/home/notification/notification_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/injection_container.dart';
@@ -40,6 +42,7 @@ import 'Auth/login_phone_screen.dart';
 import 'firebase_options.dart';
 import 'home/message/detail_message.dart';
 import 'home/message/search_Message.dart';
+import 'home/profile/update_profile_screen.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -104,8 +107,6 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -149,6 +150,14 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => BinderWatch(),
         child: const ProfileCard(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ProfileWatch(),
+        child: const UpdateProfileScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => NotificationWatch(),
+        child: const NotificationScreen(),
       ),
       ChangeNotifierProvider(
         create: (context) => HomeState(),

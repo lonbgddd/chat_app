@@ -18,10 +18,11 @@ class BinderPage extends StatefulWidget {
   State<BinderPage> createState() => _BinderPageState();
 }
 
-class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateMixin{
+class _BinderPageState extends State<BinderPage>
+    with SingleTickerProviderStateMixin {
   late Animation _animation;
   late AnimationController _animationController;
-  var listRadius = [50.0,100.0,150.0,200.0];
+  var listRadius = [50.0, 100.0, 150.0, 200.0];
   bool isRefresh = false;
   bool hasNotification = true;
 
@@ -33,7 +34,7 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
       builder: (BuildContext context) {
         return Container(
           height: MediaQuery.of(context).size.height,
-          child: DiscoverySetting(),
+          child: const DiscoverySetting(),
         );
       },
     );
@@ -69,7 +70,7 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
       });
     });
     _animationController = AnimationController(
-        vsync: this, duration: Duration(seconds: 2), lowerBound: 0.5);
+        vsync: this, duration: const Duration(seconds: 2), lowerBound: 0.5);
     _animationController.addListener(() {
       setState(() {});
     });
@@ -87,7 +88,7 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
         isRefresh = false;
       });
       _animationController = AnimationController(
-          vsync: this, duration: Duration(seconds: 2), lowerBound: 0.5);
+          vsync: this, duration: const Duration(seconds: 2), lowerBound: 0.5);
       _animationController.addListener(() {
         setState(() {});
       });
@@ -101,88 +102,91 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final provider = context.read<BinderWatch>();
-    return  Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Row(
-            children: [
-              SvgPicture.asset(
-                AppAssets.iconTinder,
-                width: 30,
-                height: 30,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              const Text(
-                "Binder",
-                style: TextStyle(
-                  fontFamily: 'Grandista',
-                  fontSize: 24,
-                  color: Color.fromRGBO(223, 54, 64, 100),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 3),
-              child: Stack(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.notifications,
-                      color: Colors.grey,
-                      size: 25,
-                    ),
-                  ),
-                  if (hasNotification)
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
-                        ),
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        child: const Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Row(
+          children: [
+            SvgPicture.asset(
+              AppAssets.iconTinder,
+              width: 30,
+              height: 30,
+              fit: BoxFit.contain,
             ),
-            IconButton(
-              onPressed: _showBottomDialog,
-              icon: const Icon(
-                Icons.tune,
-                color: Colors.grey,
+            const SizedBox(
+              width: 5,
+            ),
+            const Text(
+              "Binder",
+              style: TextStyle(
+                fontFamily: 'Grandista',
+                fontSize: 24,
+                color: Color.fromRGBO(223, 54, 64, 100),
               ),
             ),
           ],
         ),
-        backgroundColor: Colors.white,
-        body: getBody(provider.selectedOption, provider.currentAgeValue,
-            provider.showPeopleInRangeDistance, provider.distancePreference),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Stack(
+              children: [
+                IconButton(
+                  onPressed: () =>
+                      // context.go('/home/notification-page')
+                      showMatchDialog(context,
+                          avatar:
+                              "https://th.bing.com/th/id/R.a09840b729ea09d72cacd38ed1101662?rik=F1t%2bhCJtqq9b7Q&pid=ImgRaw&r=0",
+                          name: "Long"),
+                  icon: const Icon(
+                    Icons.notifications,
+                    color: Colors.grey,
+                    size: 25,
+                  ),
+                ),
+                if (hasNotification)
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: const Text(
+                        '1',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: _showBottomDialog,
+            icon: const Icon(
+              Icons.tune,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: Colors.white,
+      body: getBody(provider.selectedOption, provider.currentAgeValue,
+          provider.showPeopleInRangeDistance, provider.distancePreference),
     );
   }
 
@@ -194,32 +198,78 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
           .allUserBinder(gender, age, isInDistanceRange, kilometres),
       builder: (context, snapshot) => snapshot.hasData
           ? Padding(
-        padding: const EdgeInsets.all(10),
-        child: Stack(
-            alignment: Alignment.center,
-            children: context
-                .watch<BinderWatch>()
-                .listCard
-                .reversed
-                .map((e) => ProfileCard(
-              user: e,
-              isDetail: () => context.goNamed(
-                  'Home-detail-others',
-                  queryParameters: {
-                    'uid': e.uid.toString(),
-                  }),
-              isFont:
-              context.watch<BinderWatch>().listCard.first ==
-                  e,
-            ))
-                .toList()),
-      )
+              padding: const EdgeInsets.all(10),
+              child: Stack(
+                  alignment: Alignment.center,
+                  children: context
+                      .watch<BinderWatch>()
+                      .listCard
+                      .reversed
+                      .map((e) => ProfileCard(
+                            user: e,
+                            isDetail: () => context.goNamed(
+                                'Home-detail-others',
+                                queryParameters: {
+                                  'uid': e.uid.toString(),
+                                }),
+                            isFont:
+                                context.watch<BinderWatch>().listCard.first ==
+                                    e,
+                          ))
+                      .toList()),
+            )
           : Center(
-        child: LoadingAnimationWidget.dotsTriangle(
-          color: Color.fromRGBO(234, 64, 128, 100),
-          size: 70,
-        ),
-      ),
+              child: LoadingAnimationWidget.dotsTriangle(
+                color: const Color.fromRGBO(234, 64, 128, 100),
+                size: 70,
+              ),
+            ),
+    );
+  }
+
+  void showMatchDialog(BuildContext context,
+      {required String avatar, required String name}) {
+    final Size screenSize = MediaQuery.of(context).size;
+    final double dialogWidth = screenSize.width * 0.8;
+    final double dialogHeight = screenSize.height * 0.4;
+    showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.redAccent,
+          title: const Text('It\'s a Match!'),
+          content: Container(
+            height: dialogHeight,
+            width: dialogWidth,
+            child: Column(
+              children: [
+                const Text('Congratulations! You matched with someone.'),
+                const SizedBox(height: 16),
+                CircleAvatar(
+                  radius: 50,
+                  // Hiển thị hình ảnh của người đã match
+                  backgroundImage: NetworkImage(avatar.toString()),
+                ),
+                const SizedBox(height: 16),
+                Text(name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    )),
+              ],
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              child: const Text('Close'),
+              onPressed: () {
+                context.pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -230,7 +280,7 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           color:
-          Color.fromRGBO(234, 64, 128, 1.0 - _animationController.value)),
+              Color.fromRGBO(234, 64, 128, 1.0 - _animationController.value)),
     );
   }
 }
