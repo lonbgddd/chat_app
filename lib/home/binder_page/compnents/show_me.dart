@@ -36,7 +36,7 @@ class _ShowMeState extends State<ShowMe> {
                 color: Colors.grey[800],
               ),
               Text(
-                "Back",
+                "Quay lại",
                 style: TextStyle(
                   color: Colors.grey[800],
                   fontWeight: FontWeight.bold,
@@ -47,7 +47,7 @@ class _ShowMeState extends State<ShowMe> {
         ),
         centerTitle: true,
         title: Text(
-          "Show Me",
+          "Hiển thị cho tôi",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ class _ShowMeState extends State<ShowMe> {
             Padding(
               padding: const EdgeInsets.only(top: 8, left: 10),
               child: Text(
-                "SHOW ME",
+                "Hiển thị cho tôi",
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -71,14 +71,14 @@ class _ShowMeState extends State<ShowMe> {
               ),
             ),
             SizedBox(height: 8),
-            buildListTile("Men"),
-            buildListTile("Women"),
-            buildListTile("Everyone"),
+            buildListTile("Nữ"),
+            buildListTile("Nam"),
+            buildListTile("Mọi người"),
             SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                "Tinder welcomes everyone.",
+                "Binder chào đón tất cả mọi người",
                 style: styleRichText,
               ),
             ),
@@ -88,12 +88,12 @@ class _ShowMeState extends State<ShowMe> {
               child: RichText(
                 textAlign: TextAlign.start,
                 text: TextSpan(
-                  text: 'Discovery settings now show users who include more information about their ',
+                  text: 'Mục cài đặt Tìm Kiếm giờ đây hiển thị những người dùng có bao gồm nhiều thông tin hơn về ',
                   style: styleRichText,
                   children: <TextSpan>[
 
                     TextSpan(
-                      text: 'gender identity ',
+                      text: 'xác định giới tính',
                       style: TextStyle(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
@@ -101,10 +101,10 @@ class _ShowMeState extends State<ShowMe> {
                       ),
                     ),
                     TextSpan(
-                      text: 'and ',
+                      text: ' và ',
                     ),
                     TextSpan(
-                      text: 'sexual orentation. ',
+                      text: 'khuynh hướng tình dục',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
@@ -112,7 +112,7 @@ class _ShowMeState extends State<ShowMe> {
                       ),
                     ),
                     TextSpan(
-                      text: 'Once users add more information about themselves, they can select to be shown in searches\nthat best reflect their identity.',
+                      text: ' của họ. Khi người dùng thêm thông tin về bản thân, họ có thể chọn hiển thị trong những mục tìm kiếm nào phản ảnh tốt nhất về bản dạng của họ.',
                     ),
                   ],
                 ),

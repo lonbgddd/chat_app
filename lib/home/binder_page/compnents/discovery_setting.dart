@@ -26,7 +26,7 @@ class _DiscoverySettingState extends State<DiscoverySetting> {
           leading: Text(""),
           title: Center(
             child: Text(
-              "Discovery Settings",
+              "Cài đặt Tìm Kiếm",
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -37,7 +37,7 @@ class _DiscoverySettingState extends State<DiscoverySetting> {
                 context.pop('refresh');
               },
               child: Text(
-                "Done",
+                "Xong",
                 style: TextStyle(color: Colors.blue[700]),
               ),
             ),
@@ -49,7 +49,7 @@ class _DiscoverySettingState extends State<DiscoverySetting> {
           children: [
             SliderContainer(
               isAgePreference: false,
-              title: "Distance Preference",
+              title: "Khoảng cách ưu tiên",
             ),
             SizedBox(
               height: 5,
@@ -67,7 +67,7 @@ class _DiscoverySettingState extends State<DiscoverySetting> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Show me",
+                      "Hiển thị cho tôi",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
@@ -109,7 +109,7 @@ class _DiscoverySettingState extends State<DiscoverySetting> {
             ),
             SliderContainer(
               isAgePreference: true,
-              title: "Age Preference",
+              title: "Độ tuổi ưu tiên",
             ),
           ],
         ),

@@ -29,7 +29,7 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: () {
+                        onPressed: ()  {
                           pageProvider.previousPage();
                         },
                         icon: Icon(Icons.west, color: Colors.grey, size: 30,),
@@ -39,19 +39,19 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
                           pageProvider.nextPage();
                           pageProvider.newSexualOrientationList.clear();
                           pageProvider.isSexualOrientationEmpty = true;},
-                        child: Text('Skip', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
+                        child: Text('Bỏ qua', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
                       )
                     ],
                   ),
                   const SizedBox(height: 15,),
-                  const Text('Your sexual orientation?',
+                  const Text('Khuynh hướng tình dục của bạn ?',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 10,),
-                  const Text('Choose up to 3',
+                  const Text('Chọn tối đa 3',
                     style: TextStyle(
                         fontSize: 16
                     ),
@@ -96,11 +96,11 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25,),
-            ButtonSubmitPageView(text: 'Next',marginBottom: 70,
+            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
                 color: pageProvider.isSexualOrientationEmpty ? Colors.grey : Colors.transparent,
                 onPressed: () {
                   !pageProvider.isSexualOrientationEmpty ? pageProvider.nextPage() : null;
-                  print('Sexual orientation list: ${pageProvider.newSexualOrientationList}');
+                  print('list sexual: ${pageProvider.newSexualOrientationList}');
                 }),
 
           ],

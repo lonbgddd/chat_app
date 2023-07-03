@@ -6,22 +6,6 @@ class HelpersFunctions {
   static String sharedPreferenceNameUserKey = "NAMEKEY";
   static String sharedPreferenceAvatarUserKey = "AVATARKEY";
   static String sharedPreferenceTokenKey = "TOKENKEY";
-  static String sharedPreferencePositionKey = "POSITIONKEY";
-
-  static Future savePositionTokenSharedPreference(List<String> position) async {
-    SharedPreferences rs = await SharedPreferences.getInstance();
-    if (position.isEmpty) {
-      return await rs.setString(sharedPreferencePositionKey, '');
-    } else {
-      return await rs.setString(sharedPreferencePositionKey, '${position.first}|${position.last}');
-    }
-  }
-
-
-  Future<String?> getPositionTokenSharedPreference() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getString(sharedPreferencePositionKey).toString();
-  }
 
   static Future saveTokenUserSharedPreference(String token) async {
     SharedPreferences rs = await SharedPreferences.getInstance();
@@ -32,7 +16,6 @@ class HelpersFunctions {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(sharedPreferenceTokenKey).toString();
   }
-
 
   static Future saveIdUserSharedPreference(String uid) async {
     SharedPreferences rs = await SharedPreferences.getInstance();

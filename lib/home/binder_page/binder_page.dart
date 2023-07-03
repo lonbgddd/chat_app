@@ -49,9 +49,6 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-    print("${position.latitude}|${position.longitude}");
-    await HelpersFunctions.savePositionTokenSharedPreference(
-        [position.latitude.toString(), position.longitude.toString()]);
     return [position.longitude.toString(), position.latitude.toString()];
   }
 

@@ -52,14 +52,14 @@ class _BottomModalState extends State<BottomModal> {
               child: Column(
                 children: [
                   Text(
-                    "My boosts",
+                    "Lượt Tăng Tốc của tôi",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   Text(
-                    "Be a top profile in your area for 30 minutes to\nget more matches.",
+                    "Đẩy hồ sơ của bạn lên top đầu khu vực trong 30 phút để được nhiều tương hợp hơn.",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16),
                   )
@@ -82,12 +82,12 @@ class _BottomModalState extends State<BottomModal> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Boosts",
+                        "Lượt Tăng Tốc",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       Text(
-                        "0 left",
+                        "Còn 0",
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -109,7 +109,7 @@ class _BottomModalState extends State<BottomModal> {
                 ),
               ),
               child: const Text(
-                "Get More Boosts",
+                "Mua thêm lượt Tăng Tốc",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

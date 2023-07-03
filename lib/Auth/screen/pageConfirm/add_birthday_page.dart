@@ -31,7 +31,7 @@ class AddBirthdayPageSection extends StatelessWidget {
                   icon: Icon(Icons.west, color: Colors.grey, size: 30,),
                 ),
                 const SizedBox(height: 15,),
-                const Text('What is your date of birth?',
+                const Text('Ngày sinh của bạn ?',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 28
@@ -43,12 +43,13 @@ class AddBirthdayPageSection extends StatelessWidget {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: PinCodeCustom(controller: pageProvider.dayController, focusNode: pageProvider.dayFocusNode, length: 2,hintText: 'D',onChange: (value){
+                      child: PinCodeCustom(controller: pageProvider.dayController, focusNode: pageProvider.dayFocusNode, length: 2,hintText: 'D',onChange:  (value){
                         if (value.length == 2) {
                           FocusScope.of(context).requestFocus(pageProvider.monthFocusNode);
                         }
                         pageProvider.onBirthdayChange(value);}),
                     ),
+
                     Container(
                       padding: EdgeInsets.only(left: 10,right: 10,bottom: 20),
                       child: Text('/',
@@ -93,12 +94,12 @@ class AddBirthdayPageSection extends StatelessWidget {
                 const SizedBox(height: 10,),
                 Visibility(
                   visible: pageProvider.isErrorBirthday,
-                  child: Text('Please enter a valid date of birth', style: TextStyle(color: Colors.red,fontWeight: FontWeight.w500,fontSize: 16,),
+                  child: Text('Vui lòng nhập ngày sinh hợp lệ', style: TextStyle(color: Colors.red,fontWeight: FontWeight.w500,fontSize: 16,),
                     textAlign: TextAlign.left,
                   ),
                 ),
                 const SizedBox(height: 10,),
-                const Text('Your profile will display your age, not your date of birth.',
+                const Text('Hồ sơ của bạn sẽ hiện thông tin tuổi, không phải ngày sinh',
                   style: TextStyle(
                       fontSize: 15,color: Colors.grey,fontWeight: FontWeight.w500
                   ),
@@ -106,13 +107,12 @@ class AddBirthdayPageSection extends StatelessWidget {
               ],
             ),
           ),
-          ButtonSubmitPageView(text: 'Next',marginBottom: 30,
+          ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 30,
               color: pageProvider.isBirthdayEmpty ? Colors.grey : Colors.transparent,
               onPressed: () {
                 !pageProvider.isBirthdayEmpty ? pageProvider.nextPage() : null;
-                print('Age: ${pageProvider.birthday}');
+                print('Tuổi: ${pageProvider.birthday}');
               }),
-
 
         ],
       ),
