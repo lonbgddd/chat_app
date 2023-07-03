@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({super.key, required this.uid});
+  const UpdateProfileScreen({super.key, this.uid});
+
   final String? uid;
 
   @override
@@ -32,18 +33,17 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     'Shopping'
   ];
   List<String> newInterests = [];
+
   void getUserInfo() async {
     await DatabaseServices(widget.uid).getUserInfo().then((user) {
-      setState(() {
-        currentUser = user;
-        character = currentUser!.gender == "man"
-            ? SingingCharacter.man
-            : SingingCharacter.women;
-        nameController.text = currentUser!.fullName;
-        bioController.text = currentUser!.introduceYourself ?? '';
-        birthday = DateTime.parse(currentUser!.birthday);
-        newInterests.addAll(currentUser!.interestsList);
-      });
+      currentUser = user;
+      character = currentUser!.gender == "man"
+          ? SingingCharacter.man
+          : SingingCharacter.women;
+      nameController.text = currentUser!.fullName;
+      bioController.text = currentUser!.introduceYourself ?? '';
+      birthday = DateTime.parse(currentUser!.birthday);
+      newInterests.addAll(currentUser!.interestsList);
     });
   }
 
@@ -76,8 +76,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   @override
   void initState() {
-    getUserInfo();
     super.initState();
+    getUserInfo();
   }
 
   @override

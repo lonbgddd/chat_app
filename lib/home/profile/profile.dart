@@ -1,18 +1,10 @@
-import 'dart:io';
-
-import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
-import 'package:chat_app/config/changedNotify/update_watch.dart';
-import 'package:chat_app/home/profile/components/infor_row.dart';
-import 'package:chat_app/home/profile/components/interest_item.dart';
+import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/helpers/app_assets.dart';
@@ -31,12 +23,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<ProfileWatch>(context, listen: false).getUser();
+    Provider.of<ProfileWatch>(context, listen: false).getUser();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -78,7 +69,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   context.read<CallDataProvider>().signOut();
                   context.pushReplacement('/login-home-screen');
                 },
-                icon: Icon(Icons.login,color: Colors.grey,)),
+                icon: Icon(
+                  Icons.login,
+                  color: Colors.grey,
+                )),
           ],
         ),
         backgroundColor: Colors.white,
