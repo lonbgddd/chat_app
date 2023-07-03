@@ -45,7 +45,8 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
     String? result = await FirebaseApi().checkPermissionLocation();
     print(result);
     if (result == 'isDenied' || result == null || result == 'isDeniedForever') {
-      context.pushReplacement('/request-permission-screen');
+      print(">>>>>>>>>>>>>>>>LOG:Chuyển đến màn hình nhập địa chỉ code file login_home_screen");
+
     }
   }
 
