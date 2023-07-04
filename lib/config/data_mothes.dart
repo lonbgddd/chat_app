@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
-import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -57,8 +56,10 @@ class DatabaseMethods {
         int userAge = DateTime.now().year - int.parse(yyyy);
         // input[22,20,20,23,20]
         //condition   22<=age <=30
-        if ((userAge >= age.first - 1 && userAge <= age.last) || age.first == userAge) {
-          print('${userData['email'].toString().split(" ").first} is $userAge years old. not in range');
+        if ((userAge >= age.first - 1 && userAge <= age.last) ||
+            age.first == userAge) {
+          print(
+              '${userData['email'].toString().split(" ").first} is $userAge years old. not in range');
 
           final userModal = UserModel.fromJson(userData);
           userModals.add(userModal);
@@ -87,6 +88,7 @@ class DatabaseMethods {
       query = query.where('birthday', isNotEqualTo: null);
       snapshot = await query.get();
       final List<UserModel> userModals = [];
+
 
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
       if (userSnapshot.exists) {
@@ -134,11 +136,6 @@ class DatabaseMethods {
     }).toList();
   }
 
-
-
-
-
-
   Future<String?> getDiscoverUserSetting(String uid) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
@@ -153,19 +150,20 @@ class DatabaseMethods {
       print("not found");
     }
   }
+
   Future<void> updatePosition(List<String> position) async {
     try {
       final uid =
-      await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .update({'position': [position.last,position.first]});
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'position': [position.last, position.first]
+      });
     } catch (e) {
       print('Error: $e');
       throw Exception(e);
     }
   }
+
   Future<void> updateRequestToShow(String requestToShow) async {
     try {
       final uid =

@@ -1,9 +1,9 @@
 import 'package:chat_app/config/helpers/helpers_database.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:chat_app/model/user_model.dart';
 
 class CallDataProvider extends ChangeNotifier {
   final _firebase = FirebaseAuth.instance;
@@ -14,6 +14,7 @@ class CallDataProvider extends ChangeNotifier {
       return user;
     }
   }
+
   Future<String> loginWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     if (gUser == null) {
@@ -48,9 +49,17 @@ class CallDataProvider extends ChangeNotifier {
     }
   }
 
-
-  Future<void> confirmProfile(String name,String gender,String request, String birthday,
-      List<String> interests,String datingPurpose, List<String> photoList,List<String> sexualOrientationList,List<String> position,) async {
+  Future<void> confirmProfile(
+    String name,
+    String gender,
+    String request,
+    String birthday,
+    List<String> interests,
+    String datingPurpose,
+    List<String> photoList,
+    List<String> sexualOrientationList,
+    List<String> position,
+  ) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     final token =
@@ -58,33 +67,31 @@ class CallDataProvider extends ChangeNotifier {
 
     if (user != null) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
-        UserModel(
-            email: user.email ?? 'admin@gmail.com',
-            fullName: name,
-            avatar: photoList.first,
-            uid:  user.uid,
-            token: token,
-            gender: gender,
-            position: position,
-            requestToShow: request,
-            birthday: birthday,
-            followersList: [],
-            interestsList: interests,
-            phone: '',
-            datingPurpose: datingPurpose,
-            photoList: photoList,
-            sexualOrientationList: sexualOrientationList,
-          ).toJson(),
-      );
+            UserModel(
+              email: user.email ?? 'admin@gmail.com',
+              fullName: name,
+              avatar: photoList.first,
+              uid: user.uid,
+              token: token,
+              gender: gender,
+              position: position,
+              requestToShow: request,
+              birthday: birthday,
+              followersList: [],
+              interestsList: interests,
+              phone: '',
+              datingPurpose: datingPurpose,
+              photoList: photoList,
+              sexualOrientationList: sexualOrientationList,
+            ).toJson(),
+          );
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
-
     }
   }
 
   Stream<User?>? get user {
     return FirebaseAuth.instance.authStateChanges().map(_userFormFirebase);
   }
-
 
   Future<String?> loginWithEmailAndPass(String email, String password) async {
     String? key = 'success';
@@ -99,9 +106,10 @@ class CallDataProvider extends ChangeNotifier {
       print(dataUserSave.docs.single['email']);
 
       await HelpersFunctions.saveIdUserSharedPreference(credential.user!.uid);
-      await HelpersFunctions.saveNameUserSharedPreference(dataUserSave.docs.single['name']);
-      await HelpersFunctions.saveAvatarUserSharedPreference(dataUserSave.docs.single['avatar']);
-
+      await HelpersFunctions.saveNameUserSharedPreference(
+          dataUserSave.docs.single['name']);
+      await HelpersFunctions.saveAvatarUserSharedPreference(
+          dataUserSave.docs.single['avatar']);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         key = 'user-not-found';
@@ -116,6 +124,7 @@ class CallDataProvider extends ChangeNotifier {
     }
     return key;
   }
+
   Future<void> signOut() async {
     await HelpersFunctions.saveIdUserSharedPreference('');
     await HelpersFunctions.saveTokenUserSharedPreference('');
@@ -149,5 +158,4 @@ class CallDataProvider extends ChangeNotifier {
 //     print(e);
 //   }
 // }
-
 }
