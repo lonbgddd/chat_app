@@ -13,4 +13,18 @@ class UserService {
       throw Exception(e);
     }
   }
+  Stream<MyUserModal> getInfoUser(String uid) {
+    try {
+      return FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .snapshots()
+          .map((documentSnapshot) {
+        return MyUserModal.fromJson(documentSnapshot.data()!);
+      });
+    } catch (e) {
+      throw Exception('$e');
+    }
+  }
+
 }

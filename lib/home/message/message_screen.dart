@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
 import '../../config/changedNotify/chat_item_notify.dart';
 import '../../config/changedNotify/home_watch.dart';
 import '../../config/helpers/helpers_database.dart';
@@ -30,7 +29,7 @@ class MessageScreenState extends State<MessageScreen> {
 
   getUserChat() async {
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-    await context.read<HomeNotify>().getUserChats()?.then(
+    await  Provider.of<HomeNotify>(context,listen: false).getUserChats()?.then(
       (value) {
         setState(() {
           chatRooms = value;
@@ -40,7 +39,7 @@ class MessageScreenState extends State<MessageScreen> {
   }
 
   Widget chatRoomsList(String direction) {
-    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+    return StreamBuilder(
       stream: chatRooms,
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasError) {

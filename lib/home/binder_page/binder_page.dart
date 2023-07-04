@@ -52,6 +52,15 @@ class _BinderPageState extends State<BinderPage>
     );
     return [position.longitude.toString(), position.latitude.toString()];
   }
+  // Future<List<String>> _savePositionUser() async {
+  //   Position position = await Geolocator.getCurrentPosition(
+  //     desiredAccuracy: LocationAccuracy.high,
+  //   );
+  //   print("${position.latitude}|${position.longitude}");
+  //   await HelpersFunctions.savePositionTokenSharedPreference(
+  //       [position.latitude.toString(), position.longitude.toString()]);
+  //   return [position.longitude.toString(), position.latitude.toString()];
+  // }
 
   @override
   void initState() {
@@ -62,9 +71,9 @@ class _BinderPageState extends State<BinderPage>
       final provider = Provider.of<BinderWatch>(context, listen: false);
       provider.setScreenSize(size);
       provider.initializeSelectedOption();
-      _savePositionUser().then((position) {
-        provider.updatePositionUser(position);
-      });
+      // _savePositionUser().then((position) {
+      //   provider.updatePositionUser(position);
+      // });
     });
     _animationController = AnimationController(
         vsync: this, duration: const Duration(seconds: 2), lowerBound: 0.5);

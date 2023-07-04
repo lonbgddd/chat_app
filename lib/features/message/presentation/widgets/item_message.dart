@@ -27,7 +27,9 @@ class MyItemMessage extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return BlocProvider<DetailMessageBloc>(
-                    create: (context) => sl()..add(GetMessageList(chatRoomId!)),
+                    create: (context) {
+                      return sl()..add(GetMessageList(uid!,chatRoomId!));
+                      },
                     child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.95,
                         child: DetailMessage(
@@ -52,32 +54,24 @@ class MyItemMessage extends StatelessWidget {
             child: Container(
               color: Colors.transparent,
               margin: const EdgeInsets.only(left: 20, bottom: 20),
-              width: 60,
-              height: 60,
+              width: 70,
+              height: 70,
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.red,
-                        width: 2,
-                      ),
-                    ),
+                  ClipOval(
                     child: CircleAvatar(
-                      radius: 30,
+                      radius: 35,
                       backgroundImage: NetworkImage(state.user.avatar ?? ""),
                       child: state.user.activeStatus == "online"
-                          ? Stack(children: [
-                              const Align(
+                          ? Stack(children: const [
+                              Align(
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
-                                  radius: 11,
+                                  radius: 10,
                                   backgroundColor: Colors.white,
                                 ),
                               ),
-                              const Align(
+                              Align(
                                 alignment: Alignment.bottomRight,
                                 child: CircleAvatar(
                                   radius: 10,
@@ -114,7 +108,7 @@ class MyItemMessage extends StatelessWidget {
                                         state.user.fullName ?? "",
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 14),
+                                            fontSize: 18),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -139,11 +133,9 @@ class MyItemMessage extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                Text(
-                                  snapshot.hasData
-                                      ? DateFormat('HH:mm a')
-                                          .format(snapshot.data!.time!)
-                                      : '',
+                                Text(snapshot.hasData
+                                      ? snapshot.data!.uid != uid ? 'Đến lượt bạn' : ''
+                                  : '',
                                   style: const TextStyle(color: Colors.grey),
                                 )
                               ],

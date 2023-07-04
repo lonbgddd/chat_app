@@ -41,20 +41,20 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
     });
   }
 
-  void _requestPermission() async {
-    String? result = await FirebaseApi().checkPermissionLocation();
-    print(result);
-    if (result == 'isDenied' || result == null || result == 'isDeniedForever') {
-      print(">>>>>>>>>>>>>>>>LOG:Chuyển đến màn hình nhập địa chỉ code file login_home_screen");
-
-    }
-  }
+  // void _requestPermission() async {
+  //   String? result = await FirebaseApi().checkPermissionLocation();
+  //   print(result);
+  //   if (result == 'isDenied' || result == null || result == 'isDeniedForever') {
+  //     print(">>>>>>>>>>>>>>>>LOG:Chuyển đến màn hình nhập địa chỉ code file login_home_screen");
+  //
+  //   }
+  // }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _requestPermission();
+    //_requestPermission();
   }
 
   @override

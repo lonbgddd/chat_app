@@ -3,6 +3,8 @@ import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/user_time.dart';
+
 class LikedUserCardProvider extends ChangeNotifier {
   Future<ChatRoom?> checkMatched(String otherUid) async {
     try {
@@ -30,9 +32,12 @@ class LikedUserCardProvider extends ChangeNotifier {
       if (check == "follow") {
         List<String> users = [uid, followId];
         String chatRoomId = getChatRoomId(uid, followId);
+        List<dynamic> userTimes = [UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
+          UserTime(uid: followId, time: DateTime.now().toString()).toJson()];
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,
+          "userTimes": userTimes
         };
         await DatabaseMethods().addChatRoom(chatRoom, chatRoomId);
         notifyListeners();

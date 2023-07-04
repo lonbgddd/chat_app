@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -195,10 +196,25 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
     if(user != null){
       urlImages = await DatabaseMethods().pushListImage(photosList, user.uid);
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    await signUp.confirmProfile(nameController.text, selectedGender, selectedRequestToShow, birthday,  newInterestsList, newDatingPurpose, urlImages, newSexualOrientationList,   [position.longitude.toString(), position.latitude.toString()]).whenComplete(() =>  isLoading = false);
-    context.go('/home');
+    // Position position = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
+    await signUp.confirmProfile(
+        nameController.text,
+        selectedGender,
+        selectedRequestToShow,
+        birthday,
+        newInterestsList,
+        newDatingPurpose,
+        urlImages,
+        newSexualOrientationList,
+        ['21.07302', '105.7703283'])
+        .whenComplete(() =>  isLoading = false);
+
+    if(FirebaseApi.enablePermission){
+      context.go('/home');
+    }else{
+      context.goNamed('location-screen');
+    }
 
   }
 
