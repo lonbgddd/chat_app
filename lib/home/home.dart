@@ -1,13 +1,19 @@
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
-import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
+import 'package:chat_app/home/message/message_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+
+import '../config/data_mothes.dart';
+import '../config/firebase/firebase_api.dart';
+import '../config/helpers/helpers_database.dart';
+import '../features/message/presentation/screens/message_screen.dart';
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -91,9 +97,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       _selectedIndex = index;
     });
   }
+  Future<void> checkPermissionLocation() async {
+    if(FirebaseApi.enablePermission){
+      String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
+      await DatabaseMethods().updateAddressUser(uid!, FirebaseApi.address);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    checkPermissionLocation();
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: _bottomNavigation(),

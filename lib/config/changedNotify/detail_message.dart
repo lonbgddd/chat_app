@@ -17,7 +17,8 @@ class DetailMessageProvider extends ChangeNotifier {
   File? image;
   bool showEmoji = false;
   bool checkTime = false;
-
+  String? userTime;
+  String? detailTime;
   getChats(String chatRoomId) async {
     return await DatabaseMethods().getChats(chatRoomId);
   }
@@ -51,42 +52,30 @@ class DetailMessageProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-  // CompareTime(String uid, String chatRoomId) async {
-  //   final chat = await FirebaseFirestore.instance
-  //       .collection('chatRoom')
-  //       .doc(chatRoomId)
-  //       .collection('chats')
-  //       .orderBy('time', descending: true)
-  //       .limit(1)
-  //       .get();
-  //   ChatMessage lastChat = ChatMessage.fromJson(chat.docs.first.data());
-  //   final time = await DatabaseMethods().getUserTime(uid, chatRoomId);
-  //   DateTime dateTimeA = lastChat.time;
-  //   DateTime dateTimeB = DateTime.parse(time);
-  //   if(dateTimeA.compareTo(dateTimeB) > 0){
-  //     checkTime = false;
-  //     notifyListeners();
-  //   }else{
-  //     checkTime = true;
-  //     notifyListeners();
-  //   }
-  // }
-  // CompareTimeSelf(String uid, String chatRoomId) async {
-  //   final chat = await FirebaseFirestore.instance
-  //       .collection('chatRoom')
-  //       .doc(chatRoomId)
-  //       .collection('chats')
-  //       .orderBy('time', descending: true)
-  //       .limit(1)
-  //       .get();
-  //   ChatMessage lastChat = ChatMessage.fromJson(chat.docs.first.data());
-  //   final time = await DatabaseMethods().getUserTime(uid, chatRoomId);
-  //   DateTime dateTimeA = lastChat.time;
-  //   DateTime dateTimeB = DateTime.parse(time);
-  //   if(dateTimeA.compareTo(dateTimeB) > 0){
-  //     await DatabaseMethods().updateTime(uid, chatRoomId);
-  //   }
-  // }
+  compareTimeSelf(String uid, String chatRoomId) async {
+    final chat = await FirebaseFirestore.instance
+        .collection('chatRoom')
+        .doc(chatRoomId)
+        .collection('chats')
+        .orderBy('time', descending: true)
+        .limit(1)
+        .get();
+    ChatMessage lastChat = ChatMessage.fromJson(chat.docs.first.data());
+    final myUserTime = await DatabaseMethods().getUserTime(uid, chatRoomId);
+    DateTime dateTimeA = lastChat.time;
+    DateTime dateTimeB = DateTime.parse(myUserTime);
+    if(dateTimeA.compareTo(dateTimeB) > 0){
+      await DatabaseMethods().updateUserTime(uid, chatRoomId,lastChat.time.toString());
+    }
+    notifyListeners();
+  }
+  getUserTime(String uid, String chatRoomId) async {
+    try {
+      userTime = await DatabaseMethods().getUserTime(uid, chatRoomId);
+    } catch (e) {
+      throw Exception('$e');
+    }
+  }
 
   Future<void> pickImage() async {
     try {
@@ -108,12 +97,8 @@ class DetailMessageProvider extends ChangeNotifier {
     checkTime = !checkTime;
     notifyListeners();
   }
-  setmessageController(String value) {
-    messageController = value as TextEditingController;
-    notifyListeners();
-  }
 
-  setMaxlines(int? value) {
+  setMaxLines(int? value) {
     maxLines = value;
     notifyListeners();
   }
@@ -123,6 +108,10 @@ class DetailMessageProvider extends ChangeNotifier {
   }
   setImageNull(){
     image = null;
+    notifyListeners();
+  }
+  setDetailTime(String value){
+    detailTime = value;
     notifyListeners();
   }
 

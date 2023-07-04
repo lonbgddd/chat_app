@@ -9,8 +9,9 @@ import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
+import 'package:chat_app/config/changedNotify/location_provider.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
-import 'package:chat_app/config/changedNotify/notification_watch.dart';
+// import 'package:chat_app/config/changedNotify/notification_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
@@ -23,10 +24,11 @@ import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
-import 'package:chat_app/home/notification/notification_screen.dart';
+// import 'package:chat_app/home/notification/notification_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/injection_container.dart';
+import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/router/router.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
@@ -135,7 +137,9 @@ Future<void> main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
   await FirebaseApi().permissionKey();
+  await FirebaseApi().checkPermissionLocation();
   await FirebaseApi().checkPermissionNotification();
+
   initializeDependencies();
   runApp(MultiProvider(
     providers: [
@@ -155,10 +159,10 @@ Future<void> main() async {
         create: (context) => ProfileWatch(),
         child: const UpdateProfileScreen(),
       ),
-      ChangeNotifierProvider(
-        create: (context) => NotificationWatch(),
-        child: const NotificationScreen(),
-      ),
+      // ChangeNotifierProvider(
+      //   create: (context) => NotificationWatch(),
+      //   child: const NotificationScreen(),
+      // ),
       ChangeNotifierProvider(
         create: (context) => HomeState(),
         child: const HomePage(),
@@ -219,6 +223,10 @@ Future<void> main() async {
       //   create: (context) => sl(),
       //   child: MyItemMessage(),
       // ),
+      ChangeNotifierProvider(
+        create: (context) => LocationProvider(),
+        child: LocationScreen(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -237,9 +245,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routeInformationProvider: router.routeInformationProvider,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
+      routerConfig: router,
     );
   }
 }

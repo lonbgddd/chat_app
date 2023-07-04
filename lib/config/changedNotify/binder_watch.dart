@@ -6,6 +6,8 @@ import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
+import '../../model/user_model.dart';
+import '../../model/user_time.dart';
 
 class BinderWatch extends ChangeNotifier {
   List<UserModel> _listCard = [];
@@ -190,9 +192,12 @@ class BinderWatch extends ChangeNotifier {
       if (check == "follow") {
         List<String> users = [uid, followId];
         String chatRoomId = getChatRoomId(uid, followId);
+        List<dynamic> userTimes = [UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
+          UserTime(uid: followId, time: DateTime.now().toString()).toJson()];
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,
+          "userTimes": userTimes
         };
         await FirebaseApi()
             .sendPushMessage('Bạn có một tương hợp mới', 'Binder', token);

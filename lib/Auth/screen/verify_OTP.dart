@@ -1,10 +1,12 @@
-import 'package:chat_app/config/changedNotify/login_phone.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_count_down/timer_count_down.dart';
+import '../../config/changedNotify/login_phone.dart';
+
 
 class VerifyOTP extends StatelessWidget {
   @override

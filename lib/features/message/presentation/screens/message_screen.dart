@@ -1,14 +1,13 @@
 import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_bloc.dart';
 import 'package:chat_app/features/message/presentation/widgets/circle_message_item.dart';
-import 'package:chat_app/features/message/presentation/widgets/detail_Message.dart';
 import 'package:chat_app/features/message/presentation/widgets/item_message.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../../../config/helpers/app_assets.dart';
 import '../../domain/entities/chat_room_entity.dart';
-import '../bloc/detail_message/detail_message_bloc.dart';
 import '../bloc/message/message_bloc.dart';
 
 class MyMessageScreen extends StatelessWidget {
@@ -17,6 +16,41 @@ class MyMessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Row(
+            children: [
+              SvgPicture.asset(
+                AppAssets.iconTinder,
+                width: 30,
+                height: 30,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              const Text(
+                "Binder",
+                style: TextStyle(
+                  fontFamily: 'Grandista',
+                  fontSize: 24,
+                  color: Color.fromRGBO(223, 54, 64, 100),
+                ),
+              ),
+            ],
+          ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              AppAssets.iconShield,
+              color: Colors.grey,
+              width: 25,
+            ),
+          ),
+        ],
+      ),
       body: _buildBody(),
     );
   }
@@ -32,64 +66,32 @@ class MyMessageScreen extends StatelessWidget {
         }
 
         if (state is ChatRoomsLoaded) {
+
           return SingleChildScrollView(
             child: Container(
               color: Colors.transparent,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(
-                        left: 20, right: 20, top: 30, bottom: 15),
-                    child: Row(
-                      children: [
-                        const Text(
-                          "Messages",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                        const Spacer(),
-                        Container(
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(width: 1, color: Colors.grey),
-                                borderRadius: BorderRadius.circular(10)),
-                            child: IconButton(
-                              iconSize: 30,
-                              padding: const EdgeInsets.all(5),
-                              onPressed: () async {
-                                context.go('/home/search-user');
-                              },
-                              icon: const Icon(
-                                Icons.menu,
-                                color: Colors.pink,
-                              ),
-                            ))
-                      ],
-                    ),
-                  ),
                   search(context),
                   Container(
-                    margin: const EdgeInsets.all(20),
+                    margin: const EdgeInsets.only(left: 20,top: 20,bottom: 10),
                     child: const Text(
-                      'Activities',
+                      'Tương hợp mới',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Color.fromRGBO(229, 58, 69, 100) ),
                     ),
                   ),
                   SizedBox(
-                    height: 120,
-                    child: _buildChatRoomsList('horizontal',
-                        state.chatRoomsStream, state.currentUserId),
+                    height: 160,
+                    child: _buildChatRoomsList('horizontal', state.chatRoomsStream, state.currentUserId),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(left: 20),
+                    margin: const EdgeInsets.only(left: 20, bottom: 20),
                     child: const Text(
-                      'Messages',
+                      'Tin nhắn',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Color.fromRGBO(229, 58, 69, 100) ),
                     ),
                   ),
                   SingleChildScrollView(

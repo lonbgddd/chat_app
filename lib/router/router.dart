@@ -7,6 +7,7 @@ import 'package:chat_app/home/message/search_Message.dart';
 import 'package:chat_app/home/profile/detail_profile_others.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/profile/update_profile_screen.dart';
+import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,7 +43,11 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
           path: 'show-me',
           builder: (context, state) => ShowMe(),
-        )
+        ),
+        GoRoute(
+            path: 'location-screen',
+            name: 'location-screen',
+            builder: (context, state) => LocationScreen()),
       ]),
   GoRoute(
       path: '/',
@@ -55,6 +60,7 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
             path: 'confirm-screen',
             builder: (context, state) => const ConfirmProfile()),
+
         GoRoute(
             path: 'loginPhone',
             builder: (context, state) => LoginWithPhoneNumber(),
