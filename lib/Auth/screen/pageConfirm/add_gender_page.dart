@@ -33,26 +33,26 @@ class AddGenderPageSection extends StatelessWidget {
                     icon: Icon(Icons.west, color: Colors.grey, size: 30,),
                   ),
                   const SizedBox(height: 15,),
-                  const Text('What is your gender?',
+                  const Text('Giới tính của bạn ?',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 45,),
-                  ButtonSelectGender(value: 'Men'),
+                  ButtonSelectGender(value: 'Nam'),
                   const SizedBox(height: 20),
-                  ButtonSelectGender(value: 'Women'),
+                  ButtonSelectGender(value: 'Nữ'),
                   const SizedBox(height: 20),
-                  ButtonSelectGender(value: 'Other'),
+                  ButtonSelectGender(value: 'Khác'),
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Next',marginBottom: 70,
+            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
                 color: pageProvider.isGenderEmpty ? Colors.grey : Colors.transparent,
                 onPressed: () {
                   !pageProvider.isGenderEmpty ? pageProvider.nextPage() : null;
-                  print('Gender: ${pageProvider.selectedGender}');
+                  print('Giới tính: ${pageProvider.selectedGender}');
                 }),
           ],
         ),

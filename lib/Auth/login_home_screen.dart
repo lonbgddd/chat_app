@@ -118,14 +118,14 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      text: 'When you tap Log in, you agree to our ',
+                      text: 'Khi bấm Đăng nhập, bạn đồng ý với, ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Terms and Conditions',
+                          text: 'Điều khoản',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,
@@ -133,9 +133,9 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
                         ),
                         TextSpan(
                             text:
-                            '. Learn more about how we handle your data in our '),
+                            ' của chúng tôi. Tìm hiều về cách chúng tôi xử lý dữ liệu của bạn trong '),
                         TextSpan(
-                          text: 'Privacy Policy',
+                          text: 'Chính sách quyền riêng tư',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,
@@ -149,7 +149,7 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
                     height: 25,
                   ),
                   ButtonCustom(
-                      text: "Log in with Google",
+                      text: "Đăng nhập với Google",
                       image: AppAssets.iconGG,
                       onPressed: () {
                         isLoginGoogle();
@@ -158,7 +158,7 @@ class HomeScreenLoginState extends State<HomeScreenLogin> {
                     height: 15,
                   ),
                   ButtonCustom(
-                    text: "Log in with phone number",
+                    text: "Đăng nhập với số điện thoại",
                     image: AppAssets.iconPhone,
                     onPressed: () =>
                         context.go('/login-home-screen/loginPhone'),

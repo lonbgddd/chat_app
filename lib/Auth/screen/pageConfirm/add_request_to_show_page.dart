@@ -40,32 +40,27 @@ class AddRequestToShowPageSection extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  const Text(
-                    'Who are you interested in?',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 28),
+                  const Text('Bạn muốn thấy ai ?',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 28
+                    ),
                   ),
-                  const SizedBox(
-                    height: 45,
-                  ),
-                  ButtonSelectRequest(value: 'Men'),
+                  const SizedBox(height: 45,),
+                  ButtonSelectRequest(value: 'Nam'),
                   const SizedBox(height: 20),
-                  ButtonSelectRequest(value: 'Women'),
+                  ButtonSelectRequest(value:'Nữ'),
                   const SizedBox(height: 20),
-                  ButtonSelectRequest(value: 'Everyone'),
+                  ButtonSelectRequest(value:'Mọi người'),
                 ],
               ),
             ),
-            ButtonSubmitPageView(
-                text: 'Next',
-                marginBottom: 70,
-                color: pageProvider.isRequestToShowEmpty
-                    ? Colors.grey
-                    : Colors.transparent,
+
+            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+                color: pageProvider.isRequestToShowEmpty ? Colors.grey : Colors.transparent,
                 onPressed: () {
-                  !pageProvider.isRequestToShowEmpty
-                      ? pageProvider.nextPage()
-                      : null;
-                  print('Preference: ${pageProvider.selectedRequestToShow}');
+                  !pageProvider.isRequestToShowEmpty ? pageProvider.nextPage() : null;
+                  print('Yêu cầu: ${pageProvider.selectedRequestToShow}');
                 }),
           ],
         ),

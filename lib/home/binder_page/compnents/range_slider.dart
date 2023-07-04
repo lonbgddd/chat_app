@@ -68,21 +68,26 @@ class _SliderContainerState extends State<SliderContainer> {
                 // RangeValues _currentValue = const RangeValues(18, 22);
                     ? RangeSlider(
                   values: RangeValues(myProvider.currentAgeValue.first, myProvider.currentAgeValue.last),
-                  divisions: ((100 - 18) ~/ 4),
+                  divisions: ((100 - 18) ~/ 1),
                   min: 18,
                   max: 100.0,
                   onChanged: (RangeValues values) {
                     double start = values.start;
                     double end = values.end;
-                    if (end - start <= 4) {
+
+                    double distance = end - start;
+                    if (distance < 4) {
                       if (start == 18) {
                         end = start + 4;
+                      } else {
+                        start = end - 4;
                       }
-                      start = end - 4;
                     }
+
                     myProvider.setCurrentAgeValue([start, end]);
                   },
                 )
+
                     : Slider(
                   min: _minValue,
                   max: _maxValue,
@@ -97,7 +102,7 @@ class _SliderContainerState extends State<SliderContainer> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
-                    "Only show people in this range",
+                    "Chỉ hiện người trong phạm vi này",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,

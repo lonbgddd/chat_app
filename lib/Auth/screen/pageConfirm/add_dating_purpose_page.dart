@@ -42,7 +42,7 @@ class AddDatingPurposePageSection extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Now I am looking for...',
+                        const Text('Bây giờ mình đang tìm...',
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 28
@@ -50,7 +50,7 @@ class AddDatingPurposePageSection extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 10,),
-                        const Text('Share your purpose to find "the one"!',
+                        const Text('Chia sẻ mục đích để tìm "người ấy"!',
                           style: TextStyle(
                               fontSize: 16
                           ),
@@ -101,11 +101,11 @@ class AddDatingPurposePageSection extends StatelessWidget {
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Next', marginBottom: 70,
-                color: pageProvider.selectedIndexDatingPurpose != -1 ? Colors.transparent : Colors.grey,
+            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+                color:  pageProvider.selectedIndexDatingPurpose != -1 ? Colors.transparent : Colors.grey,
                 onPressed: () {
                   pageProvider.selectedIndexDatingPurpose != -1 ? pageProvider.nextPage() : null;
-                  print('Dating purpose: ${pageProvider.newDatingPurpose}');
+                  print('Mục đích: ${pageProvider.newDatingPurpose}');
                 }),
           ],
         ),

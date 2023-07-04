@@ -40,7 +40,7 @@ class DatabaseMethods {
         .where('uid', whereNotIn: [uid]);
     QuerySnapshot snapshot;
 
-    if (gender != 'Everyone') {
+    if (gender != 'Mọi người') {
       query = query.where('gender', isEqualTo: gender);
     }
 
@@ -76,14 +76,11 @@ class DatabaseMethods {
     }).toList();
   }
 
-  Future<List<UserModel>> getUserHasFilterKm(
-      String uid, String? gender, List<double> age, double kilometres) async {
-    Query query = FirebaseFirestore.instance
-        .collection('users')
-        .where('uid', whereNotIn: [uid]);
+  Future<List<UserModel>> getUserHasFilterKm(String uid, String? gender, List<double> age, double kilometres) async {
+    Query query = FirebaseFirestore.instance.collection('users').where('uid', whereNotIn: [uid]);
     QuerySnapshot snapshot;
 
-    if (gender != 'Everyone') {
+    if (gender != 'Mọi người') {
       query = query.where('gender', isEqualTo: gender);
     }
 
@@ -92,46 +89,44 @@ class DatabaseMethods {
       snapshot = await query.get();
       final List<UserModel> userModals = [];
 
-      String? getPosition =
-          await HelpersFunctions().getPositionTokenSharedPreference();
-      List<String>? splitPosition = getPosition?.split('|');
-      double userLatitude = double.parse(splitPosition!.first);
-      double userLongitude = double.parse(splitPosition.last);
 
-      // Using for loop to query database
-      for (var e in snapshot.docs) {
-        final userData = e.data() as Map<String, dynamic>;
-        final birthday = userData['birthday'];
-        final position = userData['position'];
-        String yyyy = birthday.toString().substring(0, 4);
-        int userAge = DateTime.now().year - int.parse(yyyy);
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data() as Map<String, dynamic>;
+        final userPosition = userData['position'];
+        double userLatitude = double.parse(userPosition.first);
+        double userLongitude = double.parse(userPosition.last);
 
-        // Default input [18,22]
+        for (var e in snapshot.docs) {
+          final userData = e.data() as Map<String, dynamic>;
+          final birthday = userData['birthday'];
+          final position = userData['position'];
+          String yyyy = birthday.toString().substring(0, 4);
+          int userAge = DateTime.now().year - int.parse(yyyy);
 
-        double userPositionLatitude = double.parse(position!.first);
-        double userPositionLongitude = double.parse(position.last);
+          double userPositionLatitude = double.parse(position!.first);
+          double userPositionLongitude = double.parse(position.last);
 
-        double distance = _calculateDistance(
-          userLatitude,
-          userLongitude,
-          userPositionLatitude,
-          userPositionLongitude,
-        );
+          double distance = _calculateDistance(
+            userLatitude,
+            userLongitude,
+            userPositionLatitude,
+            userPositionLongitude,
+          );
 
-        print(
-            '${userData['fullName'].toString()} is ${distance.round()}km away');
-        if (distance.round() <= kilometres) {
-          print("${distance.round()} < $kilometres");
-          print(
-              '${userData['fullName'].toString()} is $userAge >= ${age.first} && <= ${age.last}');
-          if (userAge >= age!.first || userAge <= age.last) {
-            final userModal = UserModel.fromJson(userData);
-            userModals.add(userModal);
+          print('${userData['fullName'].toString()} is ${distance.round()}km away');
+          if (distance.round() <= kilometres) {
+            print("${distance.round()} < $kilometres");
+            print('${userData['fullName'].toString()} is $userAge >= ${age.first} && <= ${age.last}');
+            if ((userAge >= age.first - 1 && userAge <= age.last) || age.first == userAge) {
+              final userModal = UserModel.fromJson(userData);
+              userModals.add(userModal);
+            }
           }
         }
-      }
 
-      return userModals;
+        return userModals;
+      }
     }
 
     snapshot = await query.get();

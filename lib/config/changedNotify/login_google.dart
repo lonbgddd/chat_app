@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class CallDataProvider extends ChangeNotifier {
+  final _firebase = FirebaseAuth.instance;
   User? _userFormFirebase(User? user) {
     if (user == null) {
       return null;
@@ -19,16 +20,15 @@ class CallDataProvider extends ChangeNotifier {
     if (gUser == null) {
       return 'false';
     }
-
     final GoogleSignInAuthentication gAuth = await gUser.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
     );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    await _firebase.signInWithCredential(credential);
 
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user =  _firebase.currentUser;
     QuerySnapshot dataUserSave = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: user!.email)
@@ -37,7 +37,7 @@ class CallDataProvider extends ChangeNotifier {
     if (dataUserSave.docs.isNotEmpty) {
       await HelpersFunctions.saveIdUserSharedPreference(user.uid);
       final token =
-          await HelpersFunctions().getUserTokenSharedPreference() as String;
+      await HelpersFunctions().getUserTokenSharedPreference() as String;
       await FirebaseFirestore.instance
           .collection('users')
           .doc(user.uid)
@@ -129,7 +129,6 @@ class CallDataProvider extends ChangeNotifier {
     await HelpersFunctions.saveIdUserSharedPreference('');
     await HelpersFunctions.saveTokenUserSharedPreference('');
     _userFormFirebase(null);
-    await HelpersFunctions.savePositionTokenSharedPreference([]);
 
     await GoogleSignIn().signOut();
     return await FirebaseAuth.instance.signOut();

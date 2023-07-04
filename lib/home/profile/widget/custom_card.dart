@@ -46,10 +46,13 @@ class CustomCard extends StatelessWidget {
                       )
                     : SvgPicture.asset(AppAssets.iconTinder, width: 30),
                 SizedBox(height: 6),
-                Text(
-                  textAlign: TextAlign.center,
-                  title,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    title,
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                  ),
                 ),
                 SizedBox(height: 3),
                 Text(
