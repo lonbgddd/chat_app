@@ -6,11 +6,8 @@ import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
-import '../../model/user_model.dart';
-import '../../model/user_time.dart';
-import 'package:provider/provider.dart';
 
-import 'highlight_user_watch.dart';
+import '../../model/user_time.dart';
 
 class BinderWatch extends ChangeNotifier {
   List<UserModel> _listCard = [];
@@ -40,7 +37,6 @@ class BinderWatch extends ChangeNotifier {
 
   List<UserModel> get listCard => _listCard;
 
-
   void initData() {
     _listCard = [];
   }
@@ -58,8 +54,6 @@ class BinderWatch extends ChangeNotifier {
   //   }
   // }
 
-
-
   void shuffleUsers(List<UserModel> users) {
     final random = Random();
     for (var i = users.length - 1; i > 0; i--) {
@@ -70,9 +64,8 @@ class BinderWatch extends ChangeNotifier {
     }
   }
 
-
-  void setDistancePreference(double value){
-    _distancePreference=value;
+  void setDistancePreference(double value) {
+    _distancePreference = value;
     notifyListeners();
   }
 
@@ -104,46 +97,48 @@ class BinderWatch extends ChangeNotifier {
     _selectedOption = option;
     notifyListeners();
   }
+
   Future<void> updateRequestToShow() async {
     await DatabaseMethods().updateRequestToShow(_selectedOption);
   }
+
   Future<void> updatePositionUser(List<String> position) async {
     await DatabaseMethods().updatePosition(position);
   }
-  Future<List<UserModel>> allUserBinder(BuildContext context,String gender, List<double> age,bool isInDistanceRange,double kilometres) async {
+
+  Future<List<UserModel>> allUserBinder(String gender, List<double> age,
+      bool isInDistanceRange, double kilometres) async {
     try {
-      final uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      final uid =
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
       final List<UserModel> users;
-      if(isInDistanceRange)
-      {
-        users = await DatabaseMethods().getUserHasFilterKm(uid, gender, [age.first, age.last],kilometres);
-      }
-      else {
-        users = await DatabaseMethods().getUserHasFilter(uid, gender, [age.first, age.last]);
+      if (isInDistanceRange) {
+        users = await DatabaseMethods()
+            .getUserHasFilterKm(uid, gender, [age.first, age.last], kilometres);
+      } else {
+        users = await DatabaseMethods()
+            .getUserHasFilter(uid, gender, [age.first, age.last]);
       }
       print('Your list has ${users.length} elements');
       _listCard = users ?? [];
-       shuffleUsers(_listCard);
-      await Provider.of<HighlightUserNotify>(context, listen: false).sortUsers(_listCard);
 
       return _listCard;
-
     } catch (e) {
       throw Exception(e);
     }
-
-
   }
+
   Future<String?> discoverSetting() async {
     try {
       final uid =
-      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
       final users = await DatabaseMethods().getDiscoverUserSetting(uid);
       return users;
     } catch (e) {
       throw Exception(e);
     }
   }
+
   double get angle => _angle;
 
   void setScreenSize(Size size) => _size = size;
@@ -187,21 +182,28 @@ class BinderWatch extends ChangeNotifier {
   Future addFollow(String followId, String token) async {
     try {
       final uid =
-      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
       await DatabaseMethods().addFollow(uid, followId);
       String check = await DatabaseMethods().checkFollow(uid, followId);
       if (check == "follow") {
         List<String> users = [uid, followId];
         String chatRoomId = getChatRoomId(uid, followId);
-        List<dynamic> userTimes = [UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
-          UserTime(uid: followId, time: DateTime.now().toString()).toJson()];
+        List<dynamic> userTimes = [
+          UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
+          UserTime(uid: followId, time: DateTime.now().toString()).toJson()
+        ];
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,
           "userTimes": userTimes
         };
-        await FirebaseApi()
-            .sendPushMessage('Bạn có một tương hợp mới', 'Binder', token);
+        await FirebaseApi().sendPushMessage(
+            title: 'Match',
+            uid: uid,
+            type: 'match',
+            body: 'Bạn có một tương hợp mới nhớ kiểm tra',
+            avatar: '',
+            token: token);
         await DatabaseMethods().addChatRoom(chatRoom, chatRoomId);
       }
 
@@ -274,5 +276,4 @@ class BinderWatch extends ChangeNotifier {
 
     resetPosition();
   }
-
 }

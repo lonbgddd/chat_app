@@ -1,12 +1,9 @@
 import 'package:chat_app/config/firebase/firebase_api.dart';
-import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../config/data_mothes.dart';
-import '../../../../model/chat_user.dart';
 import '../models/chat_message_model.dart';
 import '../models/chat_room_model.dart';
-import '../models/user_time_model.dart';
 
 class ChatRoomService {
   const ChatRoomService();
@@ -60,7 +57,13 @@ class ChatRoomService {
         .collection("chats")
         .add(message.toJson())
         .then((_) {
-      FirebaseApi().sendPushMessage(message.messageText!, 'Tin nhắn', token);
+      FirebaseApi().sendPushMessage(
+          title: message.messageText ?? "",
+          uid: uid,
+          type: 'chat',
+          body: message.messageText ?? "",
+          avatar: '',
+          token: token);
     }).catchError((e) {
       print(e.toString());
     });
@@ -92,8 +95,8 @@ class ChatRoomService {
           .doc(chatRoomId)
           .snapshots()
           .map((documentSnapshot) {
-            return ChatRoomModel.fromJson(documentSnapshot.data()!);
-          });
+        return ChatRoomModel.fromJson(documentSnapshot.data()!);
+      });
     } catch (e) {
       throw Exception('$e');
     }

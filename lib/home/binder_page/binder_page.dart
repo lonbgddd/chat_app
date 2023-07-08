@@ -1,5 +1,4 @@
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
-import 'package:chat_app/features/message/data/models/user_model.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +9,6 @@ import 'package:provider/provider.dart';
 
 import '../../config/changedNotify/profile_watch.dart';
 import '../../config/helpers/app_assets.dart';
-import '../../config/helpers/helpers_database.dart';
 import 'compnents/discovery_setting.dart';
 
 class BinderPage extends StatefulWidget {
@@ -20,7 +18,11 @@ class BinderPage extends StatefulWidget {
   State<BinderPage> createState() => _BinderPageState();
 }
 
-class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateMixin{
+class _BinderPageState extends State<BinderPage>
+    with SingleTickerProviderStateMixin {
+  late Animation _animation;
+  late AnimationController _animationController;
+  var listRadius = [50.0, 100.0, 150.0, 200.0];
   bool isRefresh = false;
   bool hasNotification = true;
 
@@ -76,8 +78,6 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
       //   provider.updatePositionUser(position);
       // });
     });
-
-
   }
 
   @override
@@ -85,15 +85,13 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
     super.didChangeDependencies();
     if (isRefresh) {
       final provider = context.read<BinderWatch>();
-      provider.allUserBinder(context,provider.selectedOption, provider.currentAgeValue,
+      provider.allUserBinder(provider.selectedOption, provider.currentAgeValue,
           provider.showPeopleInRangeDistance, provider.distancePreference);
       setState(() {
         isRefresh = false;
       });
-
     }
   }
-
 
   @override
   void dispose() {
@@ -134,12 +132,11 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
             child: Stack(
               children: [
                 IconButton(
-                  onPressed: () =>
-                      // context.go('/home/notification-page')
-                      showMatchDialog(context,
-                          avatar:
-                              "https://th.bing.com/th/id/R.a09840b729ea09d72cacd38ed1101662?rik=F1t%2bhCJtqq9b7Q&pid=ImgRaw&r=0",
-                          name: "Long"),
+                  onPressed: () => context.go('/home/notification-page'),
+                  // showMatchDialog(context,
+                  //     avatar:
+                  //         "https://th.bing.com/th/id/R.a09840b729ea09d72cacd38ed1101662?rik=F1t%2bhCJtqq9b7Q&pid=ImgRaw&r=0",
+                  //     name: "Long"),
                   icon: const Icon(
                     Icons.notifications,
                     color: Colors.grey,
@@ -183,28 +180,43 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
         ],
       ),
       backgroundColor: Colors.white,
-      body: getBody(context,provider.selectedOption, provider.currentAgeValue,
+      body: getBody(context, provider.selectedOption, provider.currentAgeValue,
           provider.showPeopleInRangeDistance, provider.distancePreference),
     );
   }
 
-  Widget getBody(BuildContext context, String gender, List<double> age, bool isInDistanceRange, double kilometres) {
+  Widget getBody(BuildContext context, String gender, List<double> age,
+      bool isInDistanceRange, double kilometres) {
     return FutureBuilder(
-      future: context.read<BinderWatch>().allUserBinder(context, gender, age, isInDistanceRange, kilometres),
+      future: context
+          .read<BinderWatch>()
+          .allUserBinder(gender, age, isInDistanceRange, kilometres),
       builder: (context, snapshot) => snapshot.hasData
           ? Padding(
               padding: const EdgeInsets.all(10),
               child: Stack(
                   alignment: Alignment.center,
-                  children: context.watch<BinderWatch>().listCard.reversed.map((e) => ProfileCard(
+                  children: context
+                      .watch<BinderWatch>()
+                      .listCard
+                      .reversed
+                      .map((e) => ProfileCard(
                             targetUser: e,
-                            isDetail: () => context.goNamed('home-detail-others',
-                            queryParameters: {'uid': e.uid.toString(),}),
-                            onHighlight: () => context.goNamed('home-highlight-page',
-                              queryParameters: {
-                              'currentUserID': context.read<ProfileWatch>().currentUser.uid.toString(),
-                              'targetUserID': e.uid.toString(),
-                              }),
+                            isDetail: () => context.goNamed(
+                                'home-detail-others',
+                                queryParameters: {
+                                  'uid': e.uid.toString(),
+                                }),
+                            onHighlight: () => context.goNamed(
+                                'home-highlight-page',
+                                queryParameters: {
+                                  'currentUserID': context
+                                      .read<ProfileWatch>()
+                                      .currentUser
+                                      .uid
+                                      .toString(),
+                                  'targetUserID': e.uid.toString(),
+                                }),
                             isFont:
                                 context.watch<BinderWatch>().listCard.first ==
                                     e,
@@ -265,5 +277,4 @@ class _BinderPageState extends State<BinderPage> with SingleTickerProviderStateM
       },
     );
   }
-
 }

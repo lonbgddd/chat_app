@@ -1,11 +1,7 @@
 import 'package:chat_app/Auth/login_phone_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
-import 'package:chat_app/home/binder_page/highlight_page.dart';
 import 'package:chat_app/home/binder_page/compnents/show_me.dart';
-import 'package:chat_app/home/home.dart';
-import 'package:chat_app/home/message/search_Message.dart';
-import 'package:chat_app/home/profile/detail_profile_others.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/profile/update_profile_screen.dart';
 import 'package:chat_app/location/location_screen.dart';
@@ -13,6 +9,11 @@ import 'package:chat_app/welcom/welcom.dart';
 import 'package:go_router/go_router.dart';
 
 import '../Auth/login_home_screen.dart';
+import '../home/binder_page/highlight_page.dart';
+import '../home/home.dart';
+import '../home/message/search_Message.dart';
+import '../home/notification/notification_screen.dart';
+import '../home/profile/detail_profile_others.dart';
 
 final GoRouter router = GoRouter(routes: [
   GoRoute(
@@ -22,6 +23,10 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
           path: 'update-avatar',
           builder: (context, state) => const UpdateAvatarScreen(),
+        ),
+        GoRoute(
+          path: 'notification-page',
+          builder: (context, state) => const NotificationScreen(),
         ),
         GoRoute(
           path: 'update-profile',
@@ -41,8 +46,8 @@ final GoRouter router = GoRouter(routes: [
           path: 'highlight-page',
           name: 'home-highlight-page',
           builder: (context, state) => HighlightScreen(
-            currentUserID:  state.queryParameters['currentUserID'],
-            targetUserID:  state.queryParameters['targetUserID'],
+            currentUserID: state.queryParameters['currentUserID'],
+            targetUserID: state.queryParameters['targetUserID'],
           ),
         ),
         GoRoute(
@@ -59,9 +64,9 @@ final GoRouter router = GoRouter(routes: [
             builder: (context, state) => LocationScreen()),
       ]),
   GoRoute(
-      path: '/',
-      builder: (context, state) => const WelcomeScreen(),
-    ),
+    path: '/',
+    builder: (context, state) => const WelcomeScreen(),
+  ),
   GoRoute(
       path: '/login-home-screen',
       builder: (context, state) => const HomeScreenLogin(),
@@ -69,7 +74,6 @@ final GoRouter router = GoRouter(routes: [
         GoRoute(
             path: 'confirm-screen',
             builder: (context, state) => const ConfirmProfile()),
-
         GoRoute(
             path: 'loginPhone',
             builder: (context, state) => LoginWithPhoneNumber(),
@@ -78,6 +82,4 @@ final GoRouter router = GoRouter(routes: [
                   path: 'verify_otp', builder: (context, state) => VerifyOTP()),
             ]),
       ])
-
-
 ]);

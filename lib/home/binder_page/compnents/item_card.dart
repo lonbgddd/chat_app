@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'package:chat_app/config/changedNotify/binder_watch.dart';
-import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/home/binder_page/compnents/photo_item_card.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -10,16 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../config/changedNotify/highlight_user_watch.dart';
+import '../../../config/changedNotify/binder_watch.dart';
+import '../../../config/helpers/app_assets.dart';
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key, this.targetUser, this.isDetail, this.isFont, this.onHighlight})
+  const ProfileCard(
+      {Key? key, this.targetUser, this.isDetail, this.isFont, this.onHighlight})
       : super(key: key);
   final UserModel? targetUser;
   final bool? isFont;
   final Function()? isDetail;
   final Function()? onHighlight;
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,60 +32,109 @@ class ProfileCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Stack(
-        children:[
-          SizedBox.expand(child: isFont! ? buildCard(context) : cardProfile(context)),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 8),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  buildFloatingButton(width: 40,height: 40,padding: 10,
-                      icon: SvgPicture.asset(AppAssets.iconLoop, fit: BoxFit.contain,),
-                      colorBg: Colors.transparent,colorBorder: const Color.fromRGBO(243, 214, 119, 1),
-                      onTap: () {}),
-
-                  buildFloatingButton(width:55,height: 55,padding: 15,
-                      icon: SvgPicture.asset(AppAssets.iconDelete, fit: BoxFit.contain, color: Provider.of<BinderWatch>(context).getStatus() == StatusCard.dislike ? Colors.white : Colors.redAccent,),
-                      colorBg: Provider.of<BinderWatch>(context).getStatus() == StatusCard.dislike ? Colors.red : Colors.transparent,
-                      colorBorder: Provider.of<BinderWatch>(context).getStatus() == StatusCard.dislike ? Colors.white : Colors.red,
-                      onTap: () => Provider.of<BinderWatch>(context, listen: false).disLike()),
-
-                  buildFloatingButton(width:40,height: 40,padding: 10,
-                      icon: SvgPicture.asset(AppAssets.iconStar, fit: BoxFit.contain,),
-                      colorBg: Colors.transparent,colorBorder: const Color.fromRGBO(98, 186, 243, 1),
-                      onTap: () {}),
-
-                  buildFloatingButton(width:55, height: 55,padding: 15,
-                      icon: SvgPicture.asset(AppAssets.iconHeart, fit: BoxFit.contain, color: Provider.of<BinderWatch>(context).getStatus() == StatusCard.like ? Colors.white : Color.fromRGBO(109, 229, 181, 1),),
-                      colorBg:  Provider.of<BinderWatch>(context).getStatus() == StatusCard.like ? const Color.fromRGBO(109, 229, 181, 1) : Colors.transparent,
-                      colorBorder: Provider.of<BinderWatch>(context).getStatus() == StatusCard.like ? Colors.white : const Color.fromRGBO(109, 229, 181, 1),
-                      onTap: () => Provider.of<BinderWatch>(context).like()),
-
-                  buildFloatingButton(width:40,height: 40,padding: 10,
-                    icon: SvgPicture.asset(AppAssets.iconLightning, fit: BoxFit.contain,),
-                    colorBg: Colors.transparent,
-                    colorBorder: const Color.fromRGBO(170, 84, 234, 1),
-                    onTap: onHighlight,
-                  ),
-
-                ],
+      child: Stack(children: [
+        SizedBox.expand(
+            child: isFont! ? buildCard(context) : cardProfile(context)),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 8),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
               ),
             ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buildFloatingButton(
+                    width: 40,
+                    height: 40,
+                    padding: 10,
+                    icon: SvgPicture.asset(
+                      AppAssets.iconLoop,
+                      fit: BoxFit.contain,
+                    ),
+                    colorBg: Colors.transparent,
+                    colorBorder: const Color.fromRGBO(243, 214, 119, 1),
+                    onTap: () {}),
+                buildFloatingButton(
+                    width: 55,
+                    height: 55,
+                    padding: 15,
+                    icon: SvgPicture.asset(
+                      AppAssets.iconDelete,
+                      fit: BoxFit.contain,
+                      color: Provider.of<BinderWatch>(context).getStatus() ==
+                              StatusCard.dislike
+                          ? Colors.white
+                          : Colors.redAccent,
+                    ),
+                    colorBg: Provider.of<BinderWatch>(context).getStatus() ==
+                            StatusCard.dislike
+                        ? Colors.red
+                        : Colors.transparent,
+                    colorBorder:
+                        Provider.of<BinderWatch>(context).getStatus() ==
+                                StatusCard.dislike
+                            ? Colors.white
+                            : Colors.red,
+                    onTap: () =>
+                        Provider.of<BinderWatch>(context, listen: false)
+                            .disLike()),
+                buildFloatingButton(
+                    width: 40,
+                    height: 40,
+                    padding: 10,
+                    icon: SvgPicture.asset(
+                      AppAssets.iconStar,
+                      fit: BoxFit.contain,
+                    ),
+                    colorBg: Colors.transparent,
+                    colorBorder: const Color.fromRGBO(98, 186, 243, 1),
+                    onTap: () {}),
+                buildFloatingButton(
+                    width: 55,
+                    height: 55,
+                    padding: 15,
+                    icon: SvgPicture.asset(
+                      AppAssets.iconHeart,
+                      fit: BoxFit.contain,
+                      color: Provider.of<BinderWatch>(context).getStatus() ==
+                              StatusCard.like
+                          ? Colors.white
+                          : Color.fromRGBO(109, 229, 181, 1),
+                    ),
+                    colorBg: Provider.of<BinderWatch>(context).getStatus() ==
+                            StatusCard.like
+                        ? const Color.fromRGBO(109, 229, 181, 1)
+                        : Colors.transparent,
+                    colorBorder:
+                        Provider.of<BinderWatch>(context).getStatus() ==
+                                StatusCard.like
+                            ? Colors.white
+                            : const Color.fromRGBO(109, 229, 181, 1),
+                    onTap: () => Provider.of<BinderWatch>(context).like()),
+                buildFloatingButton(
+                  width: 40,
+                  height: 40,
+                  padding: 10,
+                  icon: SvgPicture.asset(
+                    AppAssets.iconLightning,
+                    fit: BoxFit.contain,
+                  ),
+                  colorBg: Colors.transparent,
+                  colorBorder: const Color.fromRGBO(170, 84, 234, 1),
+                  onTap: onHighlight,
+                ),
+              ],
+            ),
           ),
-
-        ]
-      ),
+        ),
+      ]),
     );
   }
 
@@ -124,7 +171,6 @@ class ProfileCard extends StatelessWidget {
                 cardProfile(context),
                 buildStamps(context),
               ],
-
             ),
           );
         }),
@@ -134,23 +180,27 @@ class ProfileCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Stack(
-                  children:[
-                    PhotoGallery(
-                      targetUser: targetUser!,
-                      photoList: targetUser!.photoList,
-                      isDetail: isDetail,
-                      scrollPhysics: const NeverScrollableScrollPhysics(),
-                      isShowInfo: true,
-                    ),
-                  ]
-                ),
+            child: Stack(children: [
+              PhotoGallery(
+                targetUser: targetUser!,
+                photoList: targetUser!.photoList,
+                isDetail: isDetail,
+                scrollPhysics: const NeverScrollableScrollPhysics(),
+                isShowInfo: true,
+              ),
+            ]),
           ),
         ],
       );
 
-  Widget buildFloatingButton({required double width,required double height,required double padding,
-    required SvgPicture icon, required Color colorBg,required Color colorBorder,required onTap}) {
+  Widget buildFloatingButton(
+      {required double width,
+      required double height,
+      required double padding,
+      required SvgPicture icon,
+      required Color colorBg,
+      required Color colorBorder,
+      required onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(

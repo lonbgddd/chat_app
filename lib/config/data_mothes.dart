@@ -10,7 +10,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
-import '../features/message/data/models/user_time_model.dart';
 import '../model/user_time.dart';
 
 class DatabaseMethods {
@@ -79,8 +78,11 @@ class DatabaseMethods {
     }).toList();
   }
 
-  Future<List<UserModel>> getUserHasFilterKm(String uid, String? gender, List<double> age, double kilometres) async {
-    Query query = FirebaseFirestore.instance.collection('users').where('uid', whereNotIn: [uid]);
+  Future<List<UserModel>> getUserHasFilterKm(
+      String uid, String? gender, List<double> age, double kilometres) async {
+    Query query = FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', whereNotIn: [uid]);
     QuerySnapshot snapshot;
 
     if (gender != 'Mọi người') {
@@ -92,8 +94,8 @@ class DatabaseMethods {
       snapshot = await query.get();
       final List<UserModel> userModals = [];
 
-
-      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
       if (userSnapshot.exists) {
         final userData = userSnapshot.data() as Map<String, dynamic>;
         final userPosition = userData['position'];
@@ -117,11 +119,14 @@ class DatabaseMethods {
             userPositionLongitude,
           );
 
-          print('${userData['fullName'].toString()} is ${distance.round()}km away');
+          print(
+              '${userData['fullName'].toString()} is ${distance.round()}km away');
           if (distance.round() <= kilometres) {
             print("${distance.round()} < $kilometres");
-            print('${userData['fullName'].toString()} is $userAge >= ${age.first} && <= ${age.last}');
-            if ((userAge >= age.first - 1 && userAge <= age.last) || age.first == userAge) {
+            print(
+                '${userData['fullName'].toString()} is $userAge >= ${age.first} && <= ${age.last}');
+            if ((userAge >= age.first - 1 && userAge <= age.last) ||
+                age.first == userAge) {
               final userModal = UserModel.fromJson(userData);
               userModals.add(userModal);
             }
@@ -227,14 +232,20 @@ class DatabaseMethods {
 
   Future<void> addMessage(
       String chatRoomId, ChatMessage chatMessageData, String token) async {
+    String uid = HelpersFunctions().getUserIdUserSharedPreference().toString();
     await FirebaseFirestore.instance
         .collection("chatRoom")
         .doc(chatRoomId)
         .collection("chats")
         .add(chatMessageData.toJson())
         .then((_) {
-      FirebaseApi()
-          .sendPushMessage(chatMessageData.messageText, 'Tin nhắn', token);
+      FirebaseApi().sendPushMessage(
+          title: chatMessageData.messageText,
+          uid: uid,
+          type: 'chat',
+          body: chatMessageData.messageText,
+          avatar: '',
+          token: token);
     }).catchError((e) {
       print(e.toString());
     });
@@ -281,7 +292,6 @@ class DatabaseMethods {
       throw Exception(e);
     }
   }
-
 
   Future updateAvatar(String avatar, String uid) async {
     try {
@@ -410,42 +420,49 @@ class DatabaseMethods {
   double _toRadians(double degree) {
     return degree * pi / 180;
   }
-  Future<void> updateUserTime(String uid, String chatRoomId,String time) async {
+
+  Future<void> updateUserTime(
+      String uid, String chatRoomId, String time) async {
     try {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection("chatRoom").doc(chatRoomId).get();
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection("chatRoom")
+          .doc(chatRoomId)
+          .get();
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
         List<dynamic> userTimes = data['userTimes'];
         List<dynamic> list = [];
-        for(dynamic index in userTimes){
+        for (dynamic index in userTimes) {
           UserTime userTime = UserTime.fromJson(index);
-          if(userTime.uid == uid){
-            Map<String, dynamic> myObject = {'uid': uid,'time': time};
+          if (userTime.uid == uid) {
+            Map<String, dynamic> myObject = {'uid': uid, 'time': time};
             list.add(myObject);
-          }else{
+          } else {
             list.add(index);
           }
         }
         await FirebaseFirestore.instance
             .collection("chatRoom")
             .doc(chatRoomId)
-            .update({
-          "userTimes": list
-        });
+            .update({"userTimes": list});
       }
     } catch (e) {
       throw Exception(e);
     }
   }
+
   Future<String> getUserTime(String uid, String chatRoomId) async {
     try {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection("chatRoom").doc(chatRoomId).get();
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection("chatRoom")
+          .doc(chatRoomId)
+          .get();
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
         List<dynamic> userTimes = data['userTimes'];
-        for(dynamic index in userTimes){
+        for (dynamic index in userTimes) {
           UserTime userTime = UserTime.fromJson(index);
-          if(userTime.uid == uid){
+          if (userTime.uid == uid) {
             return userTime.time;
           }
         }
@@ -456,7 +473,7 @@ class DatabaseMethods {
     }
   }
 
-  Future updateAddressUser(String uid,String address) async {
+  Future updateAddressUser(String uid, String address) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')

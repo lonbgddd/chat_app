@@ -4,13 +4,14 @@ import 'package:chat_app/config/firebase/key.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:geocoding/geocoding.dart';
 
 class FirebaseApi {
   static bool enablePermission = false;
-  static String address ='';
+  static String address = '';
+
   Future<void> permissionKey() async {
     final _message = FirebaseMessaging.instance;
     String? token = await _message.getToken();
@@ -19,6 +20,7 @@ class FirebaseApi {
       print('Registration Token=$token');
     }
   }
+
   // Future<String?> checkPermissionLocation() async {
   //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   //   if (!serviceEnabled) {
@@ -55,8 +57,8 @@ class FirebaseApi {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position.latitude, position.longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
       Placemark placemark = placemarks[0];
       if (placemark.subThoroughfare != null) {
         address += '${placemark.subThoroughfare}, ';
@@ -65,10 +67,10 @@ class FirebaseApi {
         address += '${placemark.thoroughfare}, ';
       }
       if (placemark.subAdministrativeArea != null) {
-        address += '${placemark.subAdministrativeArea }, ';
+        address += '${placemark.subAdministrativeArea}, ';
       }
       if (placemark.administrativeArea != null) {
-        address += '${placemark.administrativeArea }, ';
+        address += '${placemark.administrativeArea}, ';
       }
       if (placemark.country != null) {
         address += '${placemark.country}';
@@ -76,7 +78,6 @@ class FirebaseApi {
       print('Địa chỉ: $placemark');
     }
   }
-
 
   Future checkPermissionNotification() async {
     final messaging = FirebaseMessaging.instance;
@@ -95,7 +96,13 @@ class FirebaseApi {
     }
   }
 
-  Future<void> sendPushMessage(String body, String title, String token) async {
+  Future<void> sendPushMessage(
+      {required String body,
+      required String title,
+      required String token,
+      required String uid,
+      required String type,
+      required String avatar}) async {
     try {
       await http.post(
         Uri.parse(API_KEY),
@@ -112,8 +119,10 @@ class FirebaseApi {
             'priority': 'high',
             'data': <String, dynamic>{
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'id': '1',
-              'status': 'done'
+              'uid': uid,
+              'type': type,
+              'avatar': avatar,
+              'status': 'false'
             },
             "to": token,
           },

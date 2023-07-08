@@ -9,8 +9,8 @@ import 'package:chat_app/config/changedNotify/highlight_user_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
-import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/location_provider.dart';
+import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
 // import 'package:chat_app/config/changedNotify/notification_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
@@ -25,6 +25,7 @@ import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
+import 'package:chat_app/home/notification/notification_screen.dart';
 // import 'package:chat_app/home/notification/notification_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/home/profile/update_avatar.dart';
@@ -32,7 +33,6 @@ import 'package:chat_app/injection_container.dart';
 import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/router/router.dart';
 import 'package:chat_app/welcom/welcom.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -42,6 +42,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'Auth/login_phone_screen.dart';
+import 'config/changedNotify/notification_watch.dart';
 import 'firebase_options.dart';
 import 'home/message/detail_message.dart';
 import 'home/message/search_Message.dart';
@@ -51,7 +52,17 @@ import 'home/profile/update_profile_screen.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
-  // showFlutterNotification(message);
+  showFlutterNotification(message);
+}
+
+void setupFirebaseMessaging() {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('Received message: ${message.notification?.title}');
+    // Xử lý thông báo ở đây
+    // Ví dụ: Hiển thị thông báo local, cập nhật UI, vv.
+  });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
 
 late AndroidNotificationChannel channel;
@@ -114,14 +125,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  setupFirebaseMessaging();
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
-  final messaging = FirebaseMessaging.instance;
-
-  final settings = await messaging.requestPermission(
+  FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
@@ -131,12 +140,6 @@ Future<void> main() async {
     sound: true,
   );
 
-  if (kDebugMode) {
-    print('Permission granted: ${settings.authorizationStatus}');
-  }
-  await FirebaseAppCheck.instance.activate(
-    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-  );
   await FirebaseApi().permissionKey();
   await FirebaseApi().checkPermissionLocation();
   await FirebaseApi().checkPermissionNotification();
@@ -204,6 +207,10 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => CallDataProvider(),
         child: const WelcomeScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => NotificationWatch(),
+        child: const NotificationScreen(),
       ),
       ChangeNotifierProvider(
         create: (context) => SearchMessageProvider(),
