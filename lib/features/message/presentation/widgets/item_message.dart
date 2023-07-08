@@ -3,6 +3,7 @@ import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../bloc/detail_message/detail_message_bloc.dart';
 import 'detail_Message.dart';
 
@@ -19,25 +20,13 @@ class MyItemMessage extends StatelessWidget {
           buildWhen: (previous, current) => current is! ChatItemActionState,
           listener: (context, state) {
             if (state is ChatItemClicked) {
-              showModalBottomSheet(
-                  isScrollControlled: true,
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  builder: (BuildContext context) {
-                    return BlocProvider<DetailMessageBloc>(
-                        create: (context) {
-                          return sl()..add(GetMessageList(uid!,chatRoomId!,false));
-                          },
-                        child: SizedBox(
-                            height: MediaQuery.of(context).size.height* 0.95,
-                            child: DetailMessage(
-                              uid: uid,
-                              chatRoomId: chatRoomId,
-                              name: state.user.fullName,
-                              avatar: state.user.avatar,
-                              token: state.user.token,
-                            )));
-                  });
+              context.goNamed('detail-message',queryParameters: {
+                'uid': uid,
+                'chatRoomId':chatRoomId,
+                'name': state.user.fullName,
+                'avatar': state.user.avatar,
+                'token': state.user.token
+              });
               BlocProvider.of<ChatItemBloc>(context)
                   .add(GetChatItem(uid!, chatRoomId!));
             }

@@ -5,14 +5,18 @@ import 'package:chat_app/home/binder_page/compnents/show_me.dart';
 import 'package:chat_app/home/profile/update_profile_screen.dart';
 import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../Auth/login_home_screen.dart';
+import '../features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
+import '../features/message/presentation/widgets/detail_message.dart';
 import '../home/binder_page/highlight_page.dart';
 import '../home/home.dart';
-import '../home/message/search_Message.dart';
+import '../features/message/presentation/screens/search_Message.dart';
 import '../home/notification/notification_screen.dart';
 import '../home/profile/detail_profile_others.dart';
+import '../injection_container.dart';
 
 final GoRouter router = GoRouter(routes: [
   GoRoute(
@@ -45,8 +49,26 @@ final GoRouter router = GoRouter(routes: [
         ),
         GoRoute(
           path: 'search-message',
+          name: 'search-message',
           builder: (context, state) => SearchMessage(),
         ),
+        GoRoute(
+            path: 'detail-message',
+            name: 'detail-message',
+            builder: (context, state) => BlocProvider<DetailMessageBloc>(
+                  create: (context) {
+                    return sl()
+                      ..add(GetMessageList(state.queryParameters['uid']!,
+                          state.queryParameters['chatRoomId']!, false));
+                  },
+                  child: DetailMessage(
+                    uid: state.queryParameters['uid'],
+                    chatRoomId: state.queryParameters['chatRoomId'],
+                    name: state.queryParameters['name'],
+                    avatar: state.queryParameters['avatar'],
+                    token: state.queryParameters['token'],
+                  ),
+                )),
         GoRoute(
           path: 'show-me',
           builder: (context, state) => ShowMe(),
