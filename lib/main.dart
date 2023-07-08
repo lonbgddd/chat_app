@@ -26,9 +26,7 @@ import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
 import 'package:chat_app/home/notification/notification_screen.dart';
-// import 'package:chat_app/home/notification/notification_screen.dart';
 import 'package:chat_app/home/profile/profile.dart';
-import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/router/router.dart';
@@ -189,10 +187,6 @@ Future<void> main() async {
         child: const BinderPage(),
       ),
       ChangeNotifierProvider(
-        create: (context) => UpdateNotify(),
-        child: const UpdateAvatarScreen(),
-      ),
-      ChangeNotifierProvider(
         create: (context) => HomeNotify(),
         child: const DetailMessage(),
       ),
@@ -233,9 +227,17 @@ Future<void> main() async {
       //   create: (context) => sl(),
       //   child: MyItemMessage(),
       // ),
+      BlocProvider<MessageBloc>(
+        create: (context) => sl()..add(const GetChatRooms()),
+        child: const MyMessageScreen(),
+      ),
       ChangeNotifierProvider(
         create: (context) => LocationProvider(),
         child: LocationScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => UpdateNotify(),
+        child: const UpdateProfileScreen(),
       ),
     ],
     child: const MyApp(),

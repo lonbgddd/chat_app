@@ -9,13 +9,6 @@ import 'package:flutter/cupertino.dart';
 import '../../model/user_model.dart';
 
 class FollowNotify extends ChangeNotifier {
-  final StreamController<List<Map<UserModel, ChatRoom?>>>
-      _userFollowYouController =
-      StreamController<List<Map<UserModel, ChatRoom?>>>.broadcast();
-
-  Stream<List<Map<UserModel, ChatRoom?>>> get userFollowYouStream =>
-      _userFollowYouController.stream;
-
   Future<List<UserModel>> userFollowYou() async {
     try {
       String uid =
@@ -23,7 +16,6 @@ class FollowNotify extends ChangeNotifier {
       List<UserModel> userFollow = await DatabaseMethods().getUserFollow(uid);
       notifyListeners();
       return userFollow;
-      // _userFollowYouController.add(result);
     } catch (e) {
       throw Exception(e);
     }

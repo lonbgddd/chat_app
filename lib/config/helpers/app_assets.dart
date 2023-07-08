@@ -33,6 +33,19 @@ class AppAssets {
   static const String emojiWavingHand = iconPath + 'emoji-waving-hand.png';
   static const String emojiWine = iconPath + 'emoji-wine.png';
 
+  static const String iconZodiac = iconPath + 'moon.png';
+  static const String iconAcademicLevel = iconPath + 'education.png';
+  static const String iconFamilyStyle = iconPath + 'pram.png';
+  static const String iconPersonalityType = iconPath + 'puzzle.png';
+  static const String iconCommunicateStyle = iconPath + 'gossip.png';
+  static const String iconLanguageOfLove = iconPath + 'love.png';
 
+  static const String iconMyPets = iconPath + 'track.png';
+  static const String iconDrinkingStatus = iconPath + 'cheers.png';
+  static const String iconSmokingStatus = iconPath + 'cigarrete.png';
+  static const String iconSportStatus = iconPath + 'weight.png';
+  static const String iconEatingStatus = iconPath + 'pizza.png';
+  static const String iconSocialNetworkStatus = iconPath + 'social-media.png';
+  static const String iconSleepingHabits = iconPath + 'sleep.png';
 
 }
