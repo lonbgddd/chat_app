@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
+import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/home/binder_page/compnents/photo_item_card.dart';
@@ -9,17 +10,85 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../config/changedNotify/highlight_user_watch.dart';
+
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key, this.user, this.isDetail, this.isFont})
+  const ProfileCard({Key? key, this.targetUser, this.isDetail, this.isFont, this.onHighlight})
       : super(key: key);
-  final UserModel? user;
+  final UserModel? targetUser;
   final bool? isFont;
   final Function()? isDetail;
+  final Function()? onHighlight;
+
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-        child: isFont! ? buildCard(context) : cardProfile(context));
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade200,
+            spreadRadius: 3,
+            blurRadius: 10,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Stack(
+        children:[
+          SizedBox.expand(child: isFont! ? buildCard(context) : cardProfile(context)),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 8),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  buildFloatingButton(width: 40,height: 40,padding: 10,
+                      icon: SvgPicture.asset(AppAssets.iconLoop, fit: BoxFit.contain,),
+                      colorBg: Colors.transparent,colorBorder: const Color.fromRGBO(243, 214, 119, 1),
+                      onTap: () {}),
+
+                  buildFloatingButton(width:55,height: 55,padding: 15,
+                      icon: SvgPicture.asset(AppAssets.iconDelete, fit: BoxFit.contain, color: Provider.of<BinderWatch>(context).getStatus() == StatusCard.dislike ? Colors.white : Colors.redAccent,),
+                      colorBg: Provider.of<BinderWatch>(context).getStatus() == StatusCard.dislike ? Colors.red : Colors.transparent,
+                      colorBorder: Provider.of<BinderWatch>(context).getStatus() == StatusCard.dislike ? Colors.white : Colors.red,
+                      onTap: () => Provider.of<BinderWatch>(context, listen: false).disLike()),
+
+                  buildFloatingButton(width:40,height: 40,padding: 10,
+                      icon: SvgPicture.asset(AppAssets.iconStar, fit: BoxFit.contain,),
+                      colorBg: Colors.transparent,colorBorder: const Color.fromRGBO(98, 186, 243, 1),
+                      onTap: () {}),
+
+                  buildFloatingButton(width:55, height: 55,padding: 15,
+                      icon: SvgPicture.asset(AppAssets.iconHeart, fit: BoxFit.contain, color: Provider.of<BinderWatch>(context).getStatus() == StatusCard.like ? Colors.white : Color.fromRGBO(109, 229, 181, 1),),
+                      colorBg:  Provider.of<BinderWatch>(context).getStatus() == StatusCard.like ? const Color.fromRGBO(109, 229, 181, 1) : Colors.transparent,
+                      colorBorder: Provider.of<BinderWatch>(context).getStatus() == StatusCard.like ? Colors.white : const Color.fromRGBO(109, 229, 181, 1),
+                      onTap: () => Provider.of<BinderWatch>(context).like()),
+
+                  buildFloatingButton(width:40,height: 40,padding: 10,
+                    icon: SvgPicture.asset(AppAssets.iconLightning, fit: BoxFit.contain,),
+                    colorBg: Colors.transparent,
+                    colorBorder: const Color.fromRGBO(170, 84, 234, 1),
+                    onTap: onHighlight,
+                  ),
+
+                ],
+              ),
+            ),
+          ),
+
+        ]
+      ),
+    );
   }
 
   Widget buildCard(context) => GestureDetector(
@@ -38,7 +107,7 @@ class ProfileCard extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constraints) {
           final provider = Provider.of<BinderWatch>(context);
           final position = provider.position;
-          final minilis = provider.isDragging ? 0 : 400;
+          final milliseconds = provider.isDragging ? 0 : 600;
           final center = constraints.smallest.center(Offset.zero);
           final angle = provider.angle * pi / 180;
           final rotatedMatrix = Matrix4.identity()
@@ -49,9 +118,13 @@ class ProfileCard extends StatelessWidget {
           return AnimatedContainer(
             curve: Curves.easeInOut,
             transform: rotatedMatrix..translate(position.dx, position.dy),
-            duration: Duration(microseconds: minilis),
+            duration: Duration(milliseconds: milliseconds),
             child: Stack(
-              children: [cardProfile(context), buildStamps(context)],
+              children: [
+                cardProfile(context),
+                buildStamps(context),
+              ],
+
             ),
           );
         }),
@@ -59,251 +132,25 @@ class ProfileCard extends StatelessWidget {
 
   cardProfile(BuildContext context) => Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.shade300,
-                  spreadRadius: 3,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: (user!.photoList.length != 0)
-                  ? PhotoGallery(
-                      photoList: user!.photoList,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Stack(
+                  children:[
+                    PhotoGallery(
+                      targetUser: targetUser!,
+                      photoList: targetUser!.photoList,
+                      isDetail: isDetail,
                       scrollPhysics: const NeverScrollableScrollPhysics(),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(user?.avatar ??
-                              'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      isShowInfo: true,
                     ),
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 3.5,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
+                  ]
                 ),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Colors.black.withOpacity(1)],
-                  stops: const [0.25, 1],
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              (user!.activeStatus.toString().contains('online'))
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromRGBO(
-                                            109, 229, 181, 1),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: const Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 4.0, horizontal: 10),
-                                        child: Text(
-                                          'Đang hoạt động',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: Text(
-                                      user!.fullName,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      (DateTime.now().year -
-                                              int.parse(user!.birthday
-                                                  .substring(0, 4)))
-                                          .toString(),
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                user?.introduceYourself ?? "",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: isDetail,
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            padding: const EdgeInsets.all(8),
-                            child: Image.asset(AppAssets.iconArrowUp),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        buildFloatingButton(
-                            40,
-                            40,
-                            10,
-                            SvgPicture.asset(
-                              AppAssets.iconLoop,
-                              fit: BoxFit.contain,
-                            ),
-                            Colors.transparent,
-                            const Color.fromRGBO(243, 214, 119, 1),
-                            () {}),
-                        buildFloatingButton(
-                            55,
-                            55,
-                            15,
-                            SvgPicture.asset(
-                              AppAssets.iconDelete,
-                              fit: BoxFit.contain,
-                              color: Provider.of<BinderWatch>(context)
-                                          .getStatus() ==
-                                      StatusCard.dislike
-                                  ? Colors.white
-                                  : Colors.redAccent,
-                            ),
-                            Provider.of<BinderWatch>(context).getStatus() ==
-                                    StatusCard.dislike
-                                ? Colors.red
-                                : Colors.transparent,
-                            Provider.of<BinderWatch>(context).getStatus() ==
-                                    StatusCard.dislike
-                                ? Colors.white
-                                : Colors.red,
-                            () =>
-                                Provider.of<BinderWatch>(context, listen: false)
-                                    .disLike()),
-                        buildFloatingButton(
-                            40,
-                            40,
-                            10,
-                            SvgPicture.asset(
-                              AppAssets.iconStar,
-                              fit: BoxFit.contain,
-                            ),
-                            Colors.transparent,
-                            const Color.fromRGBO(98, 186, 243, 1),
-                            () {}),
-                        buildFloatingButton(
-                            55,
-                            55,
-                            15,
-                            SvgPicture.asset(
-                              AppAssets.iconHeart,
-                              fit: BoxFit.contain,
-                              color: Provider.of<BinderWatch>(context)
-                                          .getStatus() ==
-                                      StatusCard.like
-                                  ? Colors.white
-                                  : const Color.fromRGBO(109, 229, 181, 1),
-                            ),
-                            Provider.of<BinderWatch>(context).getStatus() ==
-                                    StatusCard.like
-                                ? const Color.fromRGBO(109, 229, 181, 1)
-                                : Colors.transparent,
-                            Provider.of<BinderWatch>(context).getStatus() ==
-                                    StatusCard.like
-                                ? Colors.white
-                                : const Color.fromRGBO(109, 229, 181, 1),
-                            () => Provider.of<BinderWatch>(context).like()),
-                        buildFloatingButton(
-                            40,
-                            40,
-                            10,
-                            SvgPicture.asset(
-                              AppAssets.iconLightning,
-                              fit: BoxFit.contain,
-                            ),
-                            Colors.transparent,
-                            const Color.fromRGBO(170, 84, 234, 1),
-                            () {}),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
           ),
         ],
       );
 
-  Widget buildFloatingButton(double width, double height, double padding,
-      SvgPicture icon, Color colorBg, Color colorBorder, onTap) {
+  Widget buildFloatingButton({required double width,required double height,required double padding,
+    required SvgPicture icon, required Color colorBg,required Color colorBorder,required onTap}) {
     return InkWell(
       onTap: onTap,
       child: Container(

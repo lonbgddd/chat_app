@@ -86,71 +86,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
         backgroundColor: Colors.white,
-        body: body(context),
+        body: getBody(context),
       ),
     );
   }
 
-  StreamBuilder<UserModel> body(BuildContext context) {
+  Widget getBody(BuildContext context) {
     return StreamBuilder<UserModel>(
         stream: context.watch<ProfileWatch>().getUserStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             String fullName = snapshot.data!.fullName;
             List<String> splitName = fullName.split(" ");
-            return Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    context.go('/home/update-profile');
-                  },
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ProfileAvatar(
-                          avatarUrl: snapshot.data!.avatar,
-                        ),
-                        const SizedBox(
-                          height: 8.0,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "${splitName[0]}, ${(DateTime.now().year - int.parse(snapshot.data!.birthday.substring(0, 4))).toString()}",
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 1,
-                          fontSize: 20),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isVerified = !isVerified;
-                        });
-                      },
-                      child: Icon(
-                        Icons.verified,
-                        color: isVerified ? Colors.blue : Colors.grey,
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.go('/home/update-profile');
+                    },
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ProfileAvatar(
+                            avatarUrl: snapshot.data!.avatar,
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                BodyBuyPremium(),
-              ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "${splitName[0]}, ${(DateTime.now().year - int.parse(snapshot.data!.birthday.substring(0, 4))).toString()}",
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 1,
+                            fontSize: 20),
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isVerified = !isVerified;
+                          });
+                        },
+                        child: Icon(
+                          Icons.verified,
+                          color: isVerified ? Colors.blue : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  BodyBuyPremium(),
+                ],
+              ),
             );
           } else {
             return Container();

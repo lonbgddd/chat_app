@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 0
-                        ? const Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 1)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 1
-                        ? const Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 1)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 2
-                        ? const Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(243, 214, 119, 1)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
@@ -185,14 +185,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 3
-                        ? const Color.fromRGBO(229, 58, 69, 100)
+                        ? const Color.fromRGBO(229, 58, 69, 1)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),
             )),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: const Color.fromRGBO(223, 54, 64, 100),
       type: BottomNavigationBarType.fixed,
       onTap: _onItemTapped,
     );

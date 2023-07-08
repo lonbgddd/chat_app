@@ -21,8 +21,8 @@ class UserModel {
   List<String>? fluentLanguageList;
   List<String> sexualOrientationList;
   List<String> position;
-  bool? isHighlighted;
-  String? highlightTime;
+  bool isHighlighted;
+  String highlightTime;
   String? company;
   String? currentAddress;
   String? activeStatus;
@@ -63,8 +63,8 @@ class UserModel {
         required this.interestsList,
         required this.sexualOrientationList,
         this.fluentLanguageList,
-        this.isHighlighted,
-        this.highlightTime,
+        required this.isHighlighted,
+        required this.highlightTime,
         this.company,
         this.currentAddress,
         this.activeStatus,

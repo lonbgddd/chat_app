@@ -18,7 +18,6 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-
         return BottomModal();
 
 //         return Container(
@@ -161,59 +160,58 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.only(top: 20, left: 5, right: 5),
-        color: Colors.grey[100],
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: CustomCard(
-                    onTap: () => _showBottomModal(
-                        isHaveColor: true,
-                        color: Colors.blue[200]!,
-                        title: 'Nhận lượt Siêu Thích',
-                        subTitle:
-                            "Siêu Thích giúp bạn nổi bật. Tăng khả năng được tương hợp gấp 3 lần!"),
-                    iconColor: Colors.blue,
-                    icon: Icons.star,
-                    title: '0 lượt Siêu Thích',
-                    subtitle: "MUA THÊM",
-                    isIcon: true,
-                  ),
+    return Container(
+      padding: const EdgeInsets.only(top: 20, left: 5, right: 5,bottom: 50),
+
+      color: Colors.grey[100],
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: CustomCard(
+                  onTap: () => _showBottomModal(
+                      isHaveColor: true,
+                      color: Colors.blue[200]!,
+                      title: 'Nhận lượt Siêu Thích',
+                      subTitle:
+                          "Siêu Thích giúp bạn nổi bật. Tăng khả năng được tương hợp gấp 3 lần!"),
+                  iconColor: Colors.blue,
+                  icon: Icons.star,
+                  title: '0 lượt Siêu Thích',
+                  subtitle: "MUA THÊM",
+                  isIcon: true,
                 ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: CustomCard(
-                    isIcon: true,
-                    onTap: showModal,
-                    iconColor: Colors.purple,
-                    icon: Icons.bolt,
-                    title: 'Lượt Tăng Tốc của tôi',
-                    subtitle: "MUA THÊM",
-                  ),
+              ),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: CustomCard(
+                  isIcon: true,
+                  onTap: showModal,
+                  iconColor: Colors.purple,
+                  icon: Icons.bolt,
+                  title: 'Lượt Tăng Tốc của tôi',
+                  subtitle: "MUA THÊM",
                 ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: CustomCard(
-                    isIcon: false,
-                    onTap: () => _showBottomModal(
-                        color: Colors.red[200]!, title: 'My Subscriptions'),
-                    title: "Gói đăng ký",
-                    iconColor: Colors.green,
-                  ),
+              ),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: CustomCard(
+                  isIcon: false,
+                  onTap: () => _showBottomModal(
+                      color: Colors.red[200]!, title: 'My Subscriptions'),
+                  title: "Gói đăng ký",
+                  iconColor: Colors.green,
                 ),
-              ],
-            ),
-            const SliderCustom(),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const SliderCustom(),
+        ],
       ),
     );
   }

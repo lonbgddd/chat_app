@@ -5,6 +5,7 @@ import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
 import 'package:chat_app/config/changedNotify/confirm_profile_watch.dart';
 import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
+import 'package:chat_app/config/changedNotify/highlight_user_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
 import 'package:chat_app/config/changedNotify/home_watch.dart';
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
@@ -156,6 +157,11 @@ Future<void> main() async {
         child: const ProfileCard(),
       ),
       ChangeNotifierProvider(
+        create: (context) => HighlightUserNotify(),
+        child: const ProfileCard(),
+      ),
+
+      ChangeNotifierProvider(
         create: (context) => ProfileWatch(),
         child: const UpdateProfileScreen(),
       ),
@@ -240,7 +246,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Binder',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
