@@ -13,38 +13,36 @@ class DiscoverySetting extends StatefulWidget {
 }
 
 class _DiscoverySettingState extends State<DiscoverySetting> {
+
   @override
   Widget build(BuildContext context) {
     final provider = context.read<BinderWatch>();
-    double height = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.only(top: height / 70),
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: Text(""),
-          title: Center(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Center(
+          child: Text(
+            "Cài đặt Tìm Kiếm",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await provider.updateRequestToShow();
+              context.pop('refresh');
+            },
             child: Text(
-              "Cài đặt Tìm Kiếm",
-              style: TextStyle(color: Colors.black),
+              "Xong",
+              style: TextStyle(color: Colors.blue[700]),
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                await provider.updateRequestToShow();
-                context.pop('refresh');
-              },
-              child: Text(
-                "Xong",
-                style: TextStyle(color: Colors.blue[700]),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        body: Column(
+        ],
+      ),
+      backgroundColor: Colors.white,
+      body: Container(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SliderContainer(

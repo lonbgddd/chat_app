@@ -8,9 +8,13 @@ import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import '../../model/user_model.dart';
 import '../../model/user_time.dart';
+import 'package:provider/provider.dart';
+
+import 'highlight_user_watch.dart';
 
 class BinderWatch extends ChangeNotifier {
   List<UserModel> _listCard = [];
+  List<UserModel> tempList = [];
   Offset _offset = Offset.zero;
   bool _isDragging = false;
   double _angle = 0;
@@ -36,6 +40,7 @@ class BinderWatch extends ChangeNotifier {
 
   List<UserModel> get listCard => _listCard;
 
+
   void initData() {
     _listCard = [];
   }
@@ -53,24 +58,18 @@ class BinderWatch extends ChangeNotifier {
   //   }
   // }
 
-  // Future<List<UserModal>> allUserBinder() async {
-  //     return _listCard;
-  // }
-  //
-  // // Inside BinderWatch class
-  // Future<void> updateList() async {
-  //   try {
-  //     if (listCard.length > 2) return;
-  //     final uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-  //     final users = await DatabaseMethods().getAllUser(uid);
-  //     final List<UserModal> updatedUsers = [..._listCard, ...users];
-  //     _listCard = updatedUsers;
-  //     print(listCard.length);
-  //     notifyListeners();
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  // }
+
+
+  void shuffleUsers(List<UserModel> users) {
+    final random = Random();
+    for (var i = users.length - 1; i > 0; i--) {
+      final j = random.nextInt(i + 1);
+      final temp = users[i];
+      users[i] = users[j];
+      users[j] = temp;
+    }
+  }
+
 
   void setDistancePreference(double value){
     _distancePreference=value;
@@ -111,27 +110,29 @@ class BinderWatch extends ChangeNotifier {
   Future<void> updatePositionUser(List<String> position) async {
     await DatabaseMethods().updatePosition(position);
   }
-  Future<List<UserModel>> allUserBinder(String gender, List<double> age,bool isInDistanceRange,double kilometres) async {
+  Future<List<UserModel>> allUserBinder(BuildContext context,String gender, List<double> age,bool isInDistanceRange,double kilometres) async {
     try {
-      final uid =
-      await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      final uid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
       final List<UserModel> users;
       if(isInDistanceRange)
       {
-        users = await DatabaseMethods()
-            .getUserHasFilterKm(uid, gender, [age.first, age.last],kilometres);
+        users = await DatabaseMethods().getUserHasFilterKm(uid, gender, [age.first, age.last],kilometres);
       }
       else {
-        users = await DatabaseMethods()
-            .getUserHasFilter(uid, gender, [age.first, age.last]);
+        users = await DatabaseMethods().getUserHasFilter(uid, gender, [age.first, age.last]);
       }
       print('Your list has ${users.length} elements');
       _listCard = users ?? [];
+       shuffleUsers(_listCard);
+      await Provider.of<HighlightUserNotify>(context, listen: false).sortUsers(_listCard);
 
       return _listCard;
+
     } catch (e) {
       throw Exception(e);
     }
+
+
   }
   Future<String?> discoverSetting() async {
     try {
@@ -264,7 +265,14 @@ class BinderWatch extends ChangeNotifier {
 
   Future _nextCard() async {
     await Future.delayed(const Duration(milliseconds: 200));
-    _listCard.removeAt(0);
+    if (tempList.isEmpty) {
+      tempList = List.from(_listCard);
+      tempList.shuffle();
+    }
+    tempList.removeAt(0);
+    _listCard = List.from(tempList);
+
     resetPosition();
   }
+
 }

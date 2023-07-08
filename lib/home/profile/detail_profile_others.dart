@@ -10,6 +10,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../config/changedNotify/binder_watch.dart';
+import '../../config/helpers/helpers_user_and_validators.dart';
 import '../binder_page/compnents/photo_item_card.dart';
 
 class DetailProfileOthersScreen extends StatefulWidget {
@@ -21,6 +23,24 @@ class DetailProfileOthersScreen extends StatefulWidget {
 }
 
 class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
+  int tappedButtonIndex = -1;
+
+  Future<void> _handleTap(int buttonIndex,Function() onTap) async {
+    setState(() {
+      tappedButtonIndex = buttonIndex;
+    });
+
+    await Future.delayed(Duration(milliseconds: 100));
+
+    setState(() {
+      tappedButtonIndex = -1;
+    });
+
+    onTap();
+
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -46,19 +66,9 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             height: MediaQuery.of(context).size.height / 1.47,
                             child: Stack(
                               children: [
-                                (snapshot.data!.photoList.length != 0) ? Container(
+                                Container(
                                     height: MediaQuery.of(context).size.height / 1.55,
-                                    child: PhotoGallery(photoList: snapshot.data!.photoList,scrollPhysics: AlwaysScrollableScrollPhysics(),))
-                                    : Container(
-                                  height: MediaQuery.of(context).size.height / 1.55,
-                                  margin: EdgeInsets.only(bottom: 30),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(snapshot.data?.avatar ??
-                                          'https://thuthuattienich.com/wp-content/uploads/2017/02/anh-dai-dien-facebook-doc-3.jpg'),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                    child: PhotoGallery(targetUser: snapshot.data!,photoList: snapshot.data!.photoList,scrollPhysics: AlwaysScrollableScrollPhysics(),isShowInfo: false,)
                                 ),
                                 Positioned(
                                     bottom: 0,
@@ -89,54 +99,36 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      flex: 3,
-                                      child: Text(snapshot.data!.fullName,
-                                        style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.w700),
-                                      overflow: TextOverflow.ellipsis,),
-                                    ),
+                                    Text(
+                                      snapshot.data!.fullName.length > 13 ?
+                                      snapshot.data!.fullName.substring(0,13)+'...':   snapshot.data!.fullName ?? '',
+                                      style: TextStyle(fontSize: 30, color: Colors.black, fontWeight: FontWeight.w700),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,),
                                     const SizedBox(width: 8),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text((DateTime.now().year -
-                                            int.parse(snapshot.data!.birthday.substring(0, 4)))
-                                            .toString(),
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w500),
-                                      ),
+                                    Text((DateTime.now().year -
+                                          int.parse(snapshot.data!.birthday.substring(0, 4)))
+                                          .toString(),
+                                      style:  TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.w400),
                                     )
                                   ],
                                 ),
-
                                 const SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    Icon(Icons.check_circle, color: Colors.blue,),
-                                    const SizedBox(width: 5),
-                                    Text('Đã xác minh', style: TextStyle(fontSize:16 , color: Colors.blue,fontWeight: FontWeight.w500),)
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    Icon(Icons.person, color: Colors.grey,),
-                                    const SizedBox(width: 5),
-                                    Text(snapshot.data!.gender.toString(), style: TextStyle(fontSize:16 , color: Colors.grey,),)
-                                  ],
-                                ),
 
                               ],
                             ),
                           ),
-                          const SizedBox(height: 20),
-                          Container(
+
+                          (snapshot.data!.introduceYourself!.isNotEmpty || snapshot.data!.datingPurpose!.isNotEmpty) ? Container(
                             width: MediaQuery.of(context).size.height,
                             padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
+                            margin: EdgeInsets.only(top: 20),
                             decoration: BoxDecoration(
                               border: Border(
                                 top: BorderSide(
@@ -152,17 +144,28 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Giới thiệu bản thân', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
-                                const SizedBox(height: 10),
-                                Text(snapshot.data!.introduceYourself.toString(), style: TextStyle(color: Colors.black54,fontSize: 18,),textAlign: TextAlign.start,),
+                                (snapshot.data!.datingPurpose!.isNotEmpty) ?
+                                     buildDatingPurposeBox(snapshot.data!.datingPurpose) : SizedBox.shrink(),
+
+                                (snapshot.data!.introduceYourself!.isNotEmpty) ?
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 25,),
+                                        Text('Giới thiệu bản thân', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
+                                        const SizedBox(height: 10),
+                                        Text(snapshot.data!.introduceYourself.toString(), style: TextStyle(color: Colors.black54,fontSize: 16,),textAlign: TextAlign.start,),
+                                      ],
+                                    ): SizedBox.shrink(),
+
                               ],
                             ),
-                          ),
+                          ): SizedBox.shrink(),
 
-                          const SizedBox(height: 40),
-                          Container(
+                          (snapshot.data!.interestsList.length > 0) ? Container(
                             width: MediaQuery.of(context).size.height,
                             padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
+                            margin: EdgeInsets.only(top: 40),
                             decoration: BoxDecoration(
                               border: Border(
                                 top: BorderSide(
@@ -183,20 +186,19 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child:Wrap(
+                                    spacing: BorderSide.strokeAlignCenter,
                                     children: List.generate(snapshot.data!.interestsList.length , (rowIndex) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(bottom: 10,  right: 10),
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(50),
-                                            border: Border.all(
-                                                width: 1,
-                                                color: Colors.grey
-                                            ),
+                                      return Container(
+                                        margin: EdgeInsets.only(bottom: 5,right: 8),
+                                        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(50),
+                                          border: Border.all(
+                                              width: 1,
+                                              color: Colors.grey
                                           ),
-                                          child: Text(snapshot.data!.interestsList[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 17,),textAlign: TextAlign.start,),
                                         ),
+                                        child: Text(snapshot.data!.interestsList[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 15,),textAlign: TextAlign.start,),
                                       );
 
                                     },
@@ -208,87 +210,11 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
 
                               ],
                             ),
-                          ),
-
-
+                          ): SizedBox.shrink(),
                           const SizedBox(height: 30),
-                          InkWell(
-                            onTap: (){},
-                            child: Container(
-                              width: MediaQuery.of(context).size.height,
-                              padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  top: BorderSide(
-                                    color: Colors.grey.shade200,
-                                    width: 1.0,
-                                  ),
-                                  bottom: BorderSide(
-                                    color: Colors.grey.shade200,
-                                    width: 1.0,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('Chia sẻ hồ sơ', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
-                                  const SizedBox(height: 5),
-                                  Text('Xem bạn nghĩ gì', style: TextStyle(color: Colors.black54,fontSize: 16,),textAlign: TextAlign.center,),
-                                ],
-                              ),
-                            ),
-                          ),
-
-
-
-                          InkWell(
-                            onTap: (){},
-                            child: Container(
-                              width: MediaQuery.of(context).size.height,
-                              padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey.shade300,
-                                    width: 1.0,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text('Chặn ${snapshot.data?.fullName}', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
-                                  const SizedBox(height: 5),
-                                  Text('Bạn sẽ không thấy họ, và học sẽ không thấy bạn', style: TextStyle(color: Colors.black54,fontSize: 16,),textAlign: TextAlign.center,),
-                                ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: (){},
-                            child: Container(
-                              width: MediaQuery.of(context).size.height,
-                              padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey.shade300,
-                                    width: 1.0,
-                                  ),
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-
-                                children: [
-                                  Text('Báo cáo ${snapshot.data?.fullName}', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w500),),
-                                  const SizedBox(height: 5),
-                                  Text('Đừng lo lắng - chúng tôi sẽ không thông báo cho người này', style: TextStyle(color: Colors.black54,fontSize: 16,),textAlign: TextAlign.center,),
-                                ],
-                              ),
-                            ),
-                          ),
+                          buildFunctionButton(title:'Chia sẻ hồ sơ',content: 'Xem bạn nghĩ gì',onTap: (){} ),
+                          buildFunctionButton(title:'Chặn ${snapshot.data?.fullName}',content: 'Bạn sẽ không thấy họ, và học sẽ không thấy bạn',onTap: (){} ),
+                          buildFunctionButton(title:'Báo cáo ${snapshot.data?.fullName}',content:'Đừng lo lắng - chúng tôi sẽ không thông báo cho người này',onTap: (){} ),
                         ],
                       ),
                     ),
@@ -306,11 +232,17 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              buildFloatingButton(55,55,15,AppAssets.iconDelete,(){}),
+              buildFloatingButton(55,55,15,AppAssets.iconDelete,(){
+                Navigator.pop(context);
+                Provider.of<BinderWatch>(context, listen: false).disLike();
+              },0),
               const SizedBox(width: 20),
-              buildFloatingButton(40,40,10,AppAssets.iconStar,(){}),
+              buildFloatingButton(40,40,10,AppAssets.iconStar,(){},1),
               const SizedBox(width: 20),
-              buildFloatingButton(55,55,10,AppAssets.iconHeart,(){}),
+              buildFloatingButton(55,55,10,AppAssets.iconHeart,(){
+                Navigator.pop(context);
+                Provider.of<BinderWatch>(context, listen: false).like();
+              },2),
             ],
           ),
         ),
@@ -319,12 +251,17 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
     );
   }
 
-  Widget buildFloatingButton(double width,double height,double padding, String icon,onTap) {
-    return InkWell(
-            onTap: onTap,
-            child: Container(
+  Widget buildFloatingButton(double width,double height,double padding, String icon,Function() onTap, int index) {
+    return GestureDetector(
+          onTap: (){
+            _handleTap(index,onTap);
+          },
+          child: AnimatedContainer(
               width: width,
               height: height,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              transform: Matrix4.identity()..scale(tappedButtonIndex == index ? 0.9 : 1.0),
               padding: EdgeInsets.all(padding),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -345,5 +282,60 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
   }
 
 
+  Widget buildFunctionButton({required String title, required String content,onTap}) {
+    return  InkWell(
+      onTap: onTap,
+      child: Container(
+        width: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.symmetric(vertical: 20,horizontal: 30),
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade200,
+              width: 0.8,
+            ),
+            bottom: BorderSide(
+              color: Colors.grey.shade200,
+              width: 0.8,
+            ),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(title, style: TextStyle(color: Colors.black,fontSize: 19,fontWeight: FontWeight.w500),),
+            const SizedBox(height: 5),
+            Text(content, style: TextStyle(color: Colors.black54,fontSize: 16,),textAlign: TextAlign.center,),
+          ],
+        ),
+      ),
+    );
+  }
 
+
+  Widget buildDatingPurposeBox(String title) {
+    int index = HelpersUserAndValidators.datingPurposeList.indexWhere((item) => item == title);
+    return Container(
+        width: MediaQuery.of(context).size.width / 1.4,
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color:(index != -1) ? HelpersUserAndValidators.colorBgPurposeList[index] : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          (index != -1)  ? Image.asset(HelpersUserAndValidators.emojiDatingPurposeList[index],width: 30,height: 30,): SizedBox.shrink(),
+          SizedBox(width: 10,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Mình đang tìm', style: TextStyle(color:(index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 15,fontWeight: FontWeight.w500),),
+              Text(title, style: TextStyle(color: (index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 17,fontWeight: FontWeight.w600),),
+            ],
+          )
+        ],
+        )
+    );
+  }
 }
