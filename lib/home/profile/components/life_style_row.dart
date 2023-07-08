@@ -23,7 +23,6 @@ class LifeStyleRow extends StatelessWidget {
       splashColor: const Color.fromRGBO(229, 58, 69, 100),
       onTap: () {
         showModalBottomSheet(
-          showDragHandle: true,
           isScrollControlled: true,
           isDismissible: true,
           useSafeArea: true,

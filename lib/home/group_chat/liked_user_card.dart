@@ -1,11 +1,16 @@
 import 'dart:ui';
 
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
-import 'package:chat_app/home/message/detail_message.dart';
+
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+import '../../features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
+import '../../features/message/presentation/widgets/detail_message.dart';
+import '../../injection_container.dart';
 
 class LikedUserCard extends StatelessWidget {
   const LikedUserCard({super.key, this.user});
@@ -90,27 +95,13 @@ class LikedUserCard extends StatelessWidget {
                                   child: Center(
                                     child: IconButton(
                                         onPressed: () {
-                                          showModalBottomSheet(
-                                              isScrollControlled: true,
-                                              context: context,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              builder: (BuildContext context) {
-                                                return SizedBox(
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.95,
-                                                    child: DetailMessage(
-                                                      uid: user!.uid,
-                                                      chatRoomId: snapshot
-                                                          .data!.chatRoomId,
-                                                      name: user!.fullName,
-                                                      avatar: user!.avatar,
-                                                      token: user!.token,
-                                                    ));
-                                              });
+                                          context.goNamed('detail-message',queryParameters: {
+                                            'uid': user!.uid,
+                                            'chatRoomId':snapshot.data!.chatRoomId,
+                                            'name': user!.fullName,
+                                            'avatar': user!.avatar,
+                                            'token': user!.token
+                                          });
                                         },
                                         icon: const Icon(
                                           Icons.send,
