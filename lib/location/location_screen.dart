@@ -67,6 +67,9 @@ class LocationSCreenState extends State<LocationScreen> {
                               if (value != null) {
                                 List<String> splitValues = value!.split('-');
                                 country = splitValues[1];
+                                province = '';
+                                district ='';
+                                ward='';
                                 context
                                     .read<LocationProvider>()
                                     .fetchProvince(splitValues[0]);
@@ -82,6 +85,7 @@ class LocationSCreenState extends State<LocationScreen> {
                                 context
                                     .read<LocationProvider>()
                                     .setListWardNull();
+
                               }
                             },
                             hint: const Text('Chọn một quốc gia'),
@@ -126,6 +130,8 @@ class LocationSCreenState extends State<LocationScreen> {
                               if (value != null) {
                                 List<String> splitValues = value!.split('-');
                                 province = splitValues[1];
+                                district ='';
+                                ward='';
                                 context
                                     .read<LocationProvider>()
                                     .setProvince(splitValues[0]);
@@ -182,6 +188,7 @@ class LocationSCreenState extends State<LocationScreen> {
                               if (value != null) {
                                 List<String> splitValues = value!.split('-');
                                 district = splitValues[1];
+                                ward='';
                                 context
                                     .read<LocationProvider>()
                                     .setDistrict(splitValues[0]);
@@ -282,21 +289,21 @@ class LocationSCreenState extends State<LocationScreen> {
                           backgroundColor: Colors.purple,
                           padding: const EdgeInsets.symmetric(
                               vertical: 13, horizontal: 20)),
-                      onPressed: () async {
+                        onPressed: () async {
                         String address = '';
                         if (textController.text.isNotEmpty) {
                           address += '${textController.text}, ';
                         }
-                        if (ward.toString().isNotEmpty) {
+                        if (ward != null && ward.toString().isNotEmpty) {
                           address += '${ward.toString()}, ';
                         }
-                        if (district.toString().isNotEmpty) {
+                        if (district != null && district.toString().isNotEmpty) {
                           address += '${district.toString()}, ';
                         }
-                        if (province.toString().isNotEmpty) {
+                        if (province != null && province.toString().isNotEmpty) {
                           address += '${province.toString()}, ';
                         }
-                        if (country.toString().isNotEmpty) {
+                        if (country != null && country.toString().isNotEmpty) {
                           address += country.toString();
                         }
                         if (address.isNotEmpty) {

@@ -24,6 +24,7 @@ class AppAssets {
   static const String iconLoop = iconPath + 'loop.svg';
   static const String iconStar = iconPath + 'star-around.svg';
   static const String iconStar2 = iconPath + 'star.png';
+  static const String iconHeart3Lines = iconPath + 'heart-3-lines.png';
 
   static const String emojiLoveArrow = iconPath + 'emoji-love-arrow.png';
   static const String emojiInLove = iconPath + 'emoji-in-love.png';

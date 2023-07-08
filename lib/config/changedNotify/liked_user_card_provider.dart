@@ -34,10 +34,13 @@ class LikedUserCardProvider extends ChangeNotifier {
         String chatRoomId = getChatRoomId(uid, followId);
         List<dynamic> userTimes = [UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
           UserTime(uid: followId, time: DateTime.now().toString()).toJson()];
+        String time = DateTime.now().toString();
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,
-          "userTimes": userTimes
+          "userTimes": userTimes,
+          "time": time,
+          "newChatRoom": []
         };
         await DatabaseMethods().addChatRoom(chatRoom, chatRoomId);
         notifyListeners();

@@ -7,7 +7,8 @@ abstract class ChatRoomRepository {
   Stream<List<ChatMessageEntity>> getMessages(String chatRoomId);
   Stream<ChatMessageEntity> getLastMessage(String chatRoomId);
   Stream<ChatRoomEntity> getChatRoom(String uid,String chatRoomId);
+  Stream<List<ChatRoomEntity>> getNewChatRooms(String uid);
   Future<void> addMessage(String uid, String chatRoomId, String messageContent, String imageUrl, String token);
-
   Future<void> compareUserTime(String chatRoomId,String uid);
+  Future<ChatRoomEntity> getNewChatRoom(String chatRoomId);
 }

@@ -79,6 +79,7 @@ dependencies:
   flutter_animate: ^4.2.0
   permission_handler: ^10.4.0
   carousel_slider: ^4.2.1
+  animated_stream_list_nullsafety: ^2.0.3
 
 dev_dependencies:
   flutter_test:

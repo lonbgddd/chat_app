@@ -16,8 +16,9 @@ class ChatItemInitial extends ChatItemState {
 
 class ChatItemLoaded extends ChatItemState {
   final UserEntity user;
+  final bool isNewChatRoom;
   final Stream<ChatMessageEntity> lastMessageStream;
-  const ChatItemLoaded(this.user, this.lastMessageStream);
+  const ChatItemLoaded(this.user, this.lastMessageStream,this.isNewChatRoom);
 }
 
 class ChatItemClicked extends ChatItemActionState {

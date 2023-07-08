@@ -43,5 +43,13 @@ class ChatRoomRepositoryImpl implements ChatRoomRepository {
     return _chatRoomApi.getChatRoom(uid, chatRoomId);
   }
 
+  @override
+  Stream<List<ChatRoomEntity>> getNewChatRooms(String uid) {
+    return _chatRoomApi.getNewChatRoomFromFireStore(uid);
+  }
 
+  @override
+  Future<ChatRoomEntity> getNewChatRoom(String chatRoomId) {
+    return _chatRoomApi.getNewChatRoom(chatRoomId);
+  }
 }
