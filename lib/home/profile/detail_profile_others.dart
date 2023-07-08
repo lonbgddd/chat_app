@@ -24,6 +24,7 @@ class DetailProfileOthersScreen extends StatefulWidget {
 
 class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
   int tappedButtonIndex = -1;
+  bool showFullList = false;
 
   Future<void> _handleTap(int buttonIndex,Function() onTap) async {
     setState(() {
@@ -126,7 +127,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                           ),
 
                           (snapshot.data!.introduceYourself!.isNotEmpty || snapshot.data!.datingPurpose!.isNotEmpty) ? Container(
-                            width: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
                             padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
                             margin: EdgeInsets.only(top: 20),
                             decoration: BoxDecoration(
@@ -161,56 +162,18 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                               ],
                             ),
                           ): SizedBox.shrink(),
+                          (HelpersUserAndValidators.isListNotEmpty(HelpersUserAndValidators.styleOfLifeUserList(snapshot.data!))) ?
+                          generateList(title: 'Phong cách sống',list: HelpersUserAndValidators.styleOfLifeUserList(snapshot.data!)) : SizedBox.shrink(),
 
-                          (snapshot.data!.interestsList.length > 0) ? Container(
-                            width: MediaQuery.of(context).size.height,
-                            padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
-                            margin: EdgeInsets.only(top: 40),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                top: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1.0,
-                                ),
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
-                                  width: 1.0,
-                                ),
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Sở thích', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
-                                const SizedBox(height: 10),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child:Wrap(
-                                    spacing: BorderSide.strokeAlignCenter,
-                                    children: List.generate(snapshot.data!.interestsList.length , (rowIndex) {
-                                      return Container(
-                                        margin: EdgeInsets.only(bottom: 5,right: 8),
-                                        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(50),
-                                          border: Border.all(
-                                              width: 1,
-                                              color: Colors.grey
-                                          ),
-                                        ),
-                                        child: Text(snapshot.data!.interestsList[rowIndex].toString(), style: TextStyle(color: Colors.black54,fontSize: 15,),textAlign: TextAlign.start,),
-                                      );
+                          (HelpersUserAndValidators.isListNotEmpty(HelpersUserAndValidators.basicInfoUserList(snapshot.data!))) ?
+                          generateList(title: 'Thông tin thêm về tôi',list: HelpersUserAndValidators.basicInfoUserList(snapshot.data!)) : SizedBox.shrink(),
 
-                                    },
-                                    ),
+                          (snapshot.data!.interestsList.length > 0) ?
+                          generateList(title: 'Sở thích',list: snapshot.data!.interestsList) : SizedBox.shrink(),
 
 
-                                  ),
-                                ),
 
-                              ],
-                            ),
-                          ): SizedBox.shrink(),
+
                           const SizedBox(height: 30),
                           buildFunctionButton(title:'Chia sẻ hồ sơ',content: 'Xem bạn nghĩ gì',onTap: (){} ),
                           buildFunctionButton(title:'Chặn ${snapshot.data?.fullName}',content: 'Bạn sẽ không thấy họ, và học sẽ không thấy bạn',onTap: (){} ),
@@ -330,12 +293,71 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Mình đang tìm', style: TextStyle(color:(index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 15,fontWeight: FontWeight.w500),),
-              Text(title, style: TextStyle(color: (index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 17,fontWeight: FontWeight.w600),),
+              Text('Mình đang tìm', style: TextStyle(color:(index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 13,fontWeight: FontWeight.w500),),
+              Text(title, style: TextStyle(color: (index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 15,fontWeight: FontWeight.w600),),
             ],
           )
         ],
         )
     );
   }
+
+
+  Widget generateList({required String title,required List<String> list}){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
+      margin: EdgeInsets.only(top: 20),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Colors.grey.shade200,
+            width: 1.0,
+          ),
+          bottom: BorderSide(
+            color: Colors.grey.shade200,
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
+          const SizedBox(height: 15),
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  int itemCount = list.length;
+                  return Wrap(
+                    children: List.generate(itemCount, (index) {
+                      if (list[index].isNotEmpty ) {
+                        return Container(
+                            margin: EdgeInsets.only(bottom: 5,right: 8),
+                            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                  width: 1,
+                                  color: Colors.grey
+                              ),
+                            ),
+                            child:  Text(list[index].toString(), style: TextStyle(color: Colors.black54,fontSize: 14,fontWeight: FontWeight.w500),textAlign: TextAlign.start,),
+                        );
+                      }else {
+                        return SizedBox();
+                      }
+
+                    }).toList(),
+                  );
+                }
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
