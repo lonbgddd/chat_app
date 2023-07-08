@@ -6,8 +6,10 @@ import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/user_time.dart';
+import 'highlight_user_watch.dart';
 
 class BinderWatch extends ChangeNotifier {
   List<UserModel> _listCard = [];
@@ -106,7 +108,7 @@ class BinderWatch extends ChangeNotifier {
     await DatabaseMethods().updatePosition(position);
   }
 
-  Future<List<UserModel>> allUserBinder(String gender, List<double> age,
+  Future<List<UserModel>> allUserBinder(BuildContext context, String gender, List<double> age,
       bool isInDistanceRange, double kilometres) async {
     try {
       final uid =
@@ -121,6 +123,8 @@ class BinderWatch extends ChangeNotifier {
       }
       print('Your list has ${users.length} elements');
       _listCard = users ?? [];
+      shuffleUsers(_listCard);
+      await Provider.of<HighlightUserNotify>(context, listen: false).sortUsers(_listCard);
 
       return _listCard;
     } catch (e) {
