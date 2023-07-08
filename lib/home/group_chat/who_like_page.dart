@@ -15,6 +15,7 @@ class WhoLikePage extends StatefulWidget {
 class _WhoLikePageState extends State<WhoLikePage> {
   @override
   void initState() {
+    // context.read<FollowNotify>().userFollowYou();
     super.initState();
   }
 

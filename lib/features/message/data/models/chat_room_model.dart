@@ -1,5 +1,4 @@
 import '../../domain/entities/chat_room_entity.dart';
-import 'chat_message_model.dart';
 import 'user_time_model.dart';
 
 class ChatRoomModel extends ChatRoomEntity {

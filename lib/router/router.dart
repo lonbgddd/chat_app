@@ -2,7 +2,6 @@ import 'package:chat_app/Auth/login_phone_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
 import 'package:chat_app/home/binder_page/compnents/show_me.dart';
-import 'package:chat_app/home/profile/update_avatar.dart';
 import 'package:chat_app/home/profile/update_profile_screen.dart';
 import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
@@ -21,19 +20,13 @@ final GoRouter router = GoRouter(routes: [
       builder: (context, state) => const HomePage(),
       routes: [
         GoRoute(
-          path: 'update-avatar',
-          builder: (context, state) => const UpdateAvatarScreen(),
-        ),
-        GoRoute(
           path: 'notification-page',
           builder: (context, state) => const NotificationScreen(),
         ),
         GoRoute(
           path: 'update-profile',
           name: 'update-profile',
-          builder: (context, state) => UpdateProfileScreen(
-            uid: state.queryParameters['uid'],
-          ),
+          builder: (context, state) => const UpdateProfileScreen(),
         ),
         GoRoute(
           path: 'detail-others',

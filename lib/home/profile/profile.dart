@@ -1,12 +1,7 @@
-import 'dart:io';
+
 
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
-import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/update_watch.dart';
-import 'package:chat_app/config/firebase/firebase_api.dart';
-import 'package:chat_app/home/profile/components/infor_row.dart';
-import 'package:chat_app/home/profile/components/interest_item.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';

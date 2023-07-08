@@ -1,11 +1,9 @@
 import 'package:chat_app/Auth/widget/button_submit_page_view.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
-import '../../../config/helpers/helpers_user_and_validators.dart';
 
 class AddPhotoListPageSection extends StatelessWidget {
   const AddPhotoListPageSection({Key? key}) : super(key: key);
@@ -109,7 +107,6 @@ class AddPhotoListPageSection extends StatelessWidget {
                                           ],
                                         ),
                                         child: Icon(pageProvider.isEditingPhoto ? Icons.close_rounded : Icons.edit , color: Colors.grey,size: 20,),
-
                                       ),
                                     ),
                                   ),
@@ -147,7 +144,6 @@ class AddPhotoListPageSection extends StatelessWidget {
                     onPressed: () {
                       pageProvider.imageCount >= 2 ? pageProvider.confirmUser(context) : null;
                     }),
-
           ],
         ),
       ),

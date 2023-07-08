@@ -293,6 +293,15 @@ class DatabaseMethods {
     }
   }
 
+  Future<void> deleteImage(String imageUrl) async {
+    final ref = FirebaseStorage.instance.refFromURL(imageUrl);
+    await ref.delete().then((_) {
+      print('Image deleted successfully.');
+    }).catchError((error) {
+      print('Failed to delete image: $error');
+    });
+  }
+
   Future updateAvatar(String avatar, String uid) async {
     try {
       await FirebaseFirestore.instance
