@@ -7,10 +7,13 @@ import 'package:chat_app/features/message/domain/repositories/chat_room_reposito
 import 'package:chat_app/features/message/domain/repositories/user_repository.dart';
 import 'package:chat_app/features/message/domain/usecases/add_message_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/compare_usertime_usecase.dart';
+import 'package:chat_app/features/message/domain/usecases/get_new_chatroom.dart';
 import 'package:chat_app/features/message/domain/usecases/get_chatrooms_usecase.dart';
-import 'package:chat_app/features/message/domain/usecases/get_info_user.dart';
+import 'package:chat_app/features/message/domain/usecases/get_info_user_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_last_message_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_messages_usecase.dart';
+import 'package:chat_app/features/message/domain/usecases/get_my_info_usecase.dart';
+import 'package:chat_app/features/message/domain/usecases/get_new_chatrooms_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_user_information_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_chatroom_usecase.dart';
 import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_bloc.dart';
@@ -39,9 +42,12 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<CompareUserTimeUseCase>(CompareUserTimeUseCase(sl()));
   sl.registerSingleton<GetChatRoomUseCase>(GetChatRoomUseCase(sl()));
   sl.registerSingleton<GetInfoUserUseCase>(GetInfoUserUseCase(sl()));
+  sl.registerSingleton<GetMyInfoUseCase>(GetMyInfoUseCase(sl()));
+  sl.registerSingleton<GetNewChatRoomsUseCase>(GetNewChatRoomsUseCase(sl()));
+  sl.registerSingleton<GetNewChatRoomUseCase>(GetNewChatRoomUseCase(sl()));
   // Bloc
 
-  sl.registerFactory<MessageBloc>(() => MessageBloc(sl()));
-  sl.registerFactory<ChatItemBloc>(() => ChatItemBloc(sl(), sl()));
+  sl.registerFactory<MessageBloc>(() => MessageBloc(sl(),sl(),sl()));
+  sl.registerFactory<ChatItemBloc>(() => ChatItemBloc(sl(),sl(),sl()));
   sl.registerFactory<DetailMessageBloc>(() => DetailMessageBloc(sl(), sl(),sl(),sl(),sl()));
 }

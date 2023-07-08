@@ -5,15 +5,21 @@ import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 import '../config/changedNotify/notification_watch.dart';
 import '../config/data_mothes.dart';
 import '../config/firebase/firebase_api.dart';
 import '../config/helpers/helpers_database.dart';
+import '../features/message/domain/usecases/get_chatrooms_usecase.dart';
+import '../features/message/presentation/bloc/message/message_bloc.dart';
 import '../features/message/presentation/screens/message_screen.dart';
+import '../injection_container.dart';
 import '../main.dart';
 
 class HomePage extends StatefulWidget {
@@ -103,7 +109,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const BinderPage(),
-    const MyMessageScreen(),
+    BlocProvider<MessageBloc>(
+      create: (context) => sl()..add(const GetChatRooms()),
+      child: const MyMessageScreen(),
+    ),
     const WhoLikePage(),
     const ProfileScreen()
   ];
@@ -115,15 +124,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   Future<void> checkPermissionLocation() async {
+
     if (FirebaseApi.enablePermission) {
+      String address = '';
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      Placemark placemark = placemarks[0];
+      if (placemark.subThoroughfare != null) {
+        address += '${placemark.subThoroughfare}, ';
+      }
+      if (placemark.thoroughfare != null) {
+        address += '${placemark.thoroughfare}, ';
+      }
+      if (placemark.subAdministrativeArea != null) {
+        address += '${placemark.subAdministrativeArea}, ';
+      }
+      if (placemark.administrativeArea != null) {
+        address += '${placemark.administrativeArea}, ';
+      }
+      if (placemark.country != null) {
+        address += '${placemark.country}';
+      }
       String? uid = await HelpersFunctions().getUserIdUserSharedPreference();
-      await DatabaseMethods().updateAddressUser(uid!, FirebaseApi.address);
+      await DatabaseMethods().updateAddressUser(uid!, address);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     checkPermissionLocation();
+
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: _bottomNavigation(),

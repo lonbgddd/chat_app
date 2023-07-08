@@ -196,10 +196,13 @@ class BinderWatch extends ChangeNotifier {
           UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
           UserTime(uid: followId, time: DateTime.now().toString()).toJson()
         ];
+        String time = DateTime.now().toString();
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,
-          "userTimes": userTimes
+          "userTimes": userTimes,
+          "time": time,
+          "newChatRoom": []
         };
         await FirebaseApi().sendPushMessage(
             title: 'Match',

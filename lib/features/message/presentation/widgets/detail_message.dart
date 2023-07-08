@@ -1,13 +1,15 @@
+import 'dart:io';
 import 'package:chat_app/config/changedNotify/detail_message.dart';
-import 'package:chat_app/features/message/data/models/user_time_model.dart';
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/domain/entities/user_entity.dart';
 import 'package:chat_app/features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../config/helpers/helpers_database.dart';
@@ -34,13 +36,15 @@ class DetailMessage extends StatefulWidget {
 
 class _DetailMessageState extends State<DetailMessage> {
   final TextEditingController messageController = TextEditingController();
-  String keyUid ='';
+  String keyUid = '';
+
   Future<void> getKeyUid() async {
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
   }
 
-  // Stream<List<ChatMessageEntity>>? messages;
+  bool show = false;
 
+  // Stream<List<ChatMessageEntity>>? messages;
   @override
   Widget build(BuildContext context) {
     getKeyUid();
@@ -60,22 +64,26 @@ class _DetailMessageState extends State<DetailMessage> {
           backgroundColor: Colors.transparent,
           body: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(36),
-                    topRight: Radius.circular(36))),
+            decoration: const BoxDecoration(color: Colors.white),
             child: Builder(builder: (context) {
               return Column(
                 children: [
-                  state is MessageListLoaded ? head(state.user): const CircularProgressIndicator(),
+                  state is MessageListLoaded
+                      ? head(state.user)
+                      : const CircularProgressIndicator(),
                   today(),
                   // messages != null
                   state is MessageListLoaded
-                      ? Expanded(child: listMessage(state.messagesList,state.chatRoom))
+                      ? Expanded(
+                          child:
+                              listMessage(state.messagesList, state.chatRoom))
                       : const CircularProgressIndicator(),
                   controlMessage(context),
-                  if (state is ShowEmojiPicker) emoji(context)
+                  state is MessageListLoaded
+                      ? state.showEmoji == true
+                          ? emoji(context)
+                          : const SizedBox.shrink()
+                      : const SizedBox.shrink()
                 ],
               );
             }),
@@ -93,8 +101,7 @@ class _DetailMessageState extends State<DetailMessage> {
               ? Row(
                   children: [
                     Container(
-                      margin:
-                          const EdgeInsets.only(right: 10, top: 20, bottom: 10),
+                      margin: const EdgeInsets.only(right: 10, top: 10),
                       child: CircleAvatar(
                         radius: 35,
                         backgroundImage: NetworkImage(widget.avatar.toString()),
@@ -114,18 +121,24 @@ class _DetailMessageState extends State<DetailMessage> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           snapshot.data!.activeStatus == 'online'
-                              ? const Text(
-                                  'online',
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontSize: 18,
+                              ? Container(
+                                  margin: const EdgeInsets.only(top: 10),
+                                  child: const Text(
+                                    'Online',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 )
-                              : const Text('offline',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 18,
-                                  ))
+                              : Container(
+                                  margin: const EdgeInsets.only(top: 10),
+                                  child: const Text('Offline',
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                      )),
+                                )
                         ],
                       ),
                     ),
@@ -146,11 +159,11 @@ class _DetailMessageState extends State<DetailMessage> {
         ]);
   }
 
-
-  Widget listMessage(Stream<List<ChatMessageEntity>> messageListStream,Stream<ChatRoomEntity> chatRoom) {
+  Widget listMessage(Stream<List<ChatMessageEntity>> messageListStream,
+      Stream<ChatRoomEntity> chatRoom) {
     DateFormat timeFormat = DateFormat('HH:mm a');
     DateFormat dateFormat = DateFormat('MMM dd, HH:mm');
-    String userTime ='';
+    String userTime = '';
     bool checkTime(DateTime dateTime) {
       DateTime timeCurrent = DateTime.now();
       String date = DateFormat('yyyy-MM-dd').format(dateTime);
@@ -167,6 +180,7 @@ class _DetailMessageState extends State<DetailMessage> {
       }
       return false;
     }
+
     return StreamBuilder(
         stream: chatRoom,
         builder: (context, snapshot) {
@@ -194,99 +208,154 @@ class _DetailMessageState extends State<DetailMessage> {
                         itemBuilder: (context, index) {
                           DateTime time = DateTime.parse(
                               snapshot.data?[index].time.toString() ?? "");
-                            return Container(
-                              color: Colors.white,
-                              padding: const EdgeInsets.only(
-                                  left: 14, right: 14, top: 10, bottom: 10),
-                              child: Column(
-                                children: [
-                                  if (checkTime(time))
-                                    Column(children: [
-                                      if (index != snapshot.data!.length - 1 && checkDuration(time, DateTime.parse(snapshot.data?[index + 1].time.toString() ?? '')))
-                                        dateTimeFormat(timeFormat, time)
-                                      else if (index == snapshot.data!.length - 1)
-                                        dateTimeFormat(timeFormat, time)
-                                      else if (context.watch<DetailMessageProvider>().detailTime == time.toString())
-                                        dateTimeFormat(timeFormat, time)
-                                    ])
-                                  else
-                                    Column(
-                                      children: [
-                                        if (index != snapshot.data!.length - 1 && checkDuration(time, DateTime.parse(snapshot.data?[index + 1].time.toString() ?? '')))
-                                          dateTimeFormat(dateFormat, time)
-                                        else if (index == snapshot.data!.length - 1)
-                                          dateTimeFormat(dateFormat, time)
-                                        else if (context.watch<DetailMessageProvider>().detailTime == time.toString())
-                                          dateTimeFormat(dateFormat, time)
-                                      ],
-                                    ),
-                                  Align(
-                                    alignment:
-                                        (snapshot.data?[index].uid != widget.uid ? Alignment.topLeft : Alignment.topRight),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          snapshot.data?[index].uid == widget.uid ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            if(context.read<DetailMessageProvider>().detailTime == ''){
-                                              context.read<DetailMessageProvider>().setDetailTime(time.toString());
-                                            }else{
-                                              context.read<DetailMessageProvider>().setDetailTime('');
-                                            }
-                                          },
-                                          child: Container(
-                                            width: snapshot.data![index].messageText.toString().length > 20 ? MediaQuery.of(context).size.width / 2 : null,
-                                            decoration: BoxDecoration(
-                                              borderRadius: snapshot.data?[index].imageURL != '' ? const BorderRadius.all(Radius.circular(10))
-                                                  : snapshot.data?[index].uid ==
-                                                          widget.uid
-                                                      ? const BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(10),
-                                                          topRight:
-                                                              Radius.circular(10),
-                                                          bottomLeft:
-                                                              Radius.circular(10))
-                                                      : const BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(10),
-                                                          topRight:
-                                                              Radius.circular(10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                              color: (snapshot.data![index].uid != widget.uid
-                                                  ? const Color.fromARGB(255, 248, 222, 225)
-                                                  : Colors.grey.shade300),
-                                            ),
-                                            padding:
-                                                snapshot.data?[index].imageURL != ''
-                                                    ? EdgeInsets.zero
-                                                    : const EdgeInsets.all(16),
-                                            child:
-                                                snapshot.data![index].imageURL != ''
-                                                    ? image(snapshot.data![index].imageURL!, context)
-                                                    : Text(snapshot.data?[index].messageText ?? '', style: const TextStyle(fontSize: 15)),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                          return Container(
+                            color: Colors.white,
+                            padding: const EdgeInsets.only(
+                                left: 14, right: 14, top: 10, bottom: 10),
+                            child: Column(
+                              children: [
+                                if (checkTime(time))
+                                  Column(children: [
+                                    if (index != snapshot.data!.length - 1 &&
+                                        checkDuration(
+                                            time,
+                                            DateTime.parse(snapshot
+                                                    .data?[index + 1].time
+                                                    .toString() ??
+                                                '')))
+                                      dateTimeFormat(timeFormat, time)
+                                    else if (index == snapshot.data!.length - 1)
+                                      dateTimeFormat(timeFormat, time)
+                                    else if (context
+                                            .watch<DetailMessageProvider>()
+                                            .detailTime ==
+                                        time.toString())
+                                      dateTimeFormat(timeFormat, time)
+                                  ])
+                                else
+                                  Column(
+                                    children: [
+                                      if (index != snapshot.data!.length - 1 &&
+                                          checkDuration(
+                                              time,
+                                              DateTime.parse(snapshot
+                                                      .data?[index + 1].time
+                                                      .toString() ??
+                                                  '')))
+                                        dateTimeFormat(dateFormat, time)
+                                      else if (index ==
+                                          snapshot.data!.length - 1)
+                                        dateTimeFormat(dateFormat, time)
+                                      else if (context
+                                              .watch<DetailMessageProvider>()
+                                              .detailTime ==
+                                          time.toString())
+                                        dateTimeFormat(dateFormat, time)
+                                    ],
                                   ),
-                                  if (userTime.isNotEmpty)
-                                    (time.compareTo(DateTime.parse(userTime)) > 0)
-                                        ? Container()
-                                        : DateTime.parse(userTime) == time
-                                            ? Align(alignment: Alignment.bottomRight, child: avatarMini())
-                                            : Container()
-                                ],
-                              ),
-                            );
+                                Align(
+                                  alignment:
+                                      (snapshot.data?[index].uid != widget.uid
+                                          ? Alignment.topLeft
+                                          : Alignment.topRight),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        snapshot.data?[index].uid == widget.uid
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          if (context
+                                                  .read<DetailMessageProvider>()
+                                                  .detailTime ==
+                                              '') {
+                                            context
+                                                .read<DetailMessageProvider>()
+                                                .setDetailTime(time.toString());
+                                          } else {
+                                            context
+                                                .read<DetailMessageProvider>()
+                                                .setDetailTime('');
+                                          }
+                                        },
+                                        child: Container(
+                                          width: snapshot
+                                                      .data![index].messageText
+                                                      .toString()
+                                                      .length >
+                                                  20
+                                              ? MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  2
+                                              : null,
+                                          decoration: BoxDecoration(
+                                            borderRadius: snapshot.data?[index]
+                                                        .imageURL !=
+                                                    ''
+                                                ? const BorderRadius.all(
+                                                    Radius.circular(10))
+                                                : snapshot.data?[index].uid ==
+                                                        widget.uid
+                                                    ? const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10))
+                                                    : const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
+                                            color: (snapshot.data![index].uid !=
+                                                    widget.uid
+                                                ? const Color.fromARGB(
+                                                    255, 248, 222, 225)
+                                                : Colors.grey.shade300),
+                                          ),
+                                          padding:
+                                              snapshot.data?[index].imageURL !=
+                                                      ''
+                                                  ? EdgeInsets.zero
+                                                  : const EdgeInsets.all(16),
+                                          child:
+                                              snapshot.data![index].imageURL !=
+                                                      ''
+                                                  ? image(
+                                                      snapshot.data![index]
+                                                          .imageURL!,
+                                                      context)
+                                                  : Text(
+                                                      snapshot.data?[index]
+                                                              .messageText ??
+                                                          '',
+                                                      style: const TextStyle(
+                                                          fontSize: 15)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                if (userTime.isNotEmpty)
+                                  (time.compareTo(DateTime.parse(userTime)) > 0)
+                                      ? Container()
+                                      : DateTime.parse(userTime) == time
+                                          ? Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: avatarMini())
+                                          : Container()
+                              ],
+                            ),
+                          );
                         })
-
-
                     : Container();
-               });
+              });
         });
   }
 
@@ -330,7 +399,19 @@ class _DetailMessageState extends State<DetailMessage> {
                     Container(),
                     IconButton(
                         padding: const EdgeInsets.all(0),
-                        onPressed: () async {},
+                        onPressed: () async {
+                          try {
+                            final pickedFile = await ImagePicker()
+                                .pickImage(source: ImageSource.gallery);
+                            if (pickedFile != null) {
+                              // Xử lý ảnh đã chọn ở đây
+                              // Ví dụ: hiển thị ảnh trong một ImageView
+                              File? image = File(pickedFile.path);
+                            }
+                          } on PlatformException catch (e) {
+                            print('$e');
+                          }
+                        },
                         icon: const Icon(
                           Icons.image,
                         ))
@@ -390,8 +471,9 @@ class _DetailMessageState extends State<DetailMessage> {
           IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                // BlocProvider.of<DetailMessageBloc>(context)
-                //     .add(const ShowEmojiPicker());
+                show = !show;
+                BlocProvider.of<DetailMessageBloc>(context)
+                    .add(GetMessageList(widget.uid!, widget.chatRoomId!, show));
               },
               icon: const Icon(
                 Icons.emoji_emotions,
@@ -467,24 +549,6 @@ class _DetailMessageState extends State<DetailMessage> {
     );
   }
 
-  // Widget image(String url) {
-  //   return ClipRRect(
-  //     borderRadius: BorderRadius.circular(10),
-  //     child: Container(
-  //       width: 150,
-  //       height: 200,
-  //       decoration: BoxDecoration(
-  //         image: DecorationImage(
-  //           image: NetworkImage(url), // Đường dẫn tới ảnh
-  //           fit: BoxFit.cover, // Cách ảnh sẽ được hiển thị trong Container
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
-
   Widget avatarMini() {
     return Container(
       padding: const EdgeInsets.only(top: 5),
@@ -494,5 +558,4 @@ class _DetailMessageState extends State<DetailMessage> {
       ),
     );
   }
-
 }

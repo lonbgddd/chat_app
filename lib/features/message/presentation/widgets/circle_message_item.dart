@@ -1,3 +1,5 @@
+import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
+import 'package:chat_app/features/message/domain/entities/user_entity.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,13 +31,9 @@ class CircleMessageItem extends StatelessWidget {
               builder: (BuildContext context) {
                 return BlocProvider<DetailMessageBloc>(
                     create: (context) =>
-                    sl()
-                      ..add(GetMessageList(uid, chatRoomId!)),
+                        sl()..add(GetMessageList(uid, chatRoomId!, false)),
                     child: SizedBox(
-                        height: MediaQuery
-                            .of(context)
-                            .size
-                            .height * 0.95,
+                        height: MediaQuery.of(context).size.height * 0.95,
                         child: DetailMessage(
                           uid: uid,
                           chatRoomId: chatRoomId,
@@ -55,12 +53,11 @@ class CircleMessageItem extends StatelessWidget {
               BlocProvider.of<ChatItemBloc>(context)
                   .add(ShowDetail(state.user));
             },
-            child: SizedBox(
-              width: 150,
-              height: 120,
+            child: Container(
+              margin: const EdgeInsets.only(left: 20),
               child: Column(
                 children: [
-                  head(state.user.avatar!,AppAssets.iconStar2,false),
+                  newChatRoom(state.user.avatar!, AppAssets.iconStar2, state.isNewChatRoom),
                   Container(
                       margin: const EdgeInsets.only(top: 5),
                       child: Text(
@@ -81,24 +78,21 @@ class CircleMessageItem extends StatelessWidget {
       },
     );
   }
-  Widget head(String url,String icon, bool isBorder){
+
+  Widget newChatRoom(String url, String icon, bool isNew) {
     return Stack(
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 5),
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.only(right: 7),
           decoration: BoxDecoration(
-            border: isBorder ? Border.all(
-              color: const Color.fromARGB(229, 238, 181, 27),
-              width: 3,
-            ): null,
             borderRadius: BorderRadius.circular(10),
           ),
-          child:  ClipRRect(
+          child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Container(
               width: 90,
-              height: 110,
+              height: 123,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(url), // Đường dẫn tới ảnh
@@ -112,8 +106,28 @@ class CircleMessageItem extends StatelessWidget {
           bottom: 0,
           left: 0,
           right: 0,
-          child: Image(image: AssetImage(icon),height: 25,width: 25),
+          child: Image(image: AssetImage(icon), height: 25, width: 25),
         ),
+        isNew == true
+            ? Positioned(
+                bottom: 0,
+                right: 0,
+                top: 0,
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 2,
+                    ),
+                  ),
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.red,
+                  ),
+                ))
+            : Container()
       ],
     );
   }

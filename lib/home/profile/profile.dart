@@ -17,8 +17,6 @@ import 'package:provider/provider.dart';
 import '../../config/helpers/app_assets.dart';
 import 'components/body_buy_premium.dart';
 
-import '../../config/data_mothes.dart';
-import '../../config/helpers/helpers_database.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);

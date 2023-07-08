@@ -5,7 +5,7 @@ import 'package:chat_app/features/message/data/models/user_time_model.dart';
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/domain/entities/user_time_entity.dart';
 import 'package:chat_app/features/message/domain/usecases/compare_usertime_usecase.dart';
-import 'package:chat_app/features/message/domain/usecases/get_info_user.dart';
+import 'package:chat_app/features/message/domain/usecases/get_info_user_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_messages_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_chatroom_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_user_information_usecase.dart';
@@ -40,7 +40,8 @@ class DetailMessageBloc extends Bloc<DetailMessageEvent, DetailMessageState> {
 
   FutureOr<void> getMessageList(GetMessageList event, Emitter<DetailMessageState> emit) async {
     emit(const MessageListLoading());
-    emit(MessageListLoaded(_getChatRoomUserCase(event.uid,event.chatRoomId),_getMessagesUseCase(event.chatRoomId),_getInfoUserUseCase(event.uid)));
+    Stream<ChatRoomEntity> chatRoom = _getChatRoomUserCase(event.uid,event.chatRoomId);
+    emit(MessageListLoaded(_getChatRoomUserCase(event.uid,event.chatRoomId),_getMessagesUseCase(event.chatRoomId),_getInfoUserUseCase(event.uid),event.showEmoji));
   }
 
 

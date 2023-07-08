@@ -228,10 +228,7 @@ Future<void> main() async {
         create: (context) => LikedUserCardProvider(),
         child: const LikedUserCard(),
       ),
-      BlocProvider<MessageBloc>(
-        create: (context) => sl()..add(const GetChatRooms()),
-        child: const MyMessageScreen(),
-      ),
+
       // BlocProvider<ChatItemBloc>(
       //   create: (context) => sl(),
       //   child: MyItemMessage(),

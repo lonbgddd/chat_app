@@ -444,7 +444,10 @@ class DatabaseMethods {
         await FirebaseFirestore.instance
             .collection("chatRoom")
             .doc(chatRoomId)
-            .update({"userTimes": list});
+            .update({
+              "userTimes": list,
+              "time": time
+            });
       }
     } catch (e) {
       throw Exception(e);

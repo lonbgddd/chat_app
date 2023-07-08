@@ -6,7 +6,7 @@ abstract class MessageState extends Equatable {
   List<Object> get props => [];
 }
 
-class MessageInitial extends MessageState {
+class MessageInitial extends MessageState  {
   const MessageInitial();
 }
 
@@ -16,9 +16,12 @@ class ChatRoomsLoading extends MessageState {
 
 class ChatRoomsLoaded extends MessageState {
   final String currentUserId;
+  final UserEntity user;
   final Stream<List<ChatRoomEntity>> chatRoomsStream;
-  const ChatRoomsLoaded(this.chatRoomsStream, this.currentUserId);
+  final Stream<List<ChatRoomEntity>> newChatRoomsStream;
+  const ChatRoomsLoaded(this.chatRoomsStream, this.currentUserId,this.user,this.newChatRoomsStream);
   // final List<ChatRoomEntity> chatRooms;
 
   // const ChatRoomsLoaded(this.chatRooms);
 }
+
