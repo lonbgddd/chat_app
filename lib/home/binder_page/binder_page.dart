@@ -38,7 +38,6 @@ class _BinderPageState extends State<BinderPage>
         );
       },
     );
-    print(result);
     if (result == 'refresh') {
       setState(() {
         isRefresh = true;
@@ -46,21 +45,13 @@ class _BinderPageState extends State<BinderPage>
     }
   }
 
-  Future<List<String>> _savePositionUser() async {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    return [position.longitude.toString(), position.latitude.toString()];
-  }
   // Future<List<String>> _savePositionUser() async {
   //   Position position = await Geolocator.getCurrentPosition(
   //     desiredAccuracy: LocationAccuracy.high,
   //   );
-  //   print("${position.latitude}|${position.longitude}");
-  //   await HelpersFunctions.savePositionTokenSharedPreference(
-  //       [position.latitude.toString(), position.longitude.toString()]);
   //   return [position.longitude.toString(), position.latitude.toString()];
   // }
+
 
   @override
   void initState() {

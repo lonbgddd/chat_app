@@ -155,6 +155,7 @@ class ProfileCard extends StatelessWidget {
           final provider = Provider.of<BinderWatch>(context);
           final position = provider.position;
           final milliseconds = provider.isDragging ? 0 : 600;
+
           final center = constraints.smallest.center(Offset.zero);
           final angle = provider.angle * pi / 180;
           final rotatedMatrix = Matrix4.identity()

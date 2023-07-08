@@ -202,7 +202,9 @@ class ItemMessageState extends State<ItemMessage> {
                           backgroundImage:
                               NetworkImage(snapshot.data?.avatar ?? ""),
                           child: snapshot.data!.activeStatus == "online"
-                              ? Stack(children: const [
+                              ? Stack(
+                              clipBehavior: Clip.none,
+                              children: const [
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: CircleAvatar(

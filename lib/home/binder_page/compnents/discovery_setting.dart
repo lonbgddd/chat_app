@@ -5,14 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class DiscoverySetting extends StatefulWidget {
+class DiscoverySetting extends StatelessWidget {
   const DiscoverySetting({Key? key}) : super(key: key);
-
-  @override
-  State<DiscoverySetting> createState() => _DiscoverySettingState();
-}
-
-class _DiscoverySettingState extends State<DiscoverySetting> {
 
   @override
   Widget build(BuildContext context) {

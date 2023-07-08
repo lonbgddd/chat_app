@@ -96,6 +96,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           controller:
                               updateProvider.introduceYourselfController,
                           keyboardType: TextInputType.multiline,
+                          maxLength: 500,
                           textInputAction: TextInputAction.newline,
                           maxLines: null,
                           onChanged: (value) {

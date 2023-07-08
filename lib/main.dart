@@ -12,6 +12,7 @@ import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/changedNotify/location_provider.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
+
 // import 'package:chat_app/config/changedNotify/notification_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/search_message.dart';
@@ -21,11 +22,15 @@ import 'package:chat_app/features/message/presentation/bloc/message/message_bloc
 import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
+import 'package:chat_app/home/binder_selection/components/body.dart';
+import 'package:chat_app/home/binder_selection/components/item_selection_card.dart';
 import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
 import 'package:chat_app/home/message/itemMessage.dart';
+
 import 'package:chat_app/home/notification/notification_screen.dart';
+
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:chat_app/location/location_screen.dart';
@@ -149,6 +154,11 @@ Future<void> main() async {
         create: (context) => CallDataProvider(),
         child: const LoginScreen(),
       ),
+      ChangeNotifierProvider(
+        create: (context) => LikedUserCardProvider(),
+        child:  BodySelection(),
+      ),
+
       ChangeNotifierProvider(
         create: (context) => PageDataConfirmProfileProvider(),
         child: const ConfirmProfile(),
