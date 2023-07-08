@@ -20,9 +20,7 @@ class BinderPage extends StatefulWidget {
 
 class _BinderPageState extends State<BinderPage>
     with SingleTickerProviderStateMixin {
-  late Animation _animation;
-  late AnimationController _animationController;
-  var listRadius = [50.0, 100.0, 150.0, 200.0];
+
   bool isRefresh = false;
   bool hasNotification = true;
 
@@ -85,7 +83,7 @@ class _BinderPageState extends State<BinderPage>
     super.didChangeDependencies();
     if (isRefresh) {
       final provider = context.read<BinderWatch>();
-      provider.allUserBinder(provider.selectedOption, provider.currentAgeValue,
+      provider.allUserBinder(context,provider.selectedOption, provider.currentAgeValue,
           provider.showPeopleInRangeDistance, provider.distancePreference);
       setState(() {
         isRefresh = false;
@@ -190,7 +188,7 @@ class _BinderPageState extends State<BinderPage>
     return FutureBuilder(
       future: context
           .read<BinderWatch>()
-          .allUserBinder(gender, age, isInDistanceRange, kilometres),
+          .allUserBinder(context,gender, age, isInDistanceRange, kilometres),
       builder: (context, snapshot) => snapshot.hasData
           ? Padding(
               padding: const EdgeInsets.all(10),
