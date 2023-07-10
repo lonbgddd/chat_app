@@ -5,9 +5,9 @@ class AddMessageUseCase {
 
   AddMessageUseCase(this._chatRoomRepository);
 
-  Future<void> call(String uid,
-      String chatRoomId, String messageContent, String imageUrl, String token) {
-    return _chatRoomRepository.addMessage(uid,
-        chatRoomId, messageContent, imageUrl, token);
+  Future<void> call(String uid, String chatRoomId, String messageContent,
+      String imageUrl, String avatar, String name) {
+    return _chatRoomRepository.addMessage(
+        uid, chatRoomId, messageContent, imageUrl, avatar, name);
   }
 }

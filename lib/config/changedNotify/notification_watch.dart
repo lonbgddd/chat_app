@@ -15,11 +15,11 @@ class NotificationWatch extends ChangeNotifier {
           .collection('notification')
           .doc(idUser)
           .collection('mess')
+          .orderBy('time')
           .get();
-      print(data.docs.length);
       listNotification = data.docs;
-      return listNotification;
       notifyListeners();
+      return listNotification;
     } catch (e) {
       throw Exception(e);
     }
@@ -32,16 +32,20 @@ class NotificationWatch extends ChangeNotifier {
       required String tyne,
       required String avatar,
       required String mess,
+      required String name,
+      required String chatRoomId,
       required DateTime time}) async {
     try {
       String? idUser = await HelpersFunctions().getUserIdUserSharedPreference();
-
+      print('Truyền vaò $tyne');
       firestore.collection('notification').doc(idUser).collection('mess').add({
         'uid': id,
         'tyne': tyne,
         'avatar': avatar,
         'mess': mess,
-        'time': time,
+        'name': name,
+        'chatRoomId': chatRoomId,
+        'time': time.toIso8601String(),
         'status': 'false'
       });
     } catch (e) {

@@ -9,6 +9,7 @@ import 'package:chat_app/home/profile/components/sexual_orientation_bottom_sheet
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+
 import 'components/basic_information_row.dart';
 import 'components/life_style_row.dart';
 import 'components/update_image.dart';
@@ -46,7 +47,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            title:  Text(
+            title: Text(
               "Chỉnh sửa hồ sơ",
               style: TextStyle(color: Colors.black),
             ),
@@ -62,7 +63,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               },
               icon: const Icon(
                 Icons.arrow_back,
-                color:  Color.fromRGBO(229, 58, 69, 100),
+                color: Color.fromRGBO(229, 58, 69, 100),
               ),
             ),
           ),
@@ -112,7 +113,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.normal),
                         ),
-
                       ],
                     ),
                   ),

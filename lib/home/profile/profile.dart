@@ -1,5 +1,4 @@
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/home/binder_page/compnents/discovery_setting.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/home/setting/setting_screen.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -13,20 +12,23 @@ import 'components/body_buy_premium.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-  void _showBottomModal(BuildContext context)
-  {
-    showModalBottomSheet(context: context,
+  void _showBottomModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        final padding = MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
+        MediaQueryData mediaQueryData = MediaQuery.of(context);
+        EdgeInsets padding = mediaQueryData.padding;
 
         return Container(
-          padding: EdgeInsets.only(top: padding.top),   height: MediaQuery.of(context).size.height,
-              child: const SettingScreen(),
-            );
-          },
+          padding: EdgeInsets.only(top: padding.top),
+          height: MediaQuery.of(context).size.height,
+          child: const SettingScreen(),
+        );
+      },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     Provider.of<ProfileWatch>(context, listen: false).getUser();
@@ -68,9 +70,11 @@ class ProfileScreen extends StatelessWidget {
                 )),
             IconButton(
                 onPressed: () => _showBottomModal(context),
-                icon:Image.asset(AppAssets.iconSetting,
+                icon: Image.asset(
+                  AppAssets.iconSetting,
                   color: Colors.grey,
-                  width: 23,)),
+                  width: 23,
+                )),
           ],
         ),
         backgroundColor: Colors.white,

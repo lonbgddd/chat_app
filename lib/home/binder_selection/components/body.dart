@@ -1,20 +1,13 @@
-import 'dart:math';
-
 import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
-import 'package:chat_app/config/helpers/enum_cal.dart';
-import 'package:chat_app/home/binder_page/compnents/discovery_setting.dart';
-import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:chat_app/home/binder_selection/components/item_selection_card.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../../../config/changedNotify/binder_watch.dart';
-import 'package:provider/provider.dart';
 
 class BodySelection extends StatelessWidget {
   final _scrollController = ScrollController();
@@ -37,6 +30,7 @@ class BodySelection extends StatelessWidget {
       );
     }
   }
+
   void _showBottomModal({
     required BuildContext context,
     required Color color,
@@ -51,13 +45,13 @@ class BodySelection extends StatelessWidget {
     required String subTitle,
     required String title,
   }) {
-    final padding = MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    EdgeInsets padding = mediaQueryData.padding;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       isDismissible: true,
       builder: (BuildContext context) {
-
         return Container(
           padding: EdgeInsets.only(top: padding.top),
           height: MediaQuery.of(context).size.height,
@@ -82,9 +76,7 @@ class BodySelection extends StatelessWidget {
   Widget getBody(BuildContext context, String gender, List<double> age,
       bool isInDistanceRange, double kilometres) {
     return FutureBuilder(
-      future: context
-          .read<BinderWatch>()
-          .allBinderSelectionUser(),
+      future: context.read<BinderWatch>().allBinderSelectionUser(),
       builder: (context, snapshot) {
         return Padding(
           padding: const EdgeInsets.all(10),
@@ -103,7 +95,7 @@ class BodySelection extends StatelessWidget {
                 onTap: () {
                   Provider.of<LikedUserCardProvider>(context, listen: false)
                       .addFollow(
-                      context.read<BinderWatch>().listCard[index].uid);
+                          context.read<BinderWatch>().listCard[index].uid);
                   context.read<BinderWatch>().removeCardAtIndex(index);
                 },
                 user: context.read<BinderWatch>().listCard[index],
@@ -174,7 +166,7 @@ class BodySelection extends StatelessWidget {
                   iconData: null,
                   packageModel: packageBinderGoldList,
                   subTitle:
-                  'Thật nổi bật với lượt Siêu Thích và tăng gấp 3 lần khả năng tương hợp.',
+                      'Thật nổi bật với lượt Siêu Thích và tăng gấp 3 lần khả năng tương hợp.',
                 ),
                 style: ElevatedButton.styleFrom(
                   shadowColor: Colors.grey,
@@ -199,5 +191,4 @@ class BodySelection extends StatelessWidget {
       ),
     );
   }
-
 }

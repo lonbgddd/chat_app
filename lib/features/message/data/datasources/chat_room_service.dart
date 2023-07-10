@@ -16,18 +16,22 @@ class ChatRoomService {
         .orderBy('time', descending: true)
         .snapshots()
         .asyncMap((snapshot) async {
-          List<ChatRoomModel> list =[];
-          for(var index in snapshot.docs){
-            await index.reference.collection('chats').get().then((QuerySnapshot snapshot) {
-              if (snapshot.docs.isNotEmpty) {
-                ChatRoomModel chatRoom = ChatRoomModel.fromJson(index.data());
-                list.add(chatRoom);
-              }
-            });
+      List<ChatRoomModel> list = [];
+      for (var index in snapshot.docs) {
+        await index.reference
+            .collection('chats')
+            .get()
+            .then((QuerySnapshot snapshot) {
+          if (snapshot.docs.isNotEmpty) {
+            ChatRoomModel chatRoom = ChatRoomModel.fromJson(index.data());
+            list.add(chatRoom);
           }
-          return list;
+        });
+      }
+      return list;
     });
   }
+
   Stream<List<ChatRoomModel>> getNewChatRoomFromFireStore(String uid) {
     return FirebaseFirestore.instance
         .collection("chatRoom")
@@ -35,11 +39,14 @@ class ChatRoomService {
         .orderBy('time', descending: true)
         .snapshots()
         .asyncMap((snapshot) async {
-      List<ChatRoomModel> list =[];
-      for(var index in snapshot.docs){
-        await index.reference.collection('chats').get().then((QuerySnapshot snapshot) {
+      List<ChatRoomModel> list = [];
+      for (var index in snapshot.docs) {
+        await index.reference
+            .collection('chats')
+            .get()
+            .then((QuerySnapshot snapshot) {
           if (snapshot.docs.isNotEmpty) {
-          }else{
+          } else {
             ChatRoomModel chatRoom = ChatRoomModel.fromJson(index.data());
             list.add(chatRoom);
           }
@@ -76,7 +83,15 @@ class ChatRoomService {
   }
 
   Future<void> addMessage(String uid, String chatRoomId, String messageContent,
-      String imageUrl, String token) async {
+      String imageUrl, String avatar, String name) async {
+    String token = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .get()
+        .then((value) {
+      return value.docs.first.data()['token'];
+    });
+
     ChatMessageModel message = ChatMessageModel(
         uid: uid,
         messageText: messageContent,
@@ -89,11 +104,13 @@ class ChatRoomService {
         .add(message.toJson())
         .then((_) {
       FirebaseApi().sendPushMessage(
-          title: message.messageText ?? "",
+          title: 'Tin nhắn',
           uid: uid,
           type: 'chat',
+          chatRoomId: chatRoomId,
           body: message.messageText ?? "",
-          avatar: '',
+          avatar: avatar,
+          name: name,
           token: token);
     }).catchError((e) {
       print(e.toString());
@@ -108,7 +125,8 @@ class ChatRoomService {
         .orderBy('time', descending: true)
         .limit(1)
         .get();
-    ChatMessageModel lastChat = ChatMessageModel.fromJson(chat.docs.first.data());
+    ChatMessageModel lastChat =
+        ChatMessageModel.fromJson(chat.docs.first.data());
     final myUserTime = await DatabaseMethods().getUserTime(uid, chatRoomId);
     DateTime? dateTimeA = lastChat.time!;
     DateTime dateTimeB = DateTime.parse(myUserTime);
@@ -125,41 +143,42 @@ class ChatRoomService {
           .doc(chatRoomId)
           .snapshots()
           .asyncMap((doc) async {
-            if(doc.data()!.containsKey('newChatRoom')){
-              List<dynamic> users = doc['newChatRoom'];
-              String? myUid = await HelpersFunctions().getUserIdUserSharedPreference();
-              if(users.isEmpty){
+        if (doc.data()!.containsKey('newChatRoom')) {
+          List<dynamic> users = doc['newChatRoom'];
+          String? myUid =
+              await HelpersFunctions().getUserIdUserSharedPreference();
+          if (users.isEmpty) {
+            users.add(myUid);
+            FirebaseFirestore.instance
+                .collection("chatRoom")
+                .doc(chatRoomId)
+                .update({"newChatRoom": users});
+          } else if (users.length < 2) {
+            for (var user in users) {
+              if (user != myUid) {
                 users.add(myUid);
                 FirebaseFirestore.instance
                     .collection("chatRoom")
-                    .doc(chatRoomId).update({
-                  "newChatRoom" : users
-                });
-              }else if(users.length <2){
-                for(var user in users ){
-                  if(user != myUid){
-                    users.add(myUid);
-                    FirebaseFirestore.instance
-                        .collection("chatRoom")
-                        .doc(chatRoomId).update({
-                      "newChatRoom" : users
-                    });
-                  }
-                }
+                    .doc(chatRoomId)
+                    .update({"newChatRoom": users});
               }
             }
-            return ChatRoomModel.fromJson(doc.data()!);
-          });
+          }
+        }
+        return ChatRoomModel.fromJson(doc.data()!);
+      });
     } catch (e) {
       throw Exception('$e');
     }
   }
+
   Future<ChatRoomModel> getNewChatRoom(String chatRoomId) {
     try {
       return FirebaseFirestore.instance
           .collection("chatRoom")
           .doc(chatRoomId)
-          .get().then((doc) => ChatRoomModel.fromJson(doc.data()!));
+          .get()
+          .then((doc) => ChatRoomModel.fromJson(doc.data()!));
     } catch (e) {
       throw Exception('$e');
     }

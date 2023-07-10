@@ -1,12 +1,8 @@
-import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
-import 'package:chat_app/home/binder_page/compnents/range_slider.dart';
 import 'package:chat_app/home/binder_page/widget/custom_field.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class BodyHighSearch extends StatelessWidget {
   const BodyHighSearch({super.key});
@@ -25,8 +21,9 @@ class BodyHighSearch extends StatelessWidget {
     required String subTitle,
     required String title,
   }) {
-    final padding =
-        MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    EdgeInsets padding = mediaQueryData.padding;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,

@@ -7,16 +7,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../config/changedNotify/notification_watch.dart';
 import '../config/data_mothes.dart';
 import '../config/firebase/firebase_api.dart';
 import '../config/helpers/helpers_database.dart';
-import '../features/message/domain/usecases/get_chatrooms_usecase.dart';
 import '../features/message/presentation/bloc/message/message_bloc.dart';
 import '../features/message/presentation/screens/message_screen.dart';
 import '../injection_container.dart';
@@ -45,20 +43,33 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     FirebaseMessaging.onMessage.listen((event) async {
-      print(event.data);
       String uid = await event.data['id'];
       event.data['type'] != 'chat'
-          ? showMatchDialog(context,
-              avatar: event.data['avatar'], name: 'Taì', uid: uid)
+          ? {
+              NotificationWatch().saveNotification(
+                  id: uid,
+                  tyne: 'match',
+                  name: event.notification?.title ?? "",
+                  chatRoomId: event.data['chatRoomId'],
+                  avatar: event.data['avatar'],
+                  mess: event.notification?.title ?? "",
+                  time: DateTime.now()),
+              showMatchDialog(context,
+                  avatar: event.data['avatar'],
+                  name: event.data['name'] ?? "",
+                  uid: uid)
+            }
           : _selectedIndex == 1
               ? null
               : {
                   showFlutterNotification(event),
                   NotificationWatch().saveNotification(
                       id: uid,
-                      tyne: 'chat',
+                      name: event.data['name'],
+                      chatRoomId: event.data['chatRoomId'],
+                      tyne: event.data['type'],
                       avatar: event.data['avatar'],
-                      mess: event.notification?.title ?? "",
+                      mess: event.notification?.body ?? "",
                       time: DateTime.now())
                 };
     });
@@ -71,7 +82,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ? showMatchDialog(context,
             avatar: message.data['avatar'],
             name: 'Taì',
-            uid: message.data['id'].toString() ?? "")
+            uid: message.data['id'].toString())
         : showFlutterNotification(message);
   }
 
@@ -112,9 +123,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   static final List<Widget> _widgetOptions = <Widget>[
     const BinderPage(),
     BlocProvider<MessageBloc>(
-      create: (context) => sl()..add(const GetChatRooms()),
-      child: const MyMessageScreen()
-    ),
+        create: (context) => sl()..add(const GetChatRooms()),
+        child: const MyMessageScreen()),
     BinderSelection(),
     const WhoLikePage(),
     const ProfileScreen(),
@@ -334,12 +344,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ElevatedButton(
               child: const Text('Close'),
               onPressed: () async {
-                NotificationWatch().saveNotification(
-                    id: uid,
-                    tyne: 'match',
-                    avatar: avatar,
-                    mess: 'Match',
-                    time: DateTime.now());
                 context.pop();
               },
             ),

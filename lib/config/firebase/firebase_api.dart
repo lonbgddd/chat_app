@@ -102,6 +102,8 @@ class FirebaseApi {
       required String token,
       required String uid,
       required String type,
+      required String chatRoomId,
+      required String name,
       required String avatar}) async {
     try {
       await http.post(
@@ -120,6 +122,8 @@ class FirebaseApi {
             'data': <String, dynamic>{
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',
               'uid': uid,
+              'chatRoomId': chatRoomId,
+              'name': name,
               'type': type,
               'avatar': avatar,
               'status': 'false'
@@ -128,7 +132,6 @@ class FirebaseApi {
           },
         ),
       );
-      print('done');
     } catch (e) {
       print("error push notification");
     }
