@@ -270,7 +270,7 @@ class MyMessageScreen extends StatelessWidget {
           Expanded(
             child: TextField(
               onTap: () {
-                context.go('/home/search-message');
+                context.goNamed('search-message');
               },
               decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),

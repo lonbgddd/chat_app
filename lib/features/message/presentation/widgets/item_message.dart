@@ -3,6 +3,7 @@ import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../bloc/detail_message/detail_message_bloc.dart';
 import 'detail_Message.dart';
 
@@ -20,38 +21,18 @@ class _MyItemMessageState extends State<MyItemMessage>  with AutomaticKeepAliveC
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ChatItemBloc, ChatItemState>(
-      listenWhen: (previous, current) => current is ChatItemActionState,
-      buildWhen: (previous, current) => current is! ChatItemActionState,
-      listener: (context, state) {
-        if (state is ChatItemClicked) {
-          showModalBottomSheet(
-              isScrollControlled: true,
-              context: context,
-              backgroundColor: Colors.transparent,
-              builder: (BuildContext context) {
-                return BlocProvider<DetailMessageBloc>(
-                    create: (context) {
-                      return sl()
-                        ..add(GetMessageList(widget.uid!, widget.chatRoomId!, false));
-                    },
-                    child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.95,
-                        child: DetailMessage(
-                          uid: widget.uid,
-                          chatRoomId: widget.chatRoomId,
-                          name: state.user.fullName,
-                          avatar: state.user.avatar,
-                          token: state.user.token,
-                        )));
+
+          listenWhen: (previous, current) => current is ChatItemActionState,
+          buildWhen: (previous, current) => current is! ChatItemActionState,
+          listener: (context, state) {
+            if (state is ChatItemClicked) {
+              context.goNamed('detail-message',queryParameters: {
+                'uid': uid,
+                'chatRoomId':chatRoomId,
+                'name': state.user.fullName,
+                'avatar': state.user.avatar,
+                'token': state.user.token
               });
-          BlocProvider.of<ChatItemBloc>(context)
-              .add(GetChatItem(widget.uid!, widget.chatRoomId!));
-        }
-      },
-      builder: (context, state) {
-        if (state is ChatItemLoaded) {
-          return GestureDetector(
-            onTap: () {
               BlocProvider.of<ChatItemBloc>(context)
                   .add(ShowDetail(state.user));
             },
