@@ -126,10 +126,10 @@ class MyMessageScreen extends StatelessWidget {
           );
         }
         return snapshot.hasData
-            ? ListView.builder(
+            ? ListView.separated(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: snapshot.data?.length,
+                itemCount: snapshot.data!.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = snapshot.data?[index];
@@ -139,11 +139,11 @@ class MyMessageScreen extends StatelessWidget {
                       .replaceAll(currentUid ?? "", "");
                   String chatRoomId = data.chatRoomId!;
                   return BlocProvider<ChatItemBloc>(
-                      key: ValueKey(chatRoomId),
+                      // key: ValueKey(chatRoomId),
                       create: (context) =>
                           sl()..add(GetChatItem(uid, chatRoomId)),
                       child: MyItemMessage(uid: uid, chatRoomId: chatRoomId));
-                },
+                }, separatorBuilder: (BuildContext context, int index) { return Container(height: 0,); },
               )
             : Container();
       },

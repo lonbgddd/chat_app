@@ -19,7 +19,8 @@ class UpdateNotify extends ChangeNotifier {
   bool userLoaded = false;
   List<String> allLanguageList = [];
   List<String> filteredLanguageList = [];
-
+  List<File?> selectedPhotosList = [];
+  int introduceYourselfTextCount = 500;
   String gender = "";
   String datingPurpose = "";
 
@@ -55,10 +56,11 @@ class UpdateNotify extends ChangeNotifier {
       TextEditingController();
 
   final TextEditingController searchInterestController =
-  TextEditingController();
+      TextEditingController();
 
   final TextEditingController searchLanguageController =
-  TextEditingController();
+      TextEditingController();
+
   Future<void> getUser(bool initTextController) async {
     userLoaded = true;
     uid = await HelpersFunctions().getUserIdUserSharedPreference();
@@ -91,11 +93,22 @@ class UpdateNotify extends ChangeNotifier {
       companyController.text = user.company!;
       schoolController.text = user.school!;
       currentAddressController.text = user.currentAddress!;
+      introduceYourselfTextCount -= user.introduceYourself!.length;
     }
     isLoading = false;
     isInterestSearching = false;
     await fetchLanguages();
     notifyListeners();
+  }
+
+  void onIntroduceInputChange() {
+    introduceYourselfTextCount = 500 - introduceYourselfController.text.length;
+    notifyListeners();
+    if (introduceYourselfTextCount > 500) {
+      introduceYourselfController.text =
+          introduceYourselfController.text.substring(0, 500);
+      notifyListeners();
+    }
   }
 
   Future<void> pickImages() async {
@@ -106,6 +119,13 @@ class UpdateNotify extends ChangeNotifier {
       for (var imageFile in selectedImages) {
         await _cropImage(imageFile: imageFile);
       }
+      loading();
+      List<String> updatedPhotoUrls =
+          await DatabaseMethods().pushListImage(selectedPhotosList, uid!);
+      photoList!.addAll(updatedPhotoUrls);
+      selectedPhotosList.clear();
+      await updatePhotoList();
+      stopLoading();
       notifyListeners();
     } else {
       // Xử lý khi vượt quá số lượng ảnh tối đa
@@ -142,16 +162,17 @@ class UpdateNotify extends ChangeNotifier {
     if (croppedFile != null) {
       File? croppedImage = File(croppedFile.path);
       if (croppedImage.existsSync()) {
-        String fileUrl = await DatabaseMethods().pushImage(croppedImage, uid!);
-        photoList!.add(fileUrl);
+        // String fileUrl = await DatabaseMethods().pushImage(croppedImage, uid!);
+        // photoList!.add(fileUrl);
+        selectedPhotosList.add(croppedImage);
         notifyListeners();
         updatePhotoList();
       }
     }
   }
 
-  void updatePhotoList() {
-    FirebaseFirestore.instance
+  Future<void> updatePhotoList() async {
+    await FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
         .update({"photoList": photoList});
@@ -170,7 +191,6 @@ class UpdateNotify extends ChangeNotifier {
         .toList();
     notifyListeners();
   }
-
 
   Future<void> updateInterestsList() async {
     await FirebaseFirestore.instance

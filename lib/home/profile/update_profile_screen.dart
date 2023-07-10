@@ -66,7 +66,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               },
               icon: const Icon(
                 Icons.arrow_back,
-                color:  Color.fromRGBO(229, 58, 69, 100),
+                color: Color.fromRGBO(229, 58, 69, 100),
               ),
             ),
           ),
@@ -99,10 +99,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           textInputAction: TextInputAction.newline,
                           maxLines: null,
                           onChanged: (value) {
-                            print(context
-                                .read<UpdateNotify>()
-                                .introduceYourselfController
-                                .text);
+                            updateProvider.onIntroduceInputChange();
                           },
                           decoration: const InputDecoration(
                             contentPadding:
@@ -118,7 +115,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         Align(
                             alignment: Alignment.bottomRight,
                             child: Text(
-                              "500",
+                              updateProvider.introduceYourselfTextCount.toString(),
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,

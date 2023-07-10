@@ -1,5 +1,6 @@
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'life_style_bottom_sheet.dart';
 
@@ -46,7 +47,10 @@ class LifeStyleRow extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 2 - 8.0,
               child: Row(
                 children: [
-                  Image.asset(icon),
+                  SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: SvgPicture.asset(icon)),
                   const SizedBox(
                     width: 16.0,
                   ),
