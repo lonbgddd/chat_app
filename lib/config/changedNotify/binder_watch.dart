@@ -5,6 +5,7 @@ import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/enum_cal.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -117,8 +118,7 @@ class BinderWatch extends ChangeNotifier {
         users = await DatabaseMethods()
             .getUserHasFilter(uid, gender, [age.first, age.last]);
       }
-      print('Your list has ${users.length} elements');
-      _listCard = users ?? [];
+      _listCard = users;
       shuffleUsers(_listCard);
       await Provider.of<HighlightUserNotify>(context, listen: false)
           .sortUsers(_listCard);
@@ -219,15 +219,25 @@ class BinderWatch extends ChangeNotifier {
           "time": time,
           "newChatRoom": []
         };
+        String avatar = '';
+        String name = await FirebaseFirestore.instance
+            .collection('users')
+            .where('uid', isEqualTo: uid)
+            .get()
+            .then((value) {
+          avatar = value.docs.first.data()['avatar'];
+          return value.docs.first.data()['fullName'];
+        });
+
         await FirebaseApi().sendPushMessage(
             title: 'Match',
             uid: uid,
             chatRoomId: chatRoomId,
             type: 'match',
             body: 'Bạn có một tương hợp mới nhớ kiểm tra',
-            avatar: '',
+            avatar: avatar,
             token: token,
-            name: '');
+            name: name);
         await DatabaseMethods().addChatRoom(chatRoom, chatRoomId);
       }
 
