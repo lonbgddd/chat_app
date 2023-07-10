@@ -3,6 +3,7 @@ import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/Auth/screen/verify_OTP.dart';
 import 'package:chat_app/home/binder_page/compnents/show_me.dart';
 import 'package:chat_app/home/profile/update_profile_screen.dart';
+import 'package:chat_app/home/setting/setting_screen.dart';
 import 'package:chat_app/location/location_screen.dart';
 import 'package:chat_app/welcom/welcom.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,6 +78,7 @@ final GoRouter router = GoRouter(routes: [
             path: 'location-screen',
             name: 'location-screen',
             builder: (context, state) => LocationScreen()),
+
       ]),
   GoRoute(
     path: '/',

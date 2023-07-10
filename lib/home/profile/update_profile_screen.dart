@@ -46,7 +46,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text(
+            title:  Text(
               "Chỉnh sửa hồ sơ",
               style: TextStyle(color: Colors.black),
             ),
@@ -92,6 +92,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           controller:
                               updateProvider.introduceYourselfController,
                           keyboardType: TextInputType.multiline,
+                          maxLength: 500,
                           textInputAction: TextInputAction.newline,
                           maxLines: null,
                           onChanged: (value) {
@@ -111,15 +112,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.normal),
                         ),
-                        Align(
-                            alignment: Alignment.bottomRight,
-                            child: Text(
-                              "500",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey.shade700),
-                            )),
+
                       ],
                     ),
                   ),

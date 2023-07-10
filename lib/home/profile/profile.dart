@@ -1,8 +1,7 @@
-
-
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/login_google.dart';
+import 'package:chat_app/home/binder_page/compnents/discovery_setting.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
+import 'package:chat_app/home/setting/setting_screen.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,25 +11,25 @@ import 'package:provider/provider.dart';
 import '../../config/helpers/app_assets.dart';
 import 'components/body_buy_premium.dart';
 
-
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+  void _showBottomModal(BuildContext context)
+  {
+    showModalBottomSheet(context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        final padding = MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  bool isVerified = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ProfileWatch>(context, listen: false).getUser();
+        return Container(
+          padding: EdgeInsets.only(top: padding.top),   height: MediaQuery.of(context).size.height,
+              child: const SettingScreen(),
+            );
+          },
+    );
   }
-
   @override
   Widget build(BuildContext context) {
+    Provider.of<ProfileWatch>(context, listen: false).getUser();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -68,14 +67,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: 23,
                 )),
             IconButton(
-                onPressed: () async {
-                  context.read<CallDataProvider>().signOut();
-                  context.pushReplacement('/login-home-screen');
-                },
-                icon: Icon(
-                  Icons.login,
+                onPressed: () => _showBottomModal(context),
+                icon:Image.asset(AppAssets.iconSetting,
                   color: Colors.grey,
-                )),
+                  width: 23,)),
           ],
         ),
         backgroundColor: Colors.white,
@@ -129,14 +124,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 8,
                       ),
                       GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isVerified = !isVerified;
-                          });
-                        },
                         child: Icon(
                           Icons.verified,
-                          color: isVerified ? Colors.blue : Colors.grey,
+                          color: Colors.blue,
                         ),
                       ),
                     ],

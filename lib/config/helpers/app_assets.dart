@@ -5,7 +5,10 @@ class AppAssets {
 
   static const String iconTinder = iconPath + 'icon-tinder.svg';
   static const String iconTinderGold = iconPath + 'icon-tinder-gold.svg';
+  static const String iconTinderGoldBanner = iconPath + 'tinder-gold-banner.svg';
   static const String iconTinderPlatinum = iconPath + 'icon-tinder-platinum.svg';
+  static const String iconTinderPlatinumBanner = iconPath + 'tinder-plantinum-banner.svg';
+  static const String iconTinderPlusBanner = iconPath + 'tinder-plus-banner.svg';
   static const String iconChatBottomBar = iconPath + 'icon-chat.svg';
   static const String iconLoveBottomBar = iconPath + 'icon-star.svg';
   static const String iconProfileBottomBar = iconPath + 'icon-profile.svg';

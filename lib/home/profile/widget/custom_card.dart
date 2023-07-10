@@ -15,7 +15,7 @@ class CustomCard extends StatelessWidget {
     this.icon,
     required this.title,
     this.subtitle,
-    required this.iconColor,
+     this.iconColor,
     required this.onTap,
     required this.isIcon,
   }) : super(key: key);
@@ -76,7 +76,7 @@ class CustomCard extends StatelessWidget {
                 color: Colors.white54,
                 border: Border.all(
                   color: Colors.grey,
-                  width: 1,
+                  width: 0.5,
                 ),
               ),
               child: const Center(

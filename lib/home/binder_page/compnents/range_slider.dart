@@ -26,9 +26,7 @@ class _SliderContainerState extends State<SliderContainer> {
   Widget build(BuildContext context) {
     return Consumer<BinderWatch>(
       builder: (context, myProvider, _) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-          child: Column(
+        return  Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -68,9 +66,9 @@ class _SliderContainerState extends State<SliderContainer> {
                 // RangeValues _currentValue = const RangeValues(18, 22);
                     ? RangeSlider(
                   values: RangeValues(myProvider.currentAgeValue.first, myProvider.currentAgeValue.last),
-                  divisions: ((100 - 18) ~/ 1),
+                  divisions: ((70 - 18) ~/ 1),
                   min: 18,
-                  max: 100.0,
+                  max: 70.0,
                   onChanged: (RangeValues values) {
                     double start = values.start;
                     double end = values.end;
@@ -124,8 +122,7 @@ class _SliderContainerState extends State<SliderContainer> {
                 ],
               ),
             ],
-          ),
-        );
+          );
       },
     );
   }

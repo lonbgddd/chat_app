@@ -14,10 +14,11 @@ import 'highlight_user_watch.dart';
 class BinderWatch extends ChangeNotifier {
   List<UserModel> _listCard = [];
   List<UserModel> tempList = [];
+
   Offset _offset = Offset.zero;
   bool _isDragging = false;
   double _angle = 0;
-  String _selectedOption = 'Everyone';
+  String _selectedOption = 'Mọi người';
   bool _showPeopleInRangeDistance = false;
   double _distancePreference = 2;
   bool _showPeopleInRangeAge = false;
@@ -32,6 +33,7 @@ class BinderWatch extends ChangeNotifier {
   bool get showPeopleInRangeDistance => _showPeopleInRangeDistance;
 
   bool get showPeopleInRangeAge => _showPeopleInRangeAge;
+
   Offset get position => _offset;
 
   bool get isDragging => _isDragging;
@@ -42,20 +44,6 @@ class BinderWatch extends ChangeNotifier {
   void initData() {
     _listCard = [];
   }
-
-  // Future<List<UserModel>> allUserBinder() async {
-  //   try {
-  //     final uid =
-  //         await HelpersFunctions().getUserIdUserSharedPreference() as String;
-  //     final users = await DatabaseMethods().getAllUser(uid);
-  //     _listCard = users ?? [];
-  //     print('List user card: ${_listCard.length}');
-  //     return _listCard;
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  // }
-
   void shuffleUsers(List<UserModel> users) {
     final random = Random();
     for (var i = users.length - 1; i > 0; i--) {
@@ -65,7 +53,13 @@ class BinderWatch extends ChangeNotifier {
       users[j] = temp;
     }
   }
+  void removeCardAtIndex(int index) {
 
+    _listCard.removeAt(index);
+    // _removedIndexes.add(index);
+
+    notifyListeners();
+  }
   void setDistancePreference(double value) {
     _distancePreference = value;
     notifyListeners();
@@ -109,6 +103,7 @@ class BinderWatch extends ChangeNotifier {
   }
 
   Future<List<UserModel>> allUserBinder(BuildContext context, String gender, List<double> age,
+
       bool isInDistanceRange, double kilometres) async {
     try {
       final uid =
@@ -121,7 +116,6 @@ class BinderWatch extends ChangeNotifier {
         users = await DatabaseMethods()
             .getUserHasFilter(uid, gender, [age.first, age.last]);
       }
-      print('Your list has ${users.length} elements');
       _listCard = users ?? [];
       shuffleUsers(_listCard);
       await Provider.of<HighlightUserNotify>(context, listen: false).sortUsers(_listCard);
@@ -132,6 +126,22 @@ class BinderWatch extends ChangeNotifier {
     }
   }
 
+  Future<List<UserModel>> allBinderSelectionUser() async {
+    try {
+      _listCard=[];
+      final uid =
+          await HelpersFunctions().getUserIdUserSharedPreference() as String;
+      final List<UserModel>  users = await DatabaseMethods()
+            .getSelectionUser(uid);
+      _listCard=users??[];
+      // Lọc và loại bỏ các phần tử đã xóa
+      // _listCard = users?.where((user) => !_removedIndexes.contains(users.indexOf(user)))?.toList() ?? [];
+
+      return _listCard;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
   Future<String?> discoverSetting() async {
     try {
       final uid =
@@ -197,6 +207,7 @@ class BinderWatch extends ChangeNotifier {
           UserTime(uid: followId, time: DateTime.now().toString()).toJson()
         ];
         String time = DateTime.now().toString();
+
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,

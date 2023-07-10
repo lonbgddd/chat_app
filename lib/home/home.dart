@@ -22,6 +22,8 @@ import '../features/message/presentation/screens/message_screen.dart';
 import '../injection_container.dart';
 import '../main.dart';
 
+import 'binder_selection/binder_selection.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -113,8 +115,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       create: (context) => sl()..add(const GetChatRooms()),
       child: const MyMessageScreen()
     ),
+    BinderSelection(),
     const WhoLikePage(),
-    const ProfileScreen()
+    const ProfileScreen(),
+    MyMessageScreen(),
+    WhoLikePage(),
+    ProfileScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -209,7 +215,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 _onItemTapped(2);
               },
               icon: SvgPicture.asset(
-                AppAssets.iconLoveBottomBar,
+                AppAssets.iconStar,
                 width: 20,
                 height: 20,
                 fit: BoxFit.contain,
@@ -227,13 +233,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 _onItemTapped(3);
               },
               icon: SvgPicture.asset(
-                AppAssets.iconProfileBottomBar,
+                AppAssets.iconLoveBottomBar,
                 width: 20,
                 height: 20,
                 fit: BoxFit.contain,
                 colorFilter: ColorFilter.mode(
                     _selectedIndex == 3
                         ? const Color.fromRGBO(229, 58, 69, 1)
+                        : Colors.grey.shade600,
+                    BlendMode.srcIn),
+              ),
+            )),
+        BottomNavigationBarItem(
+            label: '',
+            icon: IconButton(
+              onPressed: () {
+                _onItemTapped(4);
+              },
+              icon: SvgPicture.asset(
+                AppAssets.iconProfileBottomBar,
+                width: 20,
+                height: 20,
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(
+                    _selectedIndex == 4
+                        ? const Color.fromRGBO(229, 58, 69, 100)
                         : Colors.grey.shade600,
                     BlendMode.srcIn),
               ),

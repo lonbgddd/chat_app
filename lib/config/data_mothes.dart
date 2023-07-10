@@ -35,6 +35,41 @@ class DatabaseMethods {
     return data.docs.map((e) => UserModel.fromJson(e.data())).toList();
   }
 
+  Future<List<UserModel>> getSelectionUser(String uid) async {
+    DocumentSnapshot currentUserSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    String requestToShow = currentUserSnapshot['requestToShow'] ?? '';
+    List<String> userInterests =
+        currentUserSnapshot['interestsList'].cast<String>() ?? [];
+
+    QuerySnapshot snapshot;
+
+    if (currentUserSnapshot['requestToShow'] != "Mọi người") {
+      snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('requestToShow', isEqualTo: requestToShow)
+          .where('interestsList', arrayContainsAny: userInterests)
+          .get();
+    } else {
+      snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('interestsList', arrayContainsAny: userInterests)
+          .get();
+    }
+
+    List<UserModel> userList = [];
+
+    for (var doc in snapshot.docs) {
+      final userData = doc.data() as Map<String, dynamic>;
+      UserModel user = UserModel.fromJson(userData);
+      if (user.uid != uid) {
+        userList.add(user);
+      }
+    }
+
+    return userList;
+  }
+
   Future<List<UserModel>> getUserHasFilter(
       String uid, String? gender, List<double> age) async {
     Query query = FirebaseFirestore.instance
@@ -60,9 +95,6 @@ class DatabaseMethods {
         //condition   22<=age <=30
         if ((userAge >= age.first - 1 && userAge <= age.last) ||
             age.first == userAge) {
-          print(
-              '${userData['email'].toString().split(" ").first} is $userAge years old. not in range');
-
           final userModal = UserModel.fromJson(userData);
           userModals.add(userModal);
         }
@@ -453,10 +485,7 @@ class DatabaseMethods {
         await FirebaseFirestore.instance
             .collection("chatRoom")
             .doc(chatRoomId)
-            .update({
-              "userTimes": list,
-              "time": time
-            });
+            .update({"userTimes": list, "time": time});
       }
     } catch (e) {
       throw Exception(e);

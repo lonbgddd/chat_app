@@ -18,7 +18,7 @@ List<ItemSlider> sliderList = [
   ItemSlider(
       color: Colors.black,
       image: AppAssets.iconTinderPlatinum,
-      title: 'Nâng cấp lên Binder Platinum',
+      title: 'Nâng cấp lên Binder Platinum™',
       subTitle: 'Nâng cấp mọi hoạt động của bạn trên Binder',
       id: 1),
   ItemSlider(
