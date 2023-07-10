@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     const BinderPage(),
     BlocProvider<MessageBloc>(
       create: (context) => sl()..add(const GetChatRooms()),
-      child: const MyMessageScreen(),
+      child: const MyMessageScreen()
     ),
     BinderSelection(),
     const WhoLikePage(),
@@ -161,7 +161,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     checkPermissionLocation();
-
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: _bottomNavigation(),
@@ -335,7 +334,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             ElevatedButton(
               child: const Text('Close'),
               onPressed: () async {
-                print(uid);
                 NotificationWatch().saveNotification(
                     id: uid,
                     tyne: 'match',

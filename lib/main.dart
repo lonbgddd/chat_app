@@ -1,9 +1,7 @@
 import 'package:chat_app/Auth/NOT_USE_login_screen.dart';
 import 'package:chat_app/Auth/screen/confirm_profile.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
-import 'package:chat_app/config/changedNotify/chat_item_notify.dart';
 import 'package:chat_app/config/changedNotify/confirm_profile_watch.dart';
-import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/config/changedNotify/follow_watch.dart';
 import 'package:chat_app/config/changedNotify/highlight_user_watch.dart';
 import 'package:chat_app/config/changedNotify/home_state.dart';
@@ -12,25 +10,15 @@ import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
 import 'package:chat_app/config/changedNotify/location_provider.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/changedNotify/login_phone.dart';
-
-// import 'package:chat_app/config/changedNotify/notification_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
-import 'package:chat_app/config/changedNotify/search_message.dart';
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/firebase/firebase_api.dart';
-import 'package:chat_app/features/message/presentation/bloc/message/message_bloc.dart';
-import 'package:chat_app/features/message/presentation/screens/message_screen.dart';
 import 'package:chat_app/home/binder_page/binder_page.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
-import 'package:chat_app/home/binder_selection/components/body.dart';
-import 'package:chat_app/home/binder_selection/components/item_selection_card.dart';
 import 'package:chat_app/home/group_chat/liked_user_card.dart';
 import 'package:chat_app/home/group_chat/who_like_page.dart';
 import 'package:chat_app/home/home.dart';
-import 'package:chat_app/home/message/itemMessage.dart';
-
 import 'package:chat_app/home/notification/notification_screen.dart';
-
 import 'package:chat_app/home/profile/profile.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:chat_app/location/location_screen.dart';
@@ -40,15 +28,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import 'Auth/login_phone_screen.dart';
 import 'config/changedNotify/notification_watch.dart';
+import 'config/changedNotify/search_message.dart';
+import 'features/message/presentation/widgets/detail_message.dart';
 import 'firebase_options.dart';
-import 'home/message/detail_message.dart';
-import 'home/message/search_Message.dart';
+import 'features/message/presentation/screens/search_Message.dart';
 import 'home/profile/update_profile_screen.dart';
 
 @pragma('vm:entry-point')
@@ -155,11 +143,6 @@ Future<void> main() async {
         child: const LoginScreen(),
       ),
       ChangeNotifierProvider(
-        create: (context) => LikedUserCardProvider(),
-        child:  BodySelection(),
-      ),
-
-      ChangeNotifierProvider(
         create: (context) => PageDataConfirmProfileProvider(),
         child: const ConfirmProfile(),
       ),
@@ -171,15 +154,10 @@ Future<void> main() async {
         create: (context) => HighlightUserNotify(),
         child: const ProfileCard(),
       ),
-
       ChangeNotifierProvider(
         create: (context) => ProfileWatch(),
         child: const UpdateProfileScreen(),
       ),
-      // ChangeNotifierProvider(
-      //   create: (context) => NotificationWatch(),
-      //   child: const NotificationScreen(),
-      // ),
       ChangeNotifierProvider(
         create: (context) => HomeState(),
         child: const HomePage(),
@@ -197,14 +175,6 @@ Future<void> main() async {
         child: const BinderPage(),
       ),
       ChangeNotifierProvider(
-        create: (context) => HomeNotify(),
-        child: const DetailMessage(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => ItemChatNotify(),
-        child: ItemMessage(),
-      ),
-      ChangeNotifierProvider(
         create: (context) => FollowNotify(),
         child: const WhoLikePage(),
       ),
@@ -217,33 +187,20 @@ Future<void> main() async {
         child: const NotificationScreen(),
       ),
       ChangeNotifierProvider(
-        create: (context) => SearchMessageProvider(),
-        child: SearchMessage(),
-      ),
-      ChangeNotifierProvider(
         create: (context) => LoginPhoneProvider(),
         child: LoginWithPhoneNumber(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => DetailMessageProvider(),
-        child: const DetailMessage(),
       ),
       ChangeNotifierProvider(
         create: (context) => LikedUserCardProvider(),
         child: const LikedUserCard(),
       ),
-
-      // BlocProvider<ChatItemBloc>(
-      //   create: (context) => sl(),
-      //   child: MyItemMessage(),
-      // ),
-      BlocProvider<MessageBloc>(
-        create: (context) => sl()..add(const GetChatRooms()),
-        child: const MyMessageScreen(),
-      ),
       ChangeNotifierProvider(
         create: (context) => LocationProvider(),
         child: LocationScreen(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => SearchMessageProvider(),
+        child: SearchMessage(),
       ),
       ChangeNotifierProvider(
         create: (context) => UpdateNotify(),

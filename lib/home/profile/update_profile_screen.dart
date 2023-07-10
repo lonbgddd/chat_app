@@ -1,18 +1,14 @@
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
-import 'package:chat_app/home/profile/components/basic_information_bottom_sheet.dart';
 import 'package:chat_app/home/profile/components/dating_purpose_bottom_sheet.dart';
 import 'package:chat_app/home/profile/components/gender_bottom_sheet.dart';
 import 'package:chat_app/home/profile/components/interest_bottom_sheet.dart';
 import 'package:chat_app/home/profile/components/language_bottom_sheet.dart';
-import 'package:chat_app/home/profile/components/life_style_bottom_sheet.dart';
 import 'package:chat_app/home/profile/components/sexual_orientation_bottom_sheet.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-
 import 'components/basic_information_row.dart';
 import 'components/life_style_row.dart';
 import 'components/update_image.dart';
@@ -179,7 +175,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     splashColor: const Color.fromRGBO(229, 58, 69, 100),
                     onTap: () {
                       showModalBottomSheet(
-                        showDragHandle: true,
                         isScrollControlled: true,
                         isDismissible: true,
                         useSafeArea: true,
@@ -438,7 +433,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         isScrollControlled: true,
                         isDismissible: true,
                         useSafeArea: true,
-                        showDragHandle: true,
                         context: context,
                         builder: (context) {
                           return const GenderBottomSheet();
@@ -470,7 +464,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         isScrollControlled: true,
                         isDismissible: true,
                         useSafeArea: true,
-                        showDragHandle: true,
                         context: context,
                         builder: (context) {
                           return const SexualOrientationBottomSheet();

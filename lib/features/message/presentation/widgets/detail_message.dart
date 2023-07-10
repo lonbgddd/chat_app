@@ -61,6 +61,21 @@ class _DetailMessageState extends State<DetailMessage> {
       },
       builder: (context, state) {
         return Scaffold(
+          appBar: AppBar(
+            titleSpacing: 0,
+            backgroundColor: Colors.white,
+            title:state is MessageListLoaded ? head(state.user) : const CircularProgressIndicator(),
+            leading: InkWell(
+              onTap: (){
+                context.pop();
+              },
+              child: const Icon(
+                Icons.arrow_back,
+                color:  Colors.black54,
+              ),
+            ),
+
+          ),
           backgroundColor: Colors.transparent,
           body: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -68,11 +83,6 @@ class _DetailMessageState extends State<DetailMessage> {
             child: Builder(builder: (context) {
               return Column(
                 children: [
-                  state is MessageListLoaded
-                      ? head(state.user)
-                      : const CircularProgressIndicator(),
-                  today(),
-                  // messages != null
                   state is MessageListLoaded
                       ? Expanded(
                           child:
@@ -101,9 +111,9 @@ class _DetailMessageState extends State<DetailMessage> {
               ? Row(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(right: 10, top: 10),
+                      margin: const EdgeInsets.only(right: 10),
                       child: CircleAvatar(
-                        radius: 35,
+                        radius: 25,
                         backgroundImage: NetworkImage(widget.avatar.toString()),
                       ),
                     ),
@@ -122,7 +132,7 @@ class _DetailMessageState extends State<DetailMessage> {
                           ),
                           snapshot.data!.activeStatus == 'online'
                               ? Container(
-                                  margin: const EdgeInsets.only(top: 10),
+                                  margin: const EdgeInsets.only(top: 7),
                                   child: const Text(
                                     'Online',
                                     style: TextStyle(
@@ -132,7 +142,7 @@ class _DetailMessageState extends State<DetailMessage> {
                                   ),
                                 )
                               : Container(
-                                  margin: const EdgeInsets.only(top: 10),
+                                  margin: const EdgeInsets.only(top: 7),
                                   child: const Text('Offline',
                                       style: TextStyle(
                                         color: Colors.black54,
@@ -210,8 +220,7 @@ class _DetailMessageState extends State<DetailMessage> {
                               snapshot.data?[index].time.toString() ?? "");
                           return Container(
                             color: Colors.white,
-                            padding: const EdgeInsets.only(
-                                left: 14, right: 14, top: 10, bottom: 10),
+                            padding: const EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
                             child: Column(
                               children: [
                                 if (checkTime(time))
@@ -226,11 +235,11 @@ class _DetailMessageState extends State<DetailMessage> {
                                       dateTimeFormat(timeFormat, time)
                                     else if (index == snapshot.data!.length - 1)
                                       dateTimeFormat(timeFormat, time)
-                                    else if (context
-                                            .watch<DetailMessageProvider>()
-                                            .detailTime ==
-                                        time.toString())
-                                      dateTimeFormat(timeFormat, time)
+                                    // else if (context
+                                    //         .watch<DetailMessageProvider>()
+                                    //         .detailTime ==
+                                    //     time.toString())
+                                    //   dateTimeFormat(timeFormat, time)
                                   ])
                                 else
                                   Column(
@@ -246,11 +255,11 @@ class _DetailMessageState extends State<DetailMessage> {
                                       else if (index ==
                                           snapshot.data!.length - 1)
                                         dateTimeFormat(dateFormat, time)
-                                      else if (context
-                                              .watch<DetailMessageProvider>()
-                                              .detailTime ==
-                                          time.toString())
-                                        dateTimeFormat(dateFormat, time)
+                                      // else if (context
+                                      //         .watch<DetailMessageProvider>()
+                                      //         .detailTime ==
+                                      //     time.toString())
+                                      //   dateTimeFormat(dateFormat, time)
                                     ],
                                   ),
                                 Align(
@@ -266,18 +275,18 @@ class _DetailMessageState extends State<DetailMessage> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          if (context
-                                                  .read<DetailMessageProvider>()
-                                                  .detailTime ==
-                                              '') {
-                                            context
-                                                .read<DetailMessageProvider>()
-                                                .setDetailTime(time.toString());
-                                          } else {
-                                            context
-                                                .read<DetailMessageProvider>()
-                                                .setDetailTime('');
-                                          }
+                                          // if (context
+                                          //         .read<DetailMessageProvider>()
+                                          //         .detailTime ==
+                                          //     '') {
+                                          //   context
+                                          //       .read<DetailMessageProvider>()
+                                          //       .setDetailTime(time.toString());
+                                          // } else {
+                                          //   context
+                                          //       .read<DetailMessageProvider>()
+                                          //       .setDetailTime('');
+                                          // }
                                         },
                                         child: Container(
                                           width: snapshot

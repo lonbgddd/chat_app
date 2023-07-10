@@ -1,14 +1,16 @@
 import 'package:chat_app/config/changedNotify/search_message.dart';
-import 'package:chat_app/config/data_mothes.dart';
+
+import 'package:chat_app/features/message/presentation/widgets/item_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
-import '../../config/changedNotify/home_watch.dart';
-import '../../config/helpers/helpers_database.dart';
-import '../../model/user_model.dart';
-import 'itemMessage.dart';
+import '../../../../config/changedNotify/home_watch.dart';
+import '../../../../config/helpers/helpers_database.dart';
+import '../../../../injection_container.dart';
+import '../../../../model/user_model.dart';
+import '../bloc/chat_item/chat_item_bloc.dart';
 
 class SearchMessage extends StatefulWidget {
   @override
@@ -32,10 +34,8 @@ class SearchMessageState extends State<SearchMessage> {
   }
 
   getUserChat() async {
-
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
-
-    await Provider.of<HomeNotify>(context, listen: false).getUserChats()?.then(
+    await Provider.of<SearchMessageProvider>(context, listen: false).getUserChats()?.then(
       (value) async {
         setState(() {
           chatRooms = value;
@@ -73,9 +73,11 @@ class SearchMessageState extends State<SearchMessage> {
                       .replaceAll(keyUid ?? "", "");
                   String chatRoomId = data['chatRoomId'];
                   if(listUser[index].fullName.toLowerCase().toString().contains(context.watch<SearchMessageProvider>().name)) {
-                    if(listUser[index].uid == uid){
-                      return ItemMessage(uid: uid, chatRoomId: chatRoomId);
-                    }
+                      return BlocProvider<ChatItemBloc>(
+                          key: ValueKey(chatRoomId),
+                          create: (context) =>
+                          sl()..add(GetChatItem(uid, chatRoomId)),
+                          child: MyItemMessage(uid: uid, chatRoomId: chatRoomId));
                   }
                   return const SizedBox.shrink();
                 },
