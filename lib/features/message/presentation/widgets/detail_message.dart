@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/domain/entities/user_entity.dart';
@@ -17,18 +18,12 @@ import '../../domain/entities/chat_message_entity.dart';
 
 class DetailMessage extends StatefulWidget {
   const DetailMessage(
-      {super.key,
-      this.uid,
-      this.chatRoomId,
-      this.name,
-      this.avatar,
-      this.token});
+      {super.key, this.uid, this.chatRoomId, this.name, this.avatar});
 
   final String? uid;
   final String? chatRoomId;
   final String? name;
   final String? avatar;
-  final String? token;
 
   @override
   State<DetailMessage> createState() => _DetailMessageState();
@@ -64,17 +59,18 @@ class _DetailMessageState extends State<DetailMessage> {
           appBar: AppBar(
             titleSpacing: 0,
             backgroundColor: Colors.white,
-            title:state is MessageListLoaded ? head(state.user) : const CircularProgressIndicator(),
+            title: state is MessageListLoaded
+                ? head(state.user)
+                : const CircularProgressIndicator(),
             leading: InkWell(
-              onTap: (){
+              onTap: () {
                 context.pop();
               },
               child: const Icon(
                 Icons.arrow_back,
-                color:  Colors.black54,
+                color: Colors.black54,
               ),
             ),
-
           ),
           backgroundColor: Colors.transparent,
           body: Container(
@@ -220,7 +216,8 @@ class _DetailMessageState extends State<DetailMessage> {
                               snapshot.data?[index].time.toString() ?? "");
                           return Container(
                             color: Colors.white,
-                            padding: const EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+                            padding: const EdgeInsets.only(
+                                left: 14, right: 14, top: 10, bottom: 10),
                             child: Column(
                               children: [
                                 if (checkTime(time))
@@ -441,7 +438,8 @@ class _DetailMessageState extends State<DetailMessage> {
                         widget.chatRoomId!,
                         messageController.text,
                         "",
-                        widget.token!));
+                        widget.avatar!,
+                        widget.name!));
                     messageController.clear();
                   }
                 },

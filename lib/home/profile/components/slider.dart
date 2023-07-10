@@ -17,7 +17,6 @@ class _SliderCustomState extends State<SliderCustom> {
   final _carouseController = CarouselController();
   int currentIndex = 0;
 
-
   void _showBottomModal({
     required BuildContext context,
     required Color color,
@@ -32,13 +31,13 @@ class _SliderCustomState extends State<SliderCustom> {
     required String subTitle,
     required String title,
   }) {
-    final padding = MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    EdgeInsets padding = mediaQueryData.padding;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       isDismissible: true,
       builder: (BuildContext context) {
-
         return Container(
           padding: EdgeInsets.only(top: padding.top),
           height: MediaQuery.of(context).size.height,
@@ -60,7 +59,7 @@ class _SliderCustomState extends State<SliderCustom> {
     );
   }
 
-  void checkPackage({required int index,required BuildContext context}) {
+  void checkPackage({required int index, required BuildContext context}) {
     switch (index) {
       case 1:
         _showBottomModal(
@@ -72,7 +71,8 @@ class _SliderCustomState extends State<SliderCustom> {
           assetsBanner: AppAssets.iconTinderPlatinumBanner,
           assetsIcon: AppAssets.iconTinderPlatinum,
           isHaveColor: true,
-          subTitle: 'Nâng cấp lượt Thích và Siêu Thích của bạn với gói Platinum.',
+          subTitle:
+              'Nâng cấp lượt Thích và Siêu Thích của bạn với gói Platinum.',
         );
         break;
       case 2:
@@ -85,10 +85,11 @@ class _SliderCustomState extends State<SliderCustom> {
           assetsBanner: AppAssets.iconTinderGoldBanner,
           assetsIcon: AppAssets.iconTinderGold,
           isHaveColor: true,
-          subTitle: 'Xem ai thích bạn và tương hợp ngay lập tức với Binder Gold™.',
+          subTitle:
+              'Xem ai thích bạn và tương hợp ngay lập tức với Binder Gold™.',
         );
         break;
-        case 3:
+      case 3:
         _showBottomModal(
           context: context,
           color: Colors.red.shade200,
@@ -98,10 +99,10 @@ class _SliderCustomState extends State<SliderCustom> {
           assetsBanner: AppAssets.iconTinderPlusBanner,
           assetsIcon: AppAssets.iconTinder,
           isHaveColor: true,
-          subTitle: 'Lượt Thích vô hạn. Lượt Quay Lại vô hạn. Hộ Chiếu vô hạn. Không có quảng cáo.',
+          subTitle:
+              'Lượt Thích vô hạn. Lượt Quay Lại vô hạn. Hộ Chiếu vô hạn. Không có quảng cáo.',
         );
         break;
-
     }
   }
 
@@ -138,10 +139,7 @@ class _SliderCustomState extends State<SliderCustom> {
                 top: 120,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: sliderList
-                      .asMap()
-                      .entries
-                      .map((e) {
+                  children: sliderList.asMap().entries.map((e) {
                     return GestureDetector(
                       child: Container(
                         width: 6,
@@ -159,7 +157,8 @@ class _SliderCustomState extends State<SliderCustom> {
           ],
         ),
         ElevatedButton(
-            onPressed: ()=>checkPackage(index:sliderList[currentIndex].id,context:context),
+            onPressed: () => checkPackage(
+                index: sliderList[currentIndex].id, context: context),
             style: ElevatedButton.styleFrom(
                 shadowColor: Colors.grey,
                 fixedSize: Size(250, 50),
@@ -167,7 +166,9 @@ class _SliderCustomState extends State<SliderCustom> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30))),
             child: Text(
-              sliderList[currentIndex].id==1?'Mua Binder Platinum™':sliderList[currentIndex].title,
+              sliderList[currentIndex].id == 1
+                  ? 'Mua Binder Platinum™'
+                  : sliderList[currentIndex].title,
               style: TextStyle(color: sliderList[currentIndex].color),
             )),
       ],

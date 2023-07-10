@@ -6,7 +6,6 @@ import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_
 import 'package:chat_app/features/message/presentation/widgets/circle_message_item.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -60,7 +59,6 @@ class MyMessageScreen extends StatelessWidget {
       body: _buildBody(),
     );
   }
-
 
   _buildBody() {
     return BlocBuilder<MessageBloc, MessageState>(
@@ -116,7 +114,8 @@ class MyMessageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChatRoomsList(Stream<List<ChatRoomEntity>> stream, String currentUid, UserEntity user) {
+  Widget _buildChatRoomsList(
+      Stream<List<ChatRoomEntity>> stream, String currentUid, UserEntity user) {
     return StreamBuilder<List<ChatRoomEntity>>(
       stream: stream,
       builder: (BuildContext context, snapshot) {
@@ -150,7 +149,8 @@ class MyMessageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNewChatRoomsList(Stream<List<ChatRoomEntity>> stream, String currentUid, UserEntity user) {
+  Widget _buildNewChatRoomsList(
+      Stream<List<ChatRoomEntity>> stream, String currentUid, UserEntity user) {
     return StreamBuilder<List<ChatRoomEntity>>(
       stream: stream,
       builder: (BuildContext context, snapshot) {
@@ -228,7 +228,8 @@ class MyMessageScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: NetworkImage(url), // Đường dẫn tới ảnh
-                        fit: BoxFit.fill, // Cách ảnh sẽ được hiển thị trong Container
+                        fit: BoxFit
+                            .fill, // Cách ảnh sẽ được hiển thị trong Container
                       ),
                     ),
                   ),

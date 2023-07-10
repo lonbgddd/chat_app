@@ -1,16 +1,9 @@
-import 'package:chat_app/config/changedNotify/binder_watch.dart';
-import 'package:chat_app/config/changedNotify/liked_user_card_provider.dart';
-import 'package:chat_app/config/helpers/app_assets.dart';
-import 'package:chat_app/home/binder_selection/components/item_selection_card.dart';
-import 'package:chat_app/home/profile/widget/bottom_modal.dart';
 import 'package:chat_app/home/profile/components/slider.dart';
-
+import 'package:chat_app/home/profile/widget/bottom_modal.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/home/profile/widget/custom_card.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 class BodyBuyPremium extends StatefulWidget {
   const BodyBuyPremium({Key? key}) : super(key: key);
@@ -30,8 +23,8 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
   void _showBottomModal(
       {required Color color,
       Color? iconColor,
-         bool? isHaveColor,
-        required  bool isHaveIcon,
+      bool? isHaveColor,
+      required bool isHaveIcon,
       bool? isSuperLike,
       List<PackageModel>? packageModel,
       IconData? iconData,
@@ -43,8 +36,8 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
       isScrollControlled: true,
       isDismissible: true,
       builder: (BuildContext context) {
-        final padding =
-            MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
+        MediaQueryData mediaQueryData = MediaQuery.of(context);
+        EdgeInsets padding = mediaQueryData.padding;
 
         return Container(
           padding: EdgeInsets.only(top: padding.top),
@@ -56,7 +49,7 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
             packageModel: packageModel,
             iconColor: iconColor,
             isHaveColor: isHaveColor ?? false,
-            isHaveIcon: isHaveIcon ,
+            isHaveIcon: isHaveIcon,
             iconData: iconData,
             isSuperLike: isSuperLike ?? false,
           ),
@@ -126,4 +119,3 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
     );
   }
 }
-

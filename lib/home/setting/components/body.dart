@@ -1,7 +1,6 @@
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/home/binder_page/compnents/body_discovery_setting.dart';
 import 'package:chat_app/home/binder_page/compnents/body_high_search.dart';
-import 'package:chat_app/home/binder_page/compnents/discovery_setting.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/home/setting/widget/card_custom.dart';
 import 'package:chat_app/model/package_binder_model.dart';
@@ -25,8 +24,8 @@ class Body extends StatelessWidget {
     required String subTitle,
     required String title,
   }) {
-    final padding =
-        MediaQueryData.fromView(WidgetsBinding.instance.window).padding;
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    EdgeInsets padding = mediaQueryData.padding;
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -183,30 +182,33 @@ class Body extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child: Text("TÌM KIẾM",style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black
-            ),),
+            child: Text(
+              "TÌM KIẾM",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+            ),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           BodyDiscoverySetting(),
           SizedBox(
             height: 15,
           ),
           BodyHighSearch(),
           ElevatedButton(
-                onPressed: () =>
-                    context.pushReplacementNamed('/login-home-screen'),
-                style: ElevatedButton.styleFrom(
-                    shadowColor: Colors.grey,
-                    fixedSize: Size(250, 50),
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                child: Text(
-                  "Đăng xuất",
-                  style: TextStyle(color: Colors.black),
-                )),
+              onPressed: () =>
+                  context.pushReplacementNamed('/login-home-screen'),
+              style: ElevatedButton.styleFrom(
+                  shadowColor: Colors.grey,
+                  fixedSize: Size(250, 50),
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10))),
+              child: Text(
+                "Đăng xuất",
+                style: TextStyle(color: Colors.black),
+              )),
         ],
       ),
     );

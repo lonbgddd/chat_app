@@ -262,8 +262,8 @@ class DatabaseMethods {
         .snapshots();
   }
 
-  Future<void> addMessage(
-      String chatRoomId, ChatMessage chatMessageData, String token) async {
+  Future<void> addMessage(String chatRoomId, ChatMessage chatMessageData,
+      String token, String name) async {
     String uid = HelpersFunctions().getUserIdUserSharedPreference().toString();
     await FirebaseFirestore.instance
         .collection("chatRoom")
@@ -272,12 +272,14 @@ class DatabaseMethods {
         .add(chatMessageData.toJson())
         .then((_) {
       FirebaseApi().sendPushMessage(
-          title: chatMessageData.messageText,
+          title: 'Tin nhắn',
           uid: uid,
           type: 'chat',
           body: chatMessageData.messageText,
           avatar: '',
-          token: token);
+          token: token,
+          name: name,
+          chatRoomId: chatRoomId);
     }).catchError((e) {
       print(e.toString());
     });

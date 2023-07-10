@@ -44,6 +44,7 @@ class BinderWatch extends ChangeNotifier {
   void initData() {
     _listCard = [];
   }
+
   void shuffleUsers(List<UserModel> users) {
     final random = Random();
     for (var i = users.length - 1; i > 0; i--) {
@@ -53,13 +54,14 @@ class BinderWatch extends ChangeNotifier {
       users[j] = temp;
     }
   }
-  void removeCardAtIndex(int index) {
 
+  void removeCardAtIndex(int index) {
     _listCard.removeAt(index);
     // _removedIndexes.add(index);
 
     notifyListeners();
   }
+
   void setDistancePreference(double value) {
     _distancePreference = value;
     notifyListeners();
@@ -102,9 +104,8 @@ class BinderWatch extends ChangeNotifier {
     await DatabaseMethods().updatePosition(position);
   }
 
-  Future<List<UserModel>> allUserBinder(BuildContext context, String gender, List<double> age,
-
-      bool isInDistanceRange, double kilometres) async {
+  Future<List<UserModel>> allUserBinder(BuildContext context, String gender,
+      List<double> age, bool isInDistanceRange, double kilometres) async {
     try {
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
@@ -116,9 +117,11 @@ class BinderWatch extends ChangeNotifier {
         users = await DatabaseMethods()
             .getUserHasFilter(uid, gender, [age.first, age.last]);
       }
+      print('Your list has ${users.length} elements');
       _listCard = users ?? [];
       shuffleUsers(_listCard);
-      await Provider.of<HighlightUserNotify>(context, listen: false).sortUsers(_listCard);
+      await Provider.of<HighlightUserNotify>(context, listen: false)
+          .sortUsers(_listCard);
 
       return _listCard;
     } catch (e) {
@@ -128,12 +131,12 @@ class BinderWatch extends ChangeNotifier {
 
   Future<List<UserModel>> allBinderSelectionUser() async {
     try {
-      _listCard=[];
+      _listCard = [];
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
-      final List<UserModel>  users = await DatabaseMethods()
-            .getSelectionUser(uid);
-      _listCard=users??[];
+      final List<UserModel> users =
+          await DatabaseMethods().getSelectionUser(uid);
+      _listCard = users ?? [];
       // Lọc và loại bỏ các phần tử đã xóa
       // _listCard = users?.where((user) => !_removedIndexes.contains(users.indexOf(user)))?.toList() ?? [];
 
@@ -142,6 +145,7 @@ class BinderWatch extends ChangeNotifier {
       throw Exception(e);
     }
   }
+
   Future<String?> discoverSetting() async {
     try {
       final uid =
@@ -218,10 +222,12 @@ class BinderWatch extends ChangeNotifier {
         await FirebaseApi().sendPushMessage(
             title: 'Match',
             uid: uid,
+            chatRoomId: chatRoomId,
             type: 'match',
             body: 'Bạn có một tương hợp mới nhớ kiểm tra',
             avatar: '',
-            token: token);
+            token: token,
+            name: '');
         await DatabaseMethods().addChatRoom(chatRoom, chatRoomId);
       }
 

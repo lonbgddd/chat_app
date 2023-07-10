@@ -32,10 +32,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
             FutureBuilder(
               future: context.watch<NotificationWatch>().getNotification(),
               builder: (context, snapshot) => snapshot.hasData
-                  ? snapshot.connectionState == ConnectionState.done
+                  ? snapshot.connectionState == ConnectionState.waiting
                       ? ListView.builder(
                           physics: const ScrollPhysics(),
                           shrinkWrap: true,
+                          reverse: true,
                           padding: const EdgeInsets.only(top: 90),
                           itemCount: context
                               .watch<NotificationWatch>()
@@ -43,9 +44,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               .length,
                           itemBuilder: (context, index) {
                             return ItemNotification(
-                              title: snapshot.data[index]['mess'],
-                              subtitle: snapshot.data[index]['avatar'],
+                              title: snapshot.data[index]['tyne'],
+                              mess: snapshot.data[index]['mess'],
                               imageUrl: snapshot.data[index]['avatar'],
+                              idUser: snapshot.data[index]['uid'],
+                              status: snapshot.data[index]['status'],
+                              time: snapshot.data[index]['time'],
+                              chatRoomId: snapshot.data[index]['chatRoomId'],
+                              name: snapshot.data[index]['name'],
                             );
                           },
                         )

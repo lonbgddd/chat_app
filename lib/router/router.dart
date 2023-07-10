@@ -11,10 +11,10 @@ import 'package:go_router/go_router.dart';
 
 import '../Auth/login_home_screen.dart';
 import '../features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
+import '../features/message/presentation/screens/search_Message.dart';
 import '../features/message/presentation/widgets/detail_message.dart';
 import '../home/binder_page/highlight_page.dart';
 import '../home/home.dart';
-import '../features/message/presentation/screens/search_Message.dart';
 import '../home/notification/notification_screen.dart';
 import '../home/profile/detail_profile_others.dart';
 import '../injection_container.dart';
@@ -25,9 +25,33 @@ final GoRouter router = GoRouter(routes: [
       builder: (context, state) => const HomePage(),
       routes: [
         GoRoute(
-          path: 'notification-page',
-          builder: (context, state) => const NotificationScreen(),
-        ),
+            path: 'notification-page',
+            builder: (context, state) => const NotificationScreen(),
+            routes: [
+              GoRoute(
+                path: 'detail-others-notification',
+                name: 'home-detail-others-notification',
+                builder: (context, state) => DetailProfileOthersScreen(
+                  uid: state.queryParameters['uid'],
+                ),
+              ),
+              GoRoute(
+                  path: 'detail-message-notification',
+                  name: 'detail-message-notification',
+                  builder: (context, state) => BlocProvider<DetailMessageBloc>(
+                        create: (context) {
+                          return sl()
+                            ..add(GetMessageList(state.queryParameters['uid']!,
+                                state.queryParameters['chatRoomId']!, false));
+                        },
+                        child: DetailMessage(
+                          uid: state.queryParameters['uid'],
+                          chatRoomId: state.queryParameters['chatRoomId'],
+                          name: state.queryParameters['name'],
+                          avatar: state.queryParameters['avatar'],
+                        ),
+                      )),
+            ]),
         GoRoute(
           path: 'update-profile',
           name: 'update-profile',
@@ -67,7 +91,6 @@ final GoRouter router = GoRouter(routes: [
                     chatRoomId: state.queryParameters['chatRoomId'],
                     name: state.queryParameters['name'],
                     avatar: state.queryParameters['avatar'],
-                    token: state.queryParameters['token'],
                   ),
                 )),
         GoRoute(
