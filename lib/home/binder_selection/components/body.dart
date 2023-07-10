@@ -169,7 +169,7 @@ class BodySelection extends StatelessWidget {
                   isHaveIcon: false,
                   assetsBanner: AppAssets.iconTinderGoldBanner,
                   assetsIcon: AppAssets.iconTinderGold,
-                  title: "Binder gold",
+                  title: "Binder",
                   isHaveColor: true,
                   iconData: null,
                   packageModel: packageBinderGoldList,

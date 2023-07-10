@@ -2,7 +2,6 @@ import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/home/binder_page/compnents/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +20,11 @@ class BinderPage extends StatefulWidget {
 class _BinderPageState extends State<BinderPage>
     with SingleTickerProviderStateMixin {
 
-  bool isRefresh = false;
   bool hasNotification = true;
 
   void _showBottomDialog() async {
     final padding = MediaQuery.of(context).padding;
-    String? result = await showModalBottomSheet(
+     showModalBottomSheet(
       isScrollControlled: true,
       isDismissible: true,
       context: context,
@@ -38,11 +36,7 @@ class _BinderPageState extends State<BinderPage>
         );
       },
     );
-    if (result == 'refresh') {
-      setState(() {
-        isRefresh = true;
-      });
-    }
+
   }
 
   // Future<List<String>> _savePositionUser() async {
@@ -69,18 +63,7 @@ class _BinderPageState extends State<BinderPage>
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (isRefresh) {
-      final provider = context.read<BinderWatch>();
-      provider.allUserBinder(context,provider.selectedOption, provider.currentAgeValue,
-          provider.showPeopleInRangeDistance, provider.distancePreference);
-      setState(() {
-        isRefresh = false;
-      });
-    }
-  }
+
 
   @override
   void dispose() {

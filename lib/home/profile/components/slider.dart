@@ -88,6 +88,19 @@ class _SliderCustomState extends State<SliderCustom> {
           subTitle: 'Xem ai thích bạn và tương hợp ngay lập tức với Binder Gold™.',
         );
         break;
+        case 3:
+        _showBottomModal(
+          context: context,
+          color: Colors.red.shade200,
+          title: "Binder",
+          isHaveIcon: false,
+          packageModel: packageBinderGoldList,
+          assetsBanner: AppAssets.iconTinderPlusBanner,
+          assetsIcon: AppAssets.iconTinder,
+          isHaveColor: true,
+          subTitle: 'Lượt Thích vô hạn. Lượt Quay Lại vô hạn. Hộ Chiếu vô hạn. Không có quảng cáo.',
+        );
+        break;
 
     }
   }

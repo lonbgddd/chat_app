@@ -96,9 +96,9 @@ class ItemSelectionCard extends StatelessWidget {
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize:
-                                              (user?.fullName.length ?? 0) > 10
-                                                  ? 13
-                                                  : 18,
+                                          (user?.fullName.length ?? 0) > 10
+                                              ? 13
+                                              : 18,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),

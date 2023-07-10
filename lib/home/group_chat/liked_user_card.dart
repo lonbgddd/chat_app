@@ -26,13 +26,6 @@ class LikedUserCard extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 2,
-                spreadRadius: 2,
-                offset: const Offset(0, 0))
-          ],
           borderRadius: BorderRadius.circular(15),
         ),
         child: Stack(children: [
@@ -74,11 +67,14 @@ class LikedUserCard extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8.0, horizontal: 16.0),
                               child: Text(
-                                "${user!.fullName}, ${calculateAge(user!.birthday)}",
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
+                                '${user?.fullName}, ${DateTime.now().year - int.parse(user!.birthday.substring(0, 4))}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: (user?.fullName.length ?? 0) > 10
+                                      ? 13
+                                      : 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             ClipRRect(
@@ -125,11 +121,14 @@ class LikedUserCard extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 8.0, horizontal: 16.0),
                               child: Text(
-                                "${user!.fullName}, ${calculateAge(user!.birthday)}",
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
+                                '${user?.fullName}, ${DateTime.now().year - int.parse(user!.birthday.substring(0, 4))}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: (user?.fullName.length ?? 0) > 10
+                                      ? 13
+                                      : 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             ClipRRect(
@@ -156,7 +155,7 @@ class LikedUserCard extends StatelessWidget {
                                           },
                                           icon: const Icon(
                                             Icons.clear,
-                                            color: Colors.white,
+                                            color: Colors.red,
                                           )),
                                       Container(
                                         width: 1,
@@ -171,7 +170,7 @@ class LikedUserCard extends StatelessWidget {
                                           },
                                           icon: const Icon(
                                             Icons.favorite,
-                                            color: Colors.white,
+                                            color: Colors.greenAccent,
                                           ))
                                     ],
                                   ),
