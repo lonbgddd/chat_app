@@ -1,14 +1,20 @@
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/home/binder_page/compnents/body_high_search.dart';
 import 'package:chat_app/home/binder_page/compnents/range_slider.dart';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
 class BodyDiscoverySetting extends StatelessWidget {
-  const BodyDiscoverySetting({super.key});
+  final bool isGlobal;
+
+  const BodyDiscoverySetting({super.key, required this.isGlobal});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.read<BinderWatch>();
     return Container(
       padding: EdgeInsets.only(top: 10),
       color: Colors.white,
@@ -26,7 +32,6 @@ class BodyDiscoverySetting extends StatelessWidget {
                 height: 5,
               ),
               Divider(
-                indent: 15,
                 thickness: 1,
               ),
               Padding(
@@ -44,28 +49,17 @@ class BodyDiscoverySetting extends StatelessWidget {
                         ),
                       ),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Consumer<BinderWatch>(
-                            builder: (context, selectedOptionProvider, _) {
-                              final selectedOption =
-                                  selectedOptionProvider.selectedOption;
-                              return Row(
-                                children: [
-                                  Text(
-                                    selectedOption ?? '',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  Icon(Icons.chevron_right),
-                                ],
-                              );
-                            },
+                          Text(
+                            provider.selectedOption ?? '',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
                           ),
+                          Icon(Icons.chevron_right),
                         ],
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -74,15 +68,16 @@ class BodyDiscoverySetting extends StatelessWidget {
                 height: 5,
               ),
               Divider(
-                indent: 15,
                 thickness: 1,
               ),
               SliderContainer(
                 isAgePreference: true,
                 title: "Độ tuổi ưu tiên",
               ),
-              SizedBox(height: 25,),
-              BodyHighSearch()
+
+              SizedBox(
+                height: 25,
+              ),
             ],
           ),
         ),

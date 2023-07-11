@@ -192,7 +192,7 @@ class BottomModalFullScreen extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     width: double.infinity,
-                    height: height / 5.5,
+                    height: height / 5,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(

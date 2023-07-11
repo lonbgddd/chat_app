@@ -24,14 +24,14 @@ class _BinderPageState extends State<BinderPage>
   bool hasNotification = true;
 
   void _showBottomDialog() async {
-    final padding = MediaQuery.of(context).padding;
+
     String? result = await showModalBottomSheet(
       isScrollControlled: true,
       isDismissible: true,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.only(top: padding.top),
+          padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
           height: MediaQuery.of(context).size.height,
           child: const DiscoverySetting(),
         );
@@ -71,6 +71,8 @@ class _BinderPageState extends State<BinderPage>
       final provider = Provider.of<BinderWatch>(context, listen: false);
       provider.setScreenSize(size);
       provider.initializeSelectedOption();
+      final padding = MediaQuery.of(context).padding;
+      context.read<BinderWatch>().setPaddingTop(padding.top);
       // _savePositionUser().then((position) {
       //   provider.updatePositionUser(position);
       // });

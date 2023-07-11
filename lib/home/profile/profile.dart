@@ -1,3 +1,6 @@
+
+import 'package:chat_app/config/changedNotify/binder_watch.dart';
+
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/home/setting/setting_screen.dart';
@@ -10,29 +13,31 @@ import 'package:provider/provider.dart';
 import '../../config/helpers/app_assets.dart';
 import 'components/body_buy_premium.dart';
 
+
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
   void _showBottomModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        MediaQueryData mediaQueryData = MediaQuery.of(context);
-        EdgeInsets padding = mediaQueryData.padding;
-
+        final padding = context.read<BinderWatch>().paddingTop;
         return Container(
-          padding: EdgeInsets.only(top: padding.top),
+          padding: EdgeInsets.only(top: padding),
           height: MediaQuery.of(context).size.height,
           child: const SettingScreen(),
         );
       },
     );
+
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ProfileWatch>(context, listen: false).getUser();
-    return SafeArea(
+
+    return Material(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,

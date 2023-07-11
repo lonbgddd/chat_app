@@ -1,9 +1,12 @@
+
+import 'package:chat_app/config/changedNotify/binder_watch.dart';
 import 'package:chat_app/home/profile/components/slider.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/home/profile/widget/custom_card.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BodyBuyPremium extends StatefulWidget {
   const BodyBuyPremium({Key? key}) : super(key: key);
@@ -36,11 +39,10 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
       isScrollControlled: true,
       isDismissible: true,
       builder: (BuildContext context) {
-        MediaQueryData mediaQueryData = MediaQuery.of(context);
-        EdgeInsets padding = mediaQueryData.padding;
+
 
         return Container(
-          padding: EdgeInsets.only(top: padding.top),
+          padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
           height: MediaQuery.of(context).size.height,
           child: BottomModalFullScreen(
             color: color,
@@ -62,7 +64,8 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 50),
-      color: Colors.grey[100],
+
+      color: Colors.grey[200],
       child: Column(
         children: [
           Row(
