@@ -121,7 +121,7 @@ class FirebaseApi {
             'priority': 'high',
             'data': <String, dynamic>{
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'uid': uid,
+              'id': uid,
               'chatRoomId': chatRoomId,
               'name': name,
               'type': type,
