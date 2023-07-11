@@ -23,12 +23,16 @@ class BinderWatch extends ChangeNotifier {
   String _selectedOption = 'Mọi người';
   bool _showPeopleInRangeDistance = false;
   double _distancePreference = 2;
+  double _paddingTop = 0;
   bool _showPeopleInRangeAge = false;
+  bool _isGlobal = false;
+
   List<double> _currentAgeValue = [18, 22];
 
   String get selectedOption => _selectedOption;
-
   double get distancePreference => _distancePreference;
+  double get paddingTop => _paddingTop;
+  bool get isGlobalOption => _isGlobal;
 
   List<double> get currentAgeValue => _currentAgeValue;
 
@@ -45,6 +49,15 @@ class BinderWatch extends ChangeNotifier {
 
   void initData() {
     _listCard = [];
+  }
+  void setIsGlobal(bool value)
+  {
+    _isGlobal = value;
+    notifyListeners();
+  }
+  void setPaddingTop(double value) {
+    _paddingTop = value;
+    notifyListeners();
   }
 
   void shuffleUsers(List<UserModel> users) {

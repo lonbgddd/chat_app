@@ -13,31 +13,41 @@ class DiscoverySetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.read<BinderWatch>();
+
     return  Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Center(
-            child: Text(
-              "Cài đặt Tìm Kiếm",
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                await provider.updateRequestToShow();
-                context.pop();
-              },
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0.4,
+            title: Center(
               child: Text(
-                "Xong",
-                style: TextStyle(color: Colors.blue[700]),
+                "Cài đặt Tìm Kiếm",
+                style: TextStyle(color: Colors.black),
               ),
             ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        body: BodyDiscoverySetting()
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  await provider.updateRequestToShow();
+                  context.pop("refresh");
+                },
+                child: Text(
+                  "Xong",
+                  style: TextStyle(color: Colors.blue[700]),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.grey[200],
+          body: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom:20),
+            child: Column(
+              children: [
+                BodyDiscoverySetting(isGlobal: false),
+                SizedBox(height: 25,),
+                BodyHighSearch()
+              ],
+            ),
+          ),
 
     );
   }

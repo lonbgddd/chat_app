@@ -5,7 +5,8 @@ class PackageModel {
   final String price;
   final double discount;
 
-  PackageModel( {
+
+  PackageModel({
     required this.name,
     required this.id,
     required this.title,
@@ -69,17 +70,23 @@ List<PackageModel> packageBinderSuperLike = [
     title: '',
     name: '5 lượt Siêu Thích',
     price: '39.800 ₫/th',
-    discount: 0,),
+
+    discount: 0,
+  ),
   PackageModel(
     id: 2,
     title: 'Phổ biến',
     name: '25 lượt Siêu Thích',
     price: '31.160 ₫/th',
-    discount: 22,),
+
+    discount: 22,
+  ),
   PackageModel(
     id: 3,
     title: 'Giá Tốt Nhất',
     name: '60 lượt Siêu Thích',
     price: '24.983 ₫/th',
-    discount: 37, ),
+
+    discount: 37,
+  ),
 ];

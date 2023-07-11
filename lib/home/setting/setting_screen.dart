@@ -36,7 +36,8 @@ class SettingScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         leading: Text(""),
       ),
-      backgroundColor: Colors.grey[300],
+
+        backgroundColor: Colors.grey[200],
       body: Body()
 
     );

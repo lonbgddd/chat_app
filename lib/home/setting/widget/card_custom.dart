@@ -37,7 +37,7 @@ class CardSettingCustom extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8)),
           width: width,
-          height: double.tryParse('${size.height / 9.5}'),
+          height: double.tryParse('${size.height / 9}'),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             child: Column(

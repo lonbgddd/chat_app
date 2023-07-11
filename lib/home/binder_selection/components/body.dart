@@ -45,15 +45,15 @@ class BodySelection extends StatelessWidget {
     required String subTitle,
     required String title,
   }) {
-    MediaQueryData mediaQueryData = MediaQuery.of(context);
-    EdgeInsets padding = mediaQueryData.padding;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       isDismissible: true,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.only(top: padding.top),
+
+          padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
           height: MediaQuery.of(context).size.height,
           child: BottomModalFullScreen(
             packageModel: packageModel,

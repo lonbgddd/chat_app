@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chat_app/config/changedNotify/binder_watch.dart';
+
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/home/profile/widget/item_slider.dart';
 import 'package:chat_app/model/item_slider.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SliderCustom extends StatefulWidget {
   const SliderCustom({Key? key}) : super(key: key);
@@ -39,7 +42,8 @@ class _SliderCustomState extends State<SliderCustom> {
       isDismissible: true,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.only(top: padding.top),
+
+          padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
           height: MediaQuery.of(context).size.height,
           child: BottomModalFullScreen(
             packageModel: packageModel,
