@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/domain/usecases/compare_usertime_usecase.dart';
@@ -31,27 +32,20 @@ class DetailMessageBloc extends Bloc<DetailMessageEvent, DetailMessageState> {
       : super(const DetailMessageInitial()) {
     on<GetMessageList>(getMessageList);
     on<AddMessage>(addMessage);
-    on<ShowEmojiPicker>(showEmojiPicker);
     on<CompareUserTime>(compareUserTime);
-    on<WatchTimeEvent>(watchTime);
   }
 
   FutureOr<void> getMessageList(
       GetMessageList event, Emitter<DetailMessageState> emit) async {
     emit(const MessageListLoading());
-    Stream<ChatRoomEntity> chatRoom =
-        _getChatRoomUserCase(event.uid, event.chatRoomId);
-    emit(MessageListLoaded(
-        _getChatRoomUserCase(event.uid, event.chatRoomId),
-        _getMessagesUseCase(event.chatRoomId),
-        _getInfoUserUseCase(event.uid),
-        event.showEmoji));
+    emit(MessageListLoaded(_getChatRoomUserCase(event.uid,event.chatRoomId),_getMessagesUseCase(event.chatRoomId),_getInfoUserUseCase(event.uid),event.showEmoji,event.image,event.watchTime));
   }
 
   FutureOr<void> addMessage(
       AddMessage event, Emitter<DetailMessageState> emit) {
     _addMessageUseCase(event.uid, event.chatRoomId, event.content,
-        event.imageUrl, event.avatar, event.name);
+        event.image, event.avatar, event.name);
+
   }
 
   FutureOr<void> compareUserTime(
@@ -59,19 +53,4 @@ class DetailMessageBloc extends Bloc<DetailMessageEvent, DetailMessageState> {
     _compareUserTimeUseCase(event.uid, event.chatRoomId);
   }
 
-  FutureOr<void> showEmojiPicker(
-      ShowEmojiPicker event, Emitter<DetailMessageState> emit) {
-    emit(const EmojiPickerShow());
-  }
-
-  FutureOr<void> watchTime(
-      WatchTimeEvent event, Emitter<DetailMessageState> emit) {
-    final currentState = state as WatchTimeState;
-    if (currentState.value != event.value) {
-      emit(WatchTimeState(event.value));
-    }
-  }
-  // FutureOr<void> getInfoUser(GetInfoUser event, Emitter<DetailMessageState> emit) async{
-  //     emit(GetInfoUserLoaded(_getInfoUserUseCase(event.uid)));
-  // }
 }

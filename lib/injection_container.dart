@@ -7,6 +7,8 @@ import 'package:chat_app/features/message/domain/repositories/chat_room_reposito
 import 'package:chat_app/features/message/domain/repositories/user_repository.dart';
 import 'package:chat_app/features/message/domain/usecases/add_message_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/compare_usertime_usecase.dart';
+import 'package:chat_app/features/message/domain/usecases/get_all_chatoom_usecase.dart';
+import 'package:chat_app/features/message/domain/usecases/get_list_user_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_new_chatroom.dart';
 import 'package:chat_app/features/message/domain/usecases/get_chatrooms_usecase.dart';
 import 'package:chat_app/features/message/domain/usecases/get_info_user_usecase.dart';
@@ -19,6 +21,7 @@ import 'package:chat_app/features/message/domain/usecases/get_chatroom_usecase.d
 import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_bloc.dart';
 import 'package:chat_app/features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
 import 'package:chat_app/features/message/presentation/bloc/message/message_bloc.dart';
+import 'package:chat_app/features/message/presentation/bloc/search_chatroom/search_chatroom_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
@@ -45,8 +48,11 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<GetMyInfoUseCase>(GetMyInfoUseCase(sl()));
   sl.registerSingleton<GetNewChatRoomsUseCase>(GetNewChatRoomsUseCase(sl()));
   sl.registerSingleton<GetNewChatRoomUseCase>(GetNewChatRoomUseCase(sl()));
+  sl.registerSingleton<GetAllChatRoomsUseCase>(GetAllChatRoomsUseCase(sl()));
+  sl.registerSingleton<GetListUserChatUseCase>(GetListUserChatUseCase(sl()));
   // Bloc
 
+  sl.registerFactory<SearchChatRoomBloc>(() => SearchChatRoomBloc(sl(),sl()));
   sl.registerFactory<MessageBloc>(() => MessageBloc(sl(),sl(),sl()));
   sl.registerFactory<ChatItemBloc>(() => ChatItemBloc(sl(),sl(),sl()));
   sl.registerFactory<DetailMessageBloc>(() => DetailMessageBloc(sl(), sl(),sl(),sl(),sl()));

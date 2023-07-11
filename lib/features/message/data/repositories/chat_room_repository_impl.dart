@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chat_app/features/message/data/models/user_time_model.dart';
 import 'package:chat_app/features/message/domain/entities/chat_message_entity.dart';
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 
@@ -28,9 +31,9 @@ class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
   @override
   Future<void> addMessage(String uid, String chatRoomId, String messageContent,
-      String imageUrl, String avatar, String name) {
+  File? image, String avatar, String name) {
     return _chatRoomApi.addMessage(
-        uid, chatRoomId, messageContent, imageUrl, avatar, name);
+        uid, chatRoomId, messageContent, image, avatar, name);
   }
 
   @override
@@ -51,5 +54,10 @@ class ChatRoomRepositoryImpl implements ChatRoomRepository {
   @override
   Future<ChatRoomEntity> getNewChatRoom(String chatRoomId) {
     return _chatRoomApi.getNewChatRoom(chatRoomId);
+  }
+
+  @override
+  Stream<List<ChatRoomEntity>> getAllChatRooms(String uid) {
+    return _chatRoomApi.getAllChatRooms(uid);
   }
 }

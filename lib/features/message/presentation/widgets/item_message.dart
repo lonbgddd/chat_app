@@ -3,6 +3,7 @@ import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ntp/ntp.dart';
 
 class MyItemMessage extends StatelessWidget {
   final String? uid;
@@ -10,8 +11,14 @@ class MyItemMessage extends StatelessWidget {
 
   const MyItemMessage({super.key, this.uid, this.chatRoomId});
 
+  Future<void> getTime() async {
+    DateTime currentTime = await NTP.now(
+    );
+    print('Thời gian từ NTP: $currentTime');
+  }
   @override
   Widget build(BuildContext context) {
+    getTime();
     return BlocConsumer<ChatItemBloc, ChatItemState>(
       listenWhen: (previous, current) => current is ChatItemActionState,
       buildWhen: (previous, current) => current is! ChatItemActionState,
@@ -88,6 +95,7 @@ class MyItemMessage extends StatelessWidget {
                           builder: (context, snapshot) {
                             return Row(
                               children: [
+
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -104,7 +112,7 @@ class MyItemMessage extends StatelessWidget {
                                       ),
                                       snapshot.hasData
                                           ? Text(
-                                              snapshot.data!.messageText ?? "",
+                                              snapshot.data!.messageText  != '' ? snapshot.data!.messageText! : 'đã gửi 1 ảnh',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                               ),

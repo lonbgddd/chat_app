@@ -20,8 +20,5 @@ class ChatRoomsLoaded extends MessageState {
   final Stream<List<ChatRoomEntity>> chatRoomsStream;
   final Stream<List<ChatRoomEntity>> newChatRoomsStream;
   const ChatRoomsLoaded(this.chatRoomsStream, this.currentUserId,this.user,this.newChatRoomsStream);
-  // final List<ChatRoomEntity> chatRooms;
-
-  // const ChatRoomsLoaded(this.chatRooms);
 }
 
