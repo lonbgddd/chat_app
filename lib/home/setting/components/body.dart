@@ -198,7 +198,7 @@ class Body extends StatelessWidget {
           BodyHighSearch(),
           ElevatedButton(
               onPressed: () =>
-                  context.pushReplacementNamed('/login-home-screen'),
+                  context.pushReplacement('/login-home-screen'),
               style: ElevatedButton.styleFrom(
                   shadowColor: Colors.grey,
                   fixedSize: Size(250, 50),

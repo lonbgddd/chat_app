@@ -1,23 +1,22 @@
-import 'dart:io';
 
-import 'package:animated_stream_list_nullsafety/animated_stream_list.dart';
 import 'package:chat_app/features/message/domain/entities/user_entity.dart';
 import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_bloc.dart';
+import 'package:chat_app/features/message/presentation/screens/search_Message.dart';
 import 'package:chat_app/features/message/presentation/widgets/circle_message_item.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../../../config/helpers/app_assets.dart';
 import '../../domain/entities/chat_room_entity.dart';
 import '../bloc/message/message_bloc.dart';
+import '../bloc/search_chatroom/search_chatroom_bloc.dart';
+import '../bloc/search_chatroom/search_chatroom_event.dart';
 import '../widgets/item_message.dart';
 
 class MyMessageScreen extends StatelessWidget {
   const MyMessageScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,8 +138,7 @@ class MyMessageScreen extends StatelessWidget {
                   String chatRoomId = data.chatRoomId!;
                   return BlocProvider<ChatItemBloc>(
                       key: ValueKey(chatRoomId),
-                      create: (context) =>
-                          sl()..add(GetChatItem(uid, chatRoomId)),
+                      create: (context) => sl()..add(GetChatItem(uid, chatRoomId)),
                       child: MyItemMessage(uid: uid, chatRoomId: chatRoomId));
                 },
               )
@@ -253,6 +251,8 @@ class MyMessageScreen extends StatelessWidget {
   }
 
   Widget search(BuildContext context) {
+    final FocusNode focusNode = FocusNode();
+    focusNode.unfocus();
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       color: Colors.white,
@@ -271,8 +271,9 @@ class MyMessageScreen extends StatelessWidget {
           Expanded(
             child: TextField(
               onTap: () {
-                context.goNamed('search-message');
+                context.go('/home/search-message');
               },
+              focusNode: focusNode,
               decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(horizontal: 10),
                   hintText: 'Search',

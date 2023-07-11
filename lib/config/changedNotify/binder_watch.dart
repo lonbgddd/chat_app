@@ -7,6 +7,7 @@ import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/user_time.dart';
@@ -203,15 +204,15 @@ class BinderWatch extends ChangeNotifier {
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
       await DatabaseMethods().addFollow(uid, followId);
       String check = await DatabaseMethods().checkFollow(uid, followId);
+      DateTime currentTime = await NTP.now();
+      String time = currentTime.toString();
       if (check == "follow") {
         List<String> users = [uid, followId];
         String chatRoomId = getChatRoomId(uid, followId);
         List<dynamic> userTimes = [
-          UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
-          UserTime(uid: followId, time: DateTime.now().toString()).toJson()
+          UserTime(uid: uid, time: time).toJson(),
+          UserTime(uid: followId, time: time).toJson()
         ];
-        String time = DateTime.now().toString();
-
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,

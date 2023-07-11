@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:chat_app/config/changedNotify/detail_message.dart';
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/domain/entities/user_entity.dart';
 import 'package:chat_app/features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
@@ -15,6 +14,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../config/helpers/helpers_database.dart';
 import '../../domain/entities/chat_message_entity.dart';
+import '../screens/image_Message.dart';
 
 class DetailMessage extends StatefulWidget {
   const DetailMessage(
@@ -31,28 +31,19 @@ class DetailMessage extends StatefulWidget {
 
 class _DetailMessageState extends State<DetailMessage> {
   final TextEditingController messageController = TextEditingController();
-  String keyUid = '';
+  var keyUid = '';
+  var isShowEmoji = false;
+  var watchTime ='';
 
   Future<void> getKeyUid() async {
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
   }
 
-  bool show = false;
-
-  // Stream<List<ChatMessageEntity>>? messages;
   @override
   Widget build(BuildContext context) {
     getKeyUid();
     return BlocConsumer<DetailMessageBloc, DetailMessageState>(
       listener: (context, state) {
-        // if (state is MessageListLoaded) {
-        //   setState(() {
-        //     messages = state.messagesList;
-        //   });
-        // }
-        if (state is EmojiPickerShow) {
-          print("Show emoji picker");
-        }
       },
       builder: (context, state) {
         return Scaffold(
@@ -77,21 +68,15 @@ class _DetailMessageState extends State<DetailMessage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: const BoxDecoration(color: Colors.white),
             child: Builder(builder: (context) {
+              if(state is MessageListLoaded){
               return Column(
                 children: [
-                  state is MessageListLoaded
-                      ? Expanded(
-                          child:
-                              listMessage(state.messagesList, state.chatRoom))
-                      : const CircularProgressIndicator(),
-                  controlMessage(context),
-                  state is MessageListLoaded
-                      ? state.showEmoji == true
-                          ? emoji(context)
-                          : const SizedBox.shrink()
-                      : const SizedBox.shrink()
+                  Expanded(child: listMessage(state.messagesList, state.chatRoom,state.watchTime)),
+                  controlMessage(context, state.showEmoji, state.image),
+                  state.showEmoji == true ? emoji(context) : const SizedBox.shrink()
                 ],
-              );
+              );}
+              return const SizedBox.shrink();
             }),
           ),
         );
@@ -166,7 +151,7 @@ class _DetailMessageState extends State<DetailMessage> {
   }
 
   Widget listMessage(Stream<List<ChatMessageEntity>> messageListStream,
-      Stream<ChatRoomEntity> chatRoom) {
+      Stream<ChatRoomEntity> chatRoom , String watchTime12345) {
     DateFormat timeFormat = DateFormat('HH:mm a');
     DateFormat dateFormat = DateFormat('MMM dd, HH:mm');
     String userTime = '';
@@ -186,7 +171,6 @@ class _DetailMessageState extends State<DetailMessage> {
       }
       return false;
     }
-
     return StreamBuilder(
         stream: chatRoom,
         builder: (context, snapshot) {
@@ -202,7 +186,7 @@ class _DetailMessageState extends State<DetailMessage> {
               stream: messageListStream,
               builder: (context, snapshot) {
                 BlocProvider.of<DetailMessageBloc>(context)
-                    .add(CompareUserTime(keyUid!, widget.chatRoomId!));
+                    .add(CompareUserTime(keyUid, widget.chatRoomId!));
                 return snapshot.hasData
                     ? ListView.builder(
                         itemCount: snapshot.data?.length,
@@ -232,11 +216,8 @@ class _DetailMessageState extends State<DetailMessage> {
                                       dateTimeFormat(timeFormat, time)
                                     else if (index == snapshot.data!.length - 1)
                                       dateTimeFormat(timeFormat, time)
-                                    // else if (context
-                                    //         .watch<DetailMessageProvider>()
-                                    //         .detailTime ==
-                                    //     time.toString())
-                                    //   dateTimeFormat(timeFormat, time)
+                                    else if (watchTime == time.toString())
+                                      dateTimeFormat(timeFormat, time)
                                   ])
                                 else
                                   Column(
@@ -252,11 +233,8 @@ class _DetailMessageState extends State<DetailMessage> {
                                       else if (index ==
                                           snapshot.data!.length - 1)
                                         dateTimeFormat(dateFormat, time)
-                                      // else if (context
-                                      //         .watch<DetailMessageProvider>()
-                                      //         .detailTime ==
-                                      //     time.toString())
-                                      //   dateTimeFormat(dateFormat, time)
+                                      else if (watchTime == time.toString())
+                                          dateTimeFormat(timeFormat, time)
                                     ],
                                   ),
                                 Align(
@@ -272,18 +250,17 @@ class _DetailMessageState extends State<DetailMessage> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          // if (context
-                                          //         .read<DetailMessageProvider>()
-                                          //         .detailTime ==
-                                          //     '') {
-                                          //   context
-                                          //       .read<DetailMessageProvider>()
-                                          //       .setDetailTime(time.toString());
-                                          // } else {
-                                          //   context
-                                          //       .read<DetailMessageProvider>()
-                                          //       .setDetailTime('');
-                                          // }
+                                          if(watchTime != time.toString()){
+                                            BlocProvider.of<DetailMessageBloc>(context).add(
+                                                GetMessageList(
+                                                    widget.uid!, widget.chatRoomId!, isShowEmoji , null,time.toString()));
+                                            watchTime= time.toString();
+                                          } else if(watchTime == time.toString()){
+                                            BlocProvider.of<DetailMessageBloc>(context).add(
+                                                GetMessageList(
+                                                    widget.uid!, widget.chatRoomId!, isShowEmoji , null,''));
+                                            watchTime = '';
+                                          }
                                         },
                                         child: Container(
                                           width: snapshot
@@ -333,7 +310,7 @@ class _DetailMessageState extends State<DetailMessage> {
                                           child:
                                               snapshot.data![index].imageURL !=
                                                       ''
-                                                  ? image(
+                                                  ? _image(
                                                       snapshot.data![index]
                                                           .imageURL!,
                                                       context)
@@ -348,12 +325,9 @@ class _DetailMessageState extends State<DetailMessage> {
                                     ],
                                   ),
                                 ),
-                                if (userTime.isNotEmpty)
-                                  (time.compareTo(DateTime.parse(userTime)) > 0)
-                                      ? Container()
-                                      : DateTime.parse(userTime) == time
-                                          ? Align(
-                                              alignment: Alignment.bottomRight,
+                                if (userTime.isNotEmpty)(time.compareTo(DateTime.parse(userTime)) > 0)
+                                      ? Container() : DateTime.parse(userTime) == time
+                                          ? Align(alignment: Alignment.bottomRight,
                                               child: avatarMini())
                                           : Container()
                               ],
@@ -363,6 +337,86 @@ class _DetailMessageState extends State<DetailMessage> {
                     : Container();
               });
         });
+  }
+
+  Widget controlMessage(BuildContext context, bool showEmoji, File? img) {
+    return Align(
+      alignment: Alignment.bottomLeft,
+      child: Container(
+        padding: const EdgeInsets.only(left: 16, bottom: 10),
+        width: double.infinity,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    side: const BorderSide(width: 1, color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    img != null
+                        ? selectedImage(context, img)
+                        : textFieldEmoji(context, showEmoji),
+                    img != null ? const Spacer() : const SizedBox.shrink(),
+                    IconButton(
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () async {
+                          try {
+                            final pickedFile = await ImagePicker()
+                                .pickImage(source: ImageSource.gallery);
+                            if (pickedFile != null) {
+                              File? image = File(pickedFile.path);
+                              BlocProvider.of<DetailMessageBloc>(context).add(GetMessageList(widget.uid!,widget.chatRoomId!, false, image,watchTime));
+                            }
+                          } on PlatformException catch (e) {
+                            print('$e');
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.image,
+                        ))
+                  ],
+                ),
+              ),
+            ),
+            Card(
+              shape: RoundedRectangleBorder(
+                  side: const BorderSide(width: 1, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10)),
+              child: IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () {
+                  if (messageController.text.isNotEmpty && img == null) {
+                    BlocProvider.of<DetailMessageBloc>(context).add(AddMessage(
+                        widget.uid!,
+                        widget.chatRoomId!,
+                        messageController.text,
+                        null,
+                        widget.avatar!,
+                        widget.name!));
+                    messageController.clear();
+                  }
+                  if (img != null) {
+                    BlocProvider.of<DetailMessageBloc>(context).add(AddMessage(
+                        widget.uid!,
+                        widget.chatRoomId!,
+                        '',
+                        img,
+                        widget.avatar!,
+                        widget.name!));
+                    BlocProvider.of<DetailMessageBloc>(context).add(
+                        GetMessageList(
+                            widget.uid!, widget.chatRoomId!, false, null,watchTime));
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget emoji(BuildContext context) {
@@ -384,74 +438,7 @@ class _DetailMessageState extends State<DetailMessage> {
     );
   }
 
-  Widget controlMessage(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, bottom: 10),
-        width: double.infinity,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    side: const BorderSide(width: 1, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    textFieldEmoji(context),
-                    Container(),
-                    IconButton(
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () async {
-                          try {
-                            final pickedFile = await ImagePicker()
-                                .pickImage(source: ImageSource.gallery);
-                            if (pickedFile != null) {
-                              // Xử lý ảnh đã chọn ở đây
-                              // Ví dụ: hiển thị ảnh trong một ImageView
-                              File? image = File(pickedFile.path);
-                            }
-                          } on PlatformException catch (e) {
-                            print('$e');
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.image,
-                        ))
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              shape: RoundedRectangleBorder(
-                  side: const BorderSide(width: 1, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(10)),
-              child: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () {
-                  if (messageController.text.isNotEmpty) {
-                    BlocProvider.of<DetailMessageBloc>(context).add(AddMessage(
-                        widget.uid!,
-                        widget.chatRoomId!,
-                        messageController.text,
-                        "",
-                        widget.avatar!,
-                        widget.name!));
-                    messageController.clear();
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget textFieldEmoji(BuildContext context) {
+  Widget textFieldEmoji(BuildContext context, bool showEmoji) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -461,11 +448,14 @@ class _DetailMessageState extends State<DetailMessage> {
               child: TextField(
                 controller: messageController,
                 keyboardType: TextInputType.multiline,
-                //maxLines: maxLines,
+                minLines: 1,
+                maxLines: 4,
                 onTap: () {
-                  if (context.read<DetailMessageProvider>().showEmoji) {
-                    context.read<DetailMessageProvider>().setShowEmoji(
-                        !context.read<DetailMessageProvider>().showEmoji);
+                  if (showEmoji) {
+                    BlocProvider.of<DetailMessageBloc>(context).add(
+                        GetMessageList(
+                            widget.uid!, widget.chatRoomId!, false, null,watchTime));
+                    isShowEmoji = false;
                   }
                 },
                 decoration: const InputDecoration(
@@ -478,9 +468,10 @@ class _DetailMessageState extends State<DetailMessage> {
           IconButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                show = !show;
-                BlocProvider.of<DetailMessageBloc>(context)
-                    .add(GetMessageList(widget.uid!, widget.chatRoomId!, show));
+                FocusScope.of(context).unfocus();
+                isShowEmoji = !isShowEmoji;
+                BlocProvider.of<DetailMessageBloc>(context).add(GetMessageList(
+                    widget.uid!, widget.chatRoomId!, isShowEmoji, null,watchTime));
               },
               icon: const Icon(
                 Icons.emoji_emotions,
@@ -500,7 +491,7 @@ class _DetailMessageState extends State<DetailMessage> {
     );
   }
 
-  Widget selectedImage(BuildContext context) {
+  Widget selectedImage(BuildContext context, File image) {
     return Stack(
       children: [
         ClipRRect(
@@ -508,15 +499,15 @@ class _DetailMessageState extends State<DetailMessage> {
           child: SizedBox(
             width: 100,
             height: 100,
-            child: Image.file(context.watch<DetailMessageProvider>().image!,
-                fit: BoxFit.cover),
+            child: Image.file(image, fit: BoxFit.cover),
           ),
         ),
         Positioned(
           right: 0,
           child: InkWell(
               onTap: () {
-                context.read<DetailMessageProvider>().setImageNull();
+                BlocProvider.of<DetailMessageBloc>(context).add(GetMessageList(
+                    widget.uid!, widget.chatRoomId!, false, null,watchTime));
               },
               child: Container(
                   decoration: BoxDecoration(
@@ -533,12 +524,15 @@ class _DetailMessageState extends State<DetailMessage> {
     );
   }
 
-  Widget image(String url, BuildContext context) {
+  Widget _image(String url, BuildContext context) {
     return InkWell(
       onTap: () {
-        context.goNamed('image-message', queryParameters: {
-          'url': url,
-        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageMessage(url: url),
+          ),
+        );
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),

@@ -33,10 +33,7 @@ import 'package:provider/provider.dart';
 
 import 'Auth/login_phone_screen.dart';
 import 'config/changedNotify/notification_watch.dart';
-import 'config/changedNotify/search_message.dart';
-import 'features/message/presentation/widgets/detail_message.dart';
 import 'firebase_options.dart';
-import 'features/message/presentation/screens/search_Message.dart';
 import 'home/profile/update_profile_screen.dart';
 
 @pragma('vm:entry-point')
@@ -197,10 +194,6 @@ Future<void> main() async {
       ChangeNotifierProvider(
         create: (context) => LocationProvider(),
         child: LocationScreen(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => SearchMessageProvider(),
-        child: SearchMessage(),
       ),
       ChangeNotifierProvider(
         create: (context) => UpdateNotify(),

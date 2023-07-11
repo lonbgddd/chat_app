@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import '../entities/chat_message_entity.dart';
 import '../entities/chat_room_entity.dart';
+import '../entities/user_time_entity.dart';
 
 abstract class ChatRoomRepository {
   Stream<List<ChatRoomEntity>> getChatRooms(String uid);
@@ -12,10 +15,13 @@ abstract class ChatRoomRepository {
 
   Stream<List<ChatRoomEntity>> getNewChatRooms(String uid);
 
+  Stream<List<ChatRoomEntity>> getAllChatRooms(String uid);
+
   Future<void> addMessage(String uid, String chatRoomId, String messageContent,
-      String imageUrl, String avatar, String name);
+      File? image, String avatar, String name);
 
   Future<void> compareUserTime(String chatRoomId, String uid);
 
   Future<ChatRoomEntity> getNewChatRoom(String chatRoomId);
+
 }

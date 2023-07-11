@@ -18,4 +18,9 @@ class UserRepositoryImpl extends UserRepository {
     return _userService.getInfoUser(uid);
   }
 
+  @override
+  Future<List<UserEntity>> getListUserChat(String uid) {
+    return _userService.getListUserChat(uid);
+  }
+
 }

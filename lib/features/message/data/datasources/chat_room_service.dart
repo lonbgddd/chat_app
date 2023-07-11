@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ntp/ntp.dart';
 
 import '../../../../config/data_mothes.dart';
 import '../../../../config/helpers/helpers_database.dart';
@@ -56,6 +59,16 @@ class ChatRoomService {
     });
   }
 
+  Stream<List<ChatRoomModel>> getAllChatRooms(String uid) {
+    return FirebaseFirestore.instance
+        .collection("chatRoom")
+        .where('users', arrayContains: uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+        .map((doc) => ChatRoomModel.fromJson(doc.data()))
+        .toList());
+  }
+
   Stream<List<ChatMessageModel>> getChatMessagesStream(String? chatRoomId) {
     return FirebaseFirestore.instance
         .collection("chatRoom")
@@ -83,7 +96,7 @@ class ChatRoomService {
   }
 
   Future<void> addMessage(String uid, String chatRoomId, String messageContent,
-      String imageUrl, String avatar, String name) async {
+      File? image, String avatar, String name) async {
     String token = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
@@ -91,12 +104,19 @@ class ChatRoomService {
         .then((value) {
       return value.docs.first.data()['token'];
     });
+    String imageUrl = '';
+    DateTime currentTime = await NTP.now(
 
+    );
+    String time = currentTime.toString();
+    if (image != null) {
+      imageUrl = await DatabaseMethods().pushImage(image, '$uid-$time');
+    }
     ChatMessageModel message = ChatMessageModel(
         uid: uid,
         messageText: messageContent,
         imageURL: imageUrl,
-        time: DateTime.now());
+        time: currentTime);
     await FirebaseFirestore.instance
         .collection("chatRoom")
         .doc(chatRoomId)

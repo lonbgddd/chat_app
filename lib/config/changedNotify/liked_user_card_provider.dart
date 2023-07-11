@@ -2,6 +2,7 @@ import 'package:chat_app/config/data_mothes.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/chat_room.dart';
 import 'package:flutter/material.dart';
+import 'package:ntp/ntp.dart';
 
 import '../../model/user_time.dart';
 
@@ -29,12 +30,13 @@ class LikedUserCardProvider extends ChangeNotifier {
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
       await DatabaseMethods().addFollow(uid, followId);
       String check = await DatabaseMethods().checkFollow(uid, followId);
+      DateTime currentTime = await NTP.now();
+      String time = currentTime.toString();
       if (check == "follow") {
         List<String> users = [uid, followId];
         String chatRoomId = getChatRoomId(uid, followId);
-        List<dynamic> userTimes = [UserTime(uid: uid, time: DateTime.now().toString()).toJson(),
-          UserTime(uid: followId, time: DateTime.now().toString()).toJson()];
-        String time = DateTime.now().toString();
+        List<dynamic> userTimes = [UserTime(uid: uid, time: time).toJson(),
+          UserTime(uid: followId, time: time).toJson()];
         Map<String, dynamic> chatRoom = {
           "users": users,
           "chatRoomId": chatRoomId,

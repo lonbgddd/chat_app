@@ -1,3 +1,4 @@
+import 'package:chat_app/config/data_mothes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -70,8 +71,15 @@ class LoginPhoneProvider extends ChangeNotifier {
         verificationId: codeVerify,
         smsCode: smsCode,
       );
-      await auth.signInWithCredential(credential);
-      context.go('/login-home-screen/confirm-screen');
+      UserCredential userCredential = await auth.signInWithCredential(credential);
+
+      String? uid = userCredential.user?.uid;
+      bool check = await DatabaseMethods().checkUserExists(uid);
+      if(check == true){
+        context.go('/home');
+      }else{
+        context.go('/login-home-screen/confirm-screen');
+      }
     } catch (e) {
       smsError(true);
       print('Lỗi xác minh số điện thoại: $e');

@@ -8,22 +8,23 @@ abstract class DetailMessageEvent extends Equatable {
 }
 
 class GetMessageList extends DetailMessageEvent {
+  final String watchTime;
   final bool showEmoji;
+  final File? image;
   final String uid;
   final String chatRoomId;
-
-  const GetMessageList(this.uid, this.chatRoomId, this.showEmoji);
+  const GetMessageList(this.uid ,this.chatRoomId,this.showEmoji,this.image,this.watchTime);
 }
 
 class AddMessage extends DetailMessageEvent {
   final String uid;
   final String chatRoomId;
   final String content;
-  final String imageUrl;
+  final File? image;
   final String avatar;
   final String name;
 
-  const AddMessage(this.uid, this.chatRoomId, this.content, this.imageUrl,
+  const AddMessage(this.uid, this.chatRoomId, this.content, this.image,
       this.avatar, this.name);
 }
 
@@ -52,3 +53,4 @@ class WatchTimeEvent extends DetailMessageEvent {
 //   final String chatRoomId;
 //   const GetChatRoom(this.uid,this.chatRoomId);
 // }
+

@@ -28,6 +28,4 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     UserEntity user = await _getMyInfoUseCase(uid!);
     emit(ChatRoomsLoaded(_getChatRoomsUseCase(uid!),uid!,user,_getNewChatRoomsUseCase(uid!)));
   }
-
-
 }
