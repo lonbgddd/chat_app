@@ -33,7 +33,7 @@ class _DetailMessageState extends State<DetailMessage> {
   final TextEditingController messageController = TextEditingController();
   var keyUid = '';
   var isShowEmoji = false;
-  var watchTime ='';
+  var watchTime = '';
 
   Future<void> getKeyUid() async {
     keyUid = await HelpersFunctions().getUserIdUserSharedPreference() as String;
@@ -43,8 +43,7 @@ class _DetailMessageState extends State<DetailMessage> {
   Widget build(BuildContext context) {
     getKeyUid();
     return BlocConsumer<DetailMessageBloc, DetailMessageState>(
-      listener: (context, state) {
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
@@ -68,14 +67,19 @@ class _DetailMessageState extends State<DetailMessage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             decoration: const BoxDecoration(color: Colors.white),
             child: Builder(builder: (context) {
-              if(state is MessageListLoaded){
-              return Column(
-                children: [
-                  Expanded(child: listMessage(state.messagesList, state.chatRoom,state.watchTime)),
-                  controlMessage(context, state.showEmoji, state.image),
-                  state.showEmoji == true ? emoji(context) : const SizedBox.shrink()
-                ],
-              );}
+              if (state is MessageListLoaded) {
+                return Column(
+                  children: [
+                    Expanded(
+                        child: listMessage(state.messagesList, state.chatRoom,
+                            state.watchTime)),
+                    controlMessage(context, state.showEmoji, state.image),
+                    state.showEmoji == true
+                        ? emoji(context)
+                        : const SizedBox.shrink()
+                  ],
+                );
+              }
               return const SizedBox.shrink();
             }),
           ),
@@ -151,7 +155,7 @@ class _DetailMessageState extends State<DetailMessage> {
   }
 
   Widget listMessage(Stream<List<ChatMessageEntity>> messageListStream,
-      Stream<ChatRoomEntity> chatRoom , String watchTime12345) {
+      Stream<ChatRoomEntity> chatRoom, String watchTime12345) {
     DateFormat timeFormat = DateFormat('HH:mm a');
     DateFormat dateFormat = DateFormat('MMM dd, HH:mm');
     String userTime = '';
@@ -171,6 +175,7 @@ class _DetailMessageState extends State<DetailMessage> {
       }
       return false;
     }
+
     return StreamBuilder(
         stream: chatRoom,
         builder: (context, snapshot) {
@@ -234,7 +239,7 @@ class _DetailMessageState extends State<DetailMessage> {
                                           snapshot.data!.length - 1)
                                         dateTimeFormat(dateFormat, time)
                                       else if (watchTime == time.toString())
-                                          dateTimeFormat(timeFormat, time)
+                                        dateTimeFormat(timeFormat, time)
                                     ],
                                   ),
                                 Align(
@@ -250,15 +255,26 @@ class _DetailMessageState extends State<DetailMessage> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          if(watchTime != time.toString()){
-                                            BlocProvider.of<DetailMessageBloc>(context).add(
-                                                GetMessageList(
-                                                    widget.uid!, widget.chatRoomId!, isShowEmoji , null,time.toString()));
-                                            watchTime= time.toString();
-                                          } else if(watchTime == time.toString()){
-                                            BlocProvider.of<DetailMessageBloc>(context).add(
-                                                GetMessageList(
-                                                    widget.uid!, widget.chatRoomId!, isShowEmoji , null,''));
+                                          if (watchTime != time.toString()) {
+                                            BlocProvider.of<DetailMessageBloc>(
+                                                    context)
+                                                .add(GetMessageList(
+                                                    widget.uid!,
+                                                    widget.chatRoomId!,
+                                                    isShowEmoji,
+                                                    null,
+                                                    time.toString()));
+                                            watchTime = time.toString();
+                                          } else if (watchTime ==
+                                              time.toString()) {
+                                            BlocProvider.of<DetailMessageBloc>(
+                                                    context)
+                                                .add(GetMessageList(
+                                                    widget.uid!,
+                                                    widget.chatRoomId!,
+                                                    isShowEmoji,
+                                                    null,
+                                                    ''));
                                             watchTime = '';
                                           }
                                         },
@@ -325,9 +341,12 @@ class _DetailMessageState extends State<DetailMessage> {
                                     ],
                                   ),
                                 ),
-                                if (userTime.isNotEmpty)(time.compareTo(DateTime.parse(userTime)) > 0)
-                                      ? Container() : DateTime.parse(userTime) == time
-                                          ? Align(alignment: Alignment.bottomRight,
+                                if (userTime.isNotEmpty)
+                                  (time.compareTo(DateTime.parse(userTime)) > 0)
+                                      ? Container()
+                                      : DateTime.parse(userTime) == time
+                                          ? Align(
+                                              alignment: Alignment.bottomRight,
                                               child: avatarMini())
                                           : Container()
                               ],
@@ -368,7 +387,13 @@ class _DetailMessageState extends State<DetailMessage> {
                                 .pickImage(source: ImageSource.gallery);
                             if (pickedFile != null) {
                               File? image = File(pickedFile.path);
-                              BlocProvider.of<DetailMessageBloc>(context).add(GetMessageList(widget.uid!,widget.chatRoomId!, false, image,watchTime));
+                              BlocProvider.of<DetailMessageBloc>(context).add(
+                                  GetMessageList(
+                                      widget.uid!,
+                                      widget.chatRoomId!,
+                                      false,
+                                      image,
+                                      watchTime));
                             }
                           } on PlatformException catch (e) {
                             print('$e');
@@ -407,8 +432,8 @@ class _DetailMessageState extends State<DetailMessage> {
                         widget.avatar!,
                         widget.name!));
                     BlocProvider.of<DetailMessageBloc>(context).add(
-                        GetMessageList(
-                            widget.uid!, widget.chatRoomId!, false, null,watchTime));
+                        GetMessageList(widget.uid!, widget.chatRoomId!, false,
+                            null, watchTime));
                   }
                 },
               ),
@@ -453,8 +478,8 @@ class _DetailMessageState extends State<DetailMessage> {
                 onTap: () {
                   if (showEmoji) {
                     BlocProvider.of<DetailMessageBloc>(context).add(
-                        GetMessageList(
-                            widget.uid!, widget.chatRoomId!, false, null,watchTime));
+                        GetMessageList(widget.uid!, widget.chatRoomId!, false,
+                            null, watchTime));
                     isShowEmoji = false;
                   }
                 },
@@ -471,7 +496,11 @@ class _DetailMessageState extends State<DetailMessage> {
                 FocusScope.of(context).unfocus();
                 isShowEmoji = !isShowEmoji;
                 BlocProvider.of<DetailMessageBloc>(context).add(GetMessageList(
-                    widget.uid!, widget.chatRoomId!, isShowEmoji, null,watchTime));
+                    widget.uid!,
+                    widget.chatRoomId!,
+                    isShowEmoji,
+                    null,
+                    watchTime));
               },
               icon: const Icon(
                 Icons.emoji_emotions,
@@ -507,7 +536,7 @@ class _DetailMessageState extends State<DetailMessage> {
           child: InkWell(
               onTap: () {
                 BlocProvider.of<DetailMessageBloc>(context).add(GetMessageList(
-                    widget.uid!, widget.chatRoomId!, false, null,watchTime));
+                    widget.uid!, widget.chatRoomId!, false, null, watchTime));
               },
               child: Container(
                   decoration: BoxDecoration(

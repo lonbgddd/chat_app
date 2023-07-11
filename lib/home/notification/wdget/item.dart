@@ -92,6 +92,9 @@ class ItemNotification extends StatelessWidget {
                 ButtonNotification(
                   title: title == 'chat' ? "Phản hồi" : "Xem",
                   idUser: idUser.toString(),
+                  chatRoomId: chatRoomId,
+                  name: name,
+                  avatar: imageUrl,
                   router: title == 'match'
                       ? "home-detail-others-notification"
                       : "detail-message-notification",
