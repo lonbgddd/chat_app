@@ -1,10 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:chat_app/config/firebase/firebase_api.dart';
 import 'package:chat_app/config/helpers/helpers_database.dart';
 import 'package:chat_app/model/chat_room.dart';
-import 'package:chat_app/model/chat_user.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -262,29 +260,6 @@ class DatabaseMethods {
         .snapshots();
   }
 
-  Future<void> addMessage(String chatRoomId, ChatMessage chatMessageData,
-      String token, String name) async {
-    String uid = HelpersFunctions().getUserIdUserSharedPreference().toString();
-    await FirebaseFirestore.instance
-        .collection("chatRoom")
-        .doc(chatRoomId)
-        .collection("chats")
-        .add(chatMessageData.toJson())
-        .then((_) {
-      FirebaseApi().sendPushMessage(
-          title: 'Tin nhắn',
-          uid: uid,
-          type: 'chat',
-          body: chatMessageData.messageText,
-          avatar: '',
-          token: token,
-          name: name,
-          chatRoomId: chatRoomId);
-    }).catchError((e) {
-      print(e.toString());
-    });
-  }
-
   Future<UserModel> getToken(String uid) async {
     final data = await FirebaseFirestore.instance
         .collection('users')
@@ -388,10 +363,8 @@ class DatabaseMethods {
 
   Future<bool> checkUserExists(String? uid) async {
     try {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+      DocumentSnapshot snapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
       if (snapshot.exists) {
         return true;
       }
@@ -400,7 +373,6 @@ class DatabaseMethods {
     }
     return false;
   }
-
 
   double _calculateDistance(
       double lat1, double lon1, double lat2, double lon2) {

@@ -65,8 +65,8 @@ class ChatRoomService {
         .where('users', arrayContains: uid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => ChatRoomModel.fromJson(doc.data()))
-        .toList());
+            .map((doc) => ChatRoomModel.fromJson(doc.data()))
+            .toList());
   }
 
   Stream<List<ChatMessageModel>> getChatMessagesStream(String? chatRoomId) {
@@ -97,6 +97,17 @@ class ChatRoomService {
 
   Future<void> addMessage(String uid, String chatRoomId, String messageContent,
       File? image, String avatar, String name) async {
+    String nameUser = '';
+    final uidChat = await HelpersFunctions().getUserIdUserSharedPreference();
+    String avaterUser = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: uidChat)
+        .get()
+        .then((value) {
+      nameUser = value.docs.first.data()['fullName'];
+      return value.docs.first.data()['avatar'];
+    });
+
     String token = await FirebaseFirestore.instance
         .collection('users')
         .where('uid', isEqualTo: uid)
@@ -105,9 +116,7 @@ class ChatRoomService {
       return value.docs.first.data()['token'];
     });
     String imageUrl = '';
-    DateTime currentTime = await NTP.now(
-
-    );
+    DateTime currentTime = await NTP.now();
     String time = currentTime.toString();
     if (image != null) {
       imageUrl = await DatabaseMethods().pushImage(image, '$uid-$time');
@@ -125,12 +134,12 @@ class ChatRoomService {
         .then((_) {
       FirebaseApi().sendPushMessage(
           title: 'Tin nhắn',
-          uid: uid,
+          uid: uidChat.toString(),
           type: 'chat',
           chatRoomId: chatRoomId,
           body: message.messageText ?? "",
-          avatar: avatar,
-          name: name,
+          avatar: avaterUser,
+          name: nameUser,
           token: token);
     }).catchError((e) {
       print(e.toString());
