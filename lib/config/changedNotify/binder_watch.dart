@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ntp/ntp.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../model/user_time.dart';
 import 'highlight_user_watch.dart';
 
@@ -46,6 +46,7 @@ class BinderWatch extends ChangeNotifier {
   Size _size = Size.zero;
 
   List<UserModel> get listCard => _listCard;
+
 
   void initData() {
     _listCard = [];
@@ -151,6 +152,7 @@ class BinderWatch extends ChangeNotifier {
       final List<UserModel> users =
           await DatabaseMethods().getSelectionUser(uid);
       _listCard = users ?? [];
+
       // Lọc và loại bỏ các phần tử đã xóa
       // _listCard = users?.where((user) => !_removedIndexes.contains(users.indexOf(user)))?.toList() ?? [];
 
@@ -187,14 +189,14 @@ class BinderWatch extends ChangeNotifier {
     notifyListeners();
   }
 
-  void endPosition() {
+  void endPosition(BuildContext context) {
     _isDragging = false;
     notifyListeners();
     final status = getStatus(focus: true);
 
     switch (status) {
       case StatusCard.like:
-        like();
+        like(context);
         break;
       case StatusCard.dislike:
         disLike();
@@ -211,7 +213,7 @@ class BinderWatch extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future addFollow(String followId, String token) async {
+  Future addFollow(BuildContext context,String followId, String token)  async {
     try {
       final uid =
           await HelpersFunctions().getUserIdUserSharedPreference() as String;
@@ -244,11 +246,11 @@ class BinderWatch extends ChangeNotifier {
         });
 
         await FirebaseApi().sendPushMessage(
-            title: 'Match',
+            title: AppLocalizations.of(context).notificationScreenTitle2,
             uid: uid,
             chatRoomId: chatRoomId,
             type: 'match',
-            body: 'Bạn có một tương hợp mới nhớ kiểm tra',
+            body: AppLocalizations.of(context).notificationScreenContent,
             avatar: avatar,
             token: token,
             name: name);
@@ -296,10 +298,10 @@ class BinderWatch extends ChangeNotifier {
     }
   }
 
-  void like() {
+  void like(BuildContext context) {
     _angle = 20;
     _offset += Offset(2 * _size.width, 0);
-    addFollow(_listCard.first.uid, _listCard.first.token);
+    addFollow(context,_listCard.first.uid, _listCard.first.token);
     _nextCard();
 
     notifyListeners();

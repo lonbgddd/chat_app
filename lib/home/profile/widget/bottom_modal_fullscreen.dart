@@ -3,6 +3,8 @@ import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class BottomModalFullScreen extends StatelessWidget {
   final Color color;
@@ -37,8 +39,10 @@ class BottomModalFullScreen extends StatelessWidget {
 
   {
     final height = MediaQuery.of(context).size.height;
-    final styleTextSpan = TextStyle(color: Colors.black, fontSize: 13);
+    final styleTextSpan = TextStyle(color: Colors.black, fontSize: 12);
+    final appLocal = AppLocalizations.of(context);
     return Container(
+      padding: EdgeInsets.only(top: 30),
       decoration: isHaveColor
           ? BoxDecoration(
         gradient: LinearGradient(
@@ -109,8 +113,7 @@ class BottomModalFullScreen extends StatelessWidget {
                       SizedBox(
                         height: 25,
                       ),
-                      Text(
-                        "Chọn một gói",
+                      Text(appLocal.pageFunctionVipContent1,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14),
                       ),
@@ -118,7 +121,7 @@ class BottomModalFullScreen extends StatelessWidget {
                         height: 10,
                       ),
                       Container(
-                        height: double.parse('${height / 4.5}'),
+                        height: height / 4.5,
                         // Adjust the height as needed
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -138,8 +141,7 @@ class BottomModalFullScreen extends StatelessWidget {
                           Container(
                             height: double.parse('${height / 2}'),
                             decoration: BoxDecoration(
-                              border:
-                              Border.all(color: Colors.grey, width: 0.8),
+                              border: Border.all(color: Colors.grey, width: 0.8),
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -158,7 +160,7 @@ class BottomModalFullScreen extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(3.5),
                                   child: Text(
-                                    "Đã bao gồm trong Binder",
+                                      appLocal.pageFunctionVipContent2,
                                     style: TextStyle(
                                         fontSize: 13, letterSpacing: 0.8),
                                   ),
@@ -173,8 +175,8 @@ class BottomModalFullScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                buildRowTitle("Thích không giới hạn"),
-                                buildRowTitle("5 lượt Siêu Thích mỗi tháng")
+                                buildRowTitle( appLocal.pageFunctionVipContent3),
+                                buildRowTitle( appLocal.pageFunctionVipContent4)
                               ],
                             ),
                           )
@@ -192,7 +194,7 @@ class BottomModalFullScreen extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.all(12),
                     width: double.infinity,
-                    height: height / 5,
+                    height: height / 4.8,
                     decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
@@ -203,16 +205,15 @@ class BottomModalFullScreen extends StatelessWidget {
                         RichText(
                           textAlign: TextAlign.justify,
                           text: TextSpan(
-                              text:
-                              "Khi nhấn Tiếp tục, bạn sẽ được tính phí, gói đăng ký của bạn sẽ được tự động gia hạn với cùng mức giá và thời lượng cho đến khi bạn huỷ bỏ, bất cứ lúc nào, thông qua phần cài đặt của Google Play, và bạn chấp thuận ",
+                              text:  appLocal.pageFunctionVipContent5,
                               style: styleTextSpan,
                               children: [
                                 TextSpan(
-                                  text: "Điều khoản",
+                                  text:  appLocal.pageFunctionVipContent6,
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       fontWeight: FontWeight.bold),),
-                                TextSpan(text: " của chúng tôi.")
+                                TextSpan(text:  appLocal.pageFunctionVipContent7)
                               ]),
                         ),
                         SizedBox(
@@ -227,9 +228,9 @@ class BottomModalFullScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(30))),
                             onPressed: () {},
                             child: Text(
-                              "Tiếp tục",
+                              appLocal.pageFunctionVipNextButton,
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: color == Colors.black ? Colors.white : Colors.black ,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16),
                             ))

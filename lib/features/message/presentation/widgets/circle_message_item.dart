@@ -1,15 +1,9 @@
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
-import 'package:chat_app/features/message/domain/entities/user_entity.dart';
-import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../config/helpers/app_assets.dart';
 import '../bloc/chat_item/chat_item_bloc.dart';
-import '../bloc/detail_message/detail_message_bloc.dart';
-import 'detail_message.dart';
 
 class CircleMessageItem extends StatelessWidget {
   const CircleMessageItem(
@@ -86,7 +80,7 @@ class CircleMessageItem extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(url), // Đường dẫn tới ảnh
-                  fit: BoxFit.fill, // Cách ảnh sẽ được hiển thị trong Container
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

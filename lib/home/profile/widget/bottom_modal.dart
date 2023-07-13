@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomModal extends StatefulWidget {
   const BottomModal({super.key});
@@ -10,6 +11,7 @@ class BottomModal extends StatefulWidget {
 class _BottomModalState extends State<BottomModal> {
   @override
   Widget build(BuildContext context) {
+    final appLocal = AppLocalizations.of(context);
     return Container(
       height: MediaQuery.of(context).size.height / 2.5,
       decoration: const BoxDecoration(
@@ -47,24 +49,21 @@ class _BottomModalState extends State<BottomModal> {
                 },
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                children: [
-                  Text(
-                    "Lượt Tăng Tốc của tôi",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    "Đẩy hồ sơ của bạn lên top đầu khu vực trong 30 phút để được nhiều tương hợp hơn.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
-                  )
-                ],
-              ),
+            Column(
+              children: [
+                Text(
+                  appLocal.bottomDialogBoostTitle,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                 appLocal.bottomDialogBoostContent,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                )
+              ],
             ),
             const SizedBox(
               height: 30,
@@ -82,12 +81,12 @@ class _BottomModalState extends State<BottomModal> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Lượt Tăng Tốc",
+                        appLocal.bottomDialogBoostTitle2,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       Text(
-                        "Còn 0",
+                        '${appLocal.bottomDialogBoostRemainingText} 0',
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -108,8 +107,8 @@ class _BottomModalState extends State<BottomModal> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text(
-                "Mua thêm lượt Tăng Tốc",
+              child:  Text(
+                appLocal.bottomDialogBoostButtonText,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

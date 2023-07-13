@@ -6,7 +6,7 @@ import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../config/changedNotify/binder_watch.dart';
 
 class BodySelection extends StatelessWidget {
@@ -22,11 +22,11 @@ class BodySelection extends StatelessWidget {
         color: Colors.yellow,
         title: "Binder",
         isHaveIcon: false,
-        packageModel: packageBinderGoldList,
+        packageModel: packageBinderGoldList(context),
         assetsBanner: AppAssets.iconTinderGoldBanner,
         assetsIcon: AppAssets.iconTinderGold,
         isHaveColor: true,
-        subTitle: 'Quẹt từ các hồ sơ hấp dẫn nhất mỗi ngày',
+        subTitle: AppLocalizations.of(context).selectionPageSubTitle,
       );
     }
   }
@@ -100,7 +100,7 @@ class BodySelection extends StatelessWidget {
                 },
                 user: context.read<BinderWatch>().listCard[index],
                 isDetail: () => context.goNamed(
-                  'Home-detail-others',
+                  'home-detail-others',
                   queryParameters: {
                     'uid': context
                         .read<BinderWatch>()
@@ -120,7 +120,7 @@ class BodySelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _scrollController.addListener(() => _scrollListener(context));
-
+    final appLocal = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -134,7 +134,7 @@ class BodySelection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    "Nâng cấp lên Binder Gold™\nđể có thêm Top Tuyển chọn!",
+                    appLocal.selectionPageContent1,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 15,
@@ -145,7 +145,7 @@ class BodySelection extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  getBody(context, "Mọi người", [18, 22], true, 290),
+                  getBody(context, appLocal.selectionPageEveryoneText, [18, 22], true, 290),
                 ],
               ),
             ),
@@ -164,9 +164,8 @@ class BodySelection extends StatelessWidget {
                   title: "Binder",
                   isHaveColor: true,
                   iconData: null,
-                  packageModel: packageBinderGoldList,
-                  subTitle:
-                      'Thật nổi bật với lượt Siêu Thích và tăng gấp 3 lần khả năng tương hợp.',
+                  packageModel: packageBinderGoldList(context),
+                  subTitle: appLocal.selectionPageContent2,
                 ),
                 style: ElevatedButton.styleFrom(
                   shadowColor: Colors.grey,
@@ -177,7 +176,7 @@ class BodySelection extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  "MỞ TÍNH NĂNG TOP TUYỂN CHỌN",
+                  appLocal.selectionPageContent3,
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

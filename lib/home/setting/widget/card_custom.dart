@@ -28,18 +28,16 @@ class CardSettingCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 5,left: 10,right: 10),
+      padding:  EdgeInsets.only(top: 5,left: 10,right: 10),
       child: GestureDetector(
-
         onTap: onTap,
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(8)),
           width: width,
-          height: double.tryParse('${size.height / 9}'),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -55,10 +53,8 @@ class CardSettingCustom extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 10,
-                                    spreadRadius: 0.5,
-                                    offset: Offset(0, 0.5),
+                                    color: Colors.grey.shade300,
+                                    blurRadius: 5,
                                   ),
                                 ],
                               ),

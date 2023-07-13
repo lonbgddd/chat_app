@@ -54,17 +54,17 @@ class CallDataProvider extends ChangeNotifier {
       String gender,
       String request,
       String birthday,
-      List<String> interests,
-      String datingPurpose,
+      List<int> interests,
+      int datingPurpose,
       List<String> photoList,
-      List<String> sexualOrientationList,
+      List<int> sexualOrientationList,
       List<String> position,
       ) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     final token =
     await HelpersFunctions().getUserTokenSharedPreference() as String;
-
+    print('Token: $token');
     if (user != null) {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
         UserModel(
@@ -130,9 +130,10 @@ class CallDataProvider extends ChangeNotifier {
   Future<void> signOut() async {
     await HelpersFunctions.saveIdUserSharedPreference('');
     await HelpersFunctions.saveTokenUserSharedPreference('');
-    _userFormFirebase(null);
 
     await GoogleSignIn().signOut();
+    _userFormFirebase(null);
+
     return await FirebaseAuth.instance.signOut();
   }
 

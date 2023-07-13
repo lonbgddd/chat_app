@@ -2,7 +2,7 @@ import 'package:chat_app/Auth/widget/pin_code_custom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
 import '../../widget/button_submit_page_view.dart';
 
@@ -12,6 +12,8 @@ class AddBirthdayPageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
+    final appLocal = AppLocalizations.of(context);
+
     return Container(
       color: Colors.white,
       height: MediaQuery.of(context).size.height,
@@ -31,7 +33,7 @@ class AddBirthdayPageSection extends StatelessWidget {
                   icon: Icon(Icons.west, color: Colors.grey, size: 30,),
                 ),
                 const SizedBox(height: 15,),
-                const Text('Ngày sinh của bạn ?',
+                 Text(appLocal.titleAddBirthDayPage,
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 28
@@ -94,12 +96,12 @@ class AddBirthdayPageSection extends StatelessWidget {
                 const SizedBox(height: 10,),
                 Visibility(
                   visible: pageProvider.isErrorBirthday,
-                  child: Text('Vui lòng nhập ngày sinh hợp lệ', style: TextStyle(color: Colors.red,fontWeight: FontWeight.w500,fontSize: 16,),
+                  child: Text(appLocal.textErrorEnterBirthDay, style: TextStyle(color: Colors.red,fontWeight: FontWeight.w500,fontSize: 16,),
                     textAlign: TextAlign.left,
                   ),
                 ),
                 const SizedBox(height: 10,),
-                const Text('Hồ sơ của bạn sẽ hiện thông tin tuổi, không phải ngày sinh',
+                 Text(appLocal.textNotificationBirthDayPage,
                   style: TextStyle(
                       fontSize: 15,color: Colors.grey,fontWeight: FontWeight.w500
                   ),
@@ -107,7 +109,7 @@ class AddBirthdayPageSection extends StatelessWidget {
               ],
             ),
           ),
-          ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 30,
+          ButtonSubmitPageView(text: appLocal.textNextButton,marginBottom: 30,
               color: pageProvider.isBirthdayEmpty ? Colors.grey : Colors.transparent,
               onPressed: () {
                 !pageProvider.isBirthdayEmpty ? pageProvider.nextPage() : null;

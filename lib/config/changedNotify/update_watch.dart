@@ -13,37 +13,38 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 
 class UpdateNotify extends ChangeNotifier {
+
   bool isLoading = false;
   bool isInterestSearching = false;
-  List<String> filteredInterestsList = HelpersUserAndValidators.interestsList;
+  List<String> filteredInterestsList = [];
   bool userLoaded = false;
   List<String> allLanguageList = [];
   List<String> filteredLanguageList = [];
 
   String gender = "";
-  String datingPurpose = "";
+  int datingPurpose = -1;
 
   List<String>? photoList = [];
-  List<String>? interestsList = [];
+  List<int> interestsList = [];
   List<String>? fluentLanguageList = [];
-  List<String>? sexualOrientationList = [];
+  List<int>? sexualOrientationList = [];
 
   //BasicInfoUser
-  String zodiac = "";
-  String academicLever = "";
-  String communicateStyle = "";
-  String languageOfLove = "";
-  String familyStyle = "";
-  String personalityType = "";
+  int zodiac = -1;
+  int academicLever =  -1;
+  int communicateStyle =  -1;
+  int languageOfLove =  -1;
+  int familyStyle =  -1;
+  String personalityType =  '';
 
   //StyleOfLifeUser
-  String myPet = "";
-  String drinkingStatus = "";
-  String smokingStatus = "";
-  String sportsStatus = "";
-  String eatingStatus = "";
-  String socialNetworkStatus = "";
-  String sleepingHabits = "";
+  int myPet =  -1;
+  int drinkingStatus = -1;
+  int smokingStatus =  -1;
+  int sportsStatus =  -1;
+  int eatingStatus =  -1;
+  int socialNetworkStatus =  -1;
+  int sleepingHabits =  -1;
 
   String? uid = "";
 
@@ -59,6 +60,7 @@ class UpdateNotify extends ChangeNotifier {
 
   final TextEditingController searchLanguageController =
   TextEditingController();
+
   Future<void> getUser(bool initTextController) async {
     userLoaded = true;
     uid = await HelpersFunctions().getUserIdUserSharedPreference();
@@ -164,8 +166,9 @@ class UpdateNotify extends ChangeNotifier {
     await DatabaseMethods().deleteImage(imageUrl);
   }
 
-  void searchInterest(String keyword) {
-    filteredInterestsList = HelpersUserAndValidators.interestsList
+  void searchInterest(String keyword,BuildContext context) {
+
+    filteredInterestsList = HelpersUserAndValidators.interestsList(context)
         .where((item) => item.toLowerCase().contains(keyword.toLowerCase()))
         .toList();
     notifyListeners();

@@ -1,12 +1,15 @@
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
+import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../GoogleAdMob/admob_helper.dart';
 import '../../config/changedNotify/highlight_user_watch.dart';
-import 'compnents/indicator_highlight_page.dart';
+import 'components/indicator_highlight_page.dart';
 
 class HighlightScreen extends StatefulWidget {
   final String? currentUserID;
@@ -19,14 +22,7 @@ class HighlightScreen extends StatefulWidget {
 }
 
 class _HighlightScreenScreenState extends State<HighlightScreen> {
-  List<String> appbarTitleList = ['', 'Phổ biến', 'Giá trị nhất'];
-  List<String> priceList = ['150.000', '300.000', '500.000'];
-  List<String> titleList = [
-    'Tăng tốc 10 phút',
-    'Tăng tốc 20 phút',
-    'Tăng tốc 30 phút'
-  ];
-  List<int> timeList = [5, 10, 15];
+
   var _selectedIndex = 0;
 
   @override
@@ -38,10 +34,19 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
     Provider.of<ProfileWatch>(context, listen: false)
         .getTargetUserUser(widget.targetUserID);
   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adProvider = Provider.of<AdMobProvider>(context, listen: false);
+    adProvider.loadBannerAd(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final EdgeInsets padding = MediaQuery.of(context).padding;
+    final adProvider = Provider.of<AdMobProvider>(context);
+    final appLocal = AppLocalizations.of(context);
+
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.white,
@@ -70,7 +75,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Trở nên nổi bật',
+                    appLocal.highlightPageTitle,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 23,
@@ -82,7 +87,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                     height: 10,
                   ),
                   Text(
-                    'Đẩy hồ sơ của bạn lên top đầu để tăng khả năng tương hợp với "người kia"!',
+                    appLocal.highlightPageContent,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
@@ -102,7 +107,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                     });
                   },
                   scrollDirection: Axis.horizontal,
-                  itemCount: priceList.length,
+                  itemCount: HelpersUserAndValidators.highlightPriceList.length,
                   itemBuilder: (context, index) {
                     var _scale = _selectedIndex == index ? 1.0 : 0.8;
 
@@ -111,10 +116,10 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                       tween: Tween(begin: _scale, end: _scale),
                       curve: Curves.ease,
                       child: buildItemPageView(
-                          appbarTitleList[index].toUpperCase(),
-                          titleList[index].toUpperCase(),
-                          priceList[index],
-                          timeList[index]),
+                          HelpersUserAndValidators.highlightAppbarTitleList(context)[index].toUpperCase(),
+                          HelpersUserAndValidators.highlightTitleTimeList(context)[index].toUpperCase(),
+                          HelpersUserAndValidators.highlightPriceList[index],
+                          HelpersUserAndValidators.highlightTimeList[index]),
                       builder: (context, value, child) {
                         return Transform.scale(
                           scale: value,
@@ -129,12 +134,20 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ...List.generate(
-                    priceList.length,
+                    HelpersUserAndValidators.highlightPriceList.length,
                     (index) => Indicator(
                         isActive: _selectedIndex == index ? true : false)),
               ],
             ),
-            Expanded(flex: 5, child: Container())
+            Expanded(flex: 4, child: Container()),
+
+            adProvider.isLoaded && adProvider.bannerAd != null ?
+            Container(
+                width: adProvider.bannerAd?.size.width.toDouble(),
+                height: adProvider.bannerAd?.size.height.toDouble(),
+                child: AdWidget(ad: adProvider.bannerAd!),
+              ): SizedBox.shrink(),
+
           ],
         ),
       ),
@@ -188,7 +201,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
           const SizedBox(
             height: 10,
           ),
-          Text('$price đ/lượt',
+          Text('$price ${AppLocalizations.of(context).highlightTimeRate}',
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -215,7 +228,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                 ),
               ),
               child: Text(
-                'Chọn',
+                AppLocalizations.of(context).highlightButtonText,
                 style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -248,7 +261,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Đã hoàn tất nổi bật, mong bạn sớm tìm được một nửa cuộc đời mình!',
+                  AppLocalizations.of(context).highlightNotificationText,
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -271,8 +284,7 @@ class _HighlightScreenScreenState extends State<HighlightScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         backgroundColor: Color.fromRGBO(234, 64, 128, 1),
                       ),
-                      child: Text(
-                        'Tôi đã rõ',
+                      child: Text( AppLocalizations.of(context).highlightConfirmButton,
                         style: TextStyle(
                             fontSize: 19,
                             color: Colors.white,

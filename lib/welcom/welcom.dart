@@ -40,17 +40,19 @@ class WelcomeScreen extends StatelessWidget {
                   children: [
                     Container(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           SvgPicture.asset(
                             AppAssets.iconTinder,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.contain,
                             colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
                           const SizedBox(height: 10),
                           const Text(
-                            'Binder',
+                            'Finder',
                             style: TextStyle(
                                 fontSize: 30,
                                 fontFamily: 'Grandista',

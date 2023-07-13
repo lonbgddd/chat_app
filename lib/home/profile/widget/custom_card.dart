@@ -33,25 +33,20 @@ class CustomCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             width: 110,
-            height: 115,
+            height: 100,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                isIcon
-                    ? Icon(
-                        icon,
-                        size: 32,
-                        color: iconColor,
-                      )
-                    : SvgPicture.asset(AppAssets.iconTinder, width: 30),
+                isIcon ? Icon(icon, size: 25, color: iconColor,)
+                    : SvgPicture.asset(AppAssets.iconTinder, width: 25),
                 SizedBox(height: 6),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     textAlign: TextAlign.center,
                     title,
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                   ),
                 ),
                 SizedBox(height: 3),

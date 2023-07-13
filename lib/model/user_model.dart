@@ -12,14 +12,15 @@ class UserModel {
   String avatar;
   String gender;
   String requestToShow;
-  String datingPurpose;
+  int datingPurpose;
   String? school;
   String? introduceYourself;
   List<String> followersList;
   List<String> photoList;
-  List<String> interestsList;
+  List<int> interestsList;
   List<String>? fluentLanguageList;
-  List<String> sexualOrientationList;
+  List<int> sexualOrientationList;
+
   List<String> position;
   bool isHighlighted;
   String highlightTime;
@@ -29,21 +30,21 @@ class UserModel {
   String token;
 
   //BasicInfoUser
-  String? zodiac;
-  String? academicLever;
-  String? communicateStyle;
-  String? languageOfLove;
-  String? familyStyle;
+  int? zodiac;
+  int? academicLever;
+  int? communicateStyle;
+  int? languageOfLove;
+  int? familyStyle;
   String? personalityType;
 
   //StyleOfLifeUser
-  String? myPet;
-  String? drinkingStatus;
-  String? smokingStatus;
-  String? sportsStatus;
-  String? eatingStatus;
-  String? socialNetworkStatus;
-  String? sleepingHabits;
+  int? myPet;
+  int? drinkingStatus;
+  int? smokingStatus;
+  int? sportsStatus;
+  int? eatingStatus;
+  int? socialNetworkStatus;
+  int? sleepingHabits;
 
   UserModel(
       {required this.uid,
@@ -92,18 +93,18 @@ class UserModel {
     avatar: json["avatar"] ?? '',
     gender: json["gender"] ?? '',
     requestToShow: json["requestToShow"] ?? '',
-    datingPurpose: json["datingPurpose"] ?? '',
+    datingPurpose: json["datingPurpose"] ?? -1,
     school: json["school"] ?? '',
     introduceYourself: json["introduceYourself"] ?? '',
     followersList:
     List<String>.from(json["followersList"].map((x) => x)) ?? [],
     photoList: List<String>.from(json["photoList"].map((x) => x)) ?? [],
     interestsList:
-    List<String>.from(json["interestsList"].map((x) => x)) ?? [],
+    List<int>.from(json["interestsList"].map((x) => x)) ?? [],
     fluentLanguageList:
     List<String>.from(json["fluentLanguageList"].map((x) => x)) ?? [],
     sexualOrientationList:
-    List<String>.from(json["sexualOrientationList"].map((x) => x)) ??
+    List<int>.from(json["sexualOrientationList"].map((x) => x)) ??
         [],
     position:
     List<String>.from(json["position"].map((x) => x)) ??
@@ -114,19 +115,19 @@ class UserModel {
     currentAddress: json["currentAddress"] ?? '',
     activeStatus: json["activeStatus"],
     token: json["token"],
-    zodiac: json["zodiac"] ?? '',
-    academicLever: json["academicLever"] ?? '',
-    communicateStyle: json["communicateStyle"] ?? '',
-    languageOfLove: json["languageOfLove"] ?? '',
-    familyStyle: json["familyStyle"] ?? '',
+    zodiac: json["zodiac"] ?? -1,
+    academicLever: json["academicLever"] ??-1,
+    communicateStyle: json["communicateStyle"] ??-1,
+    languageOfLove: json["languageOfLove"] ?? -1,
+    familyStyle: json["familyStyle"] ?? -1,
     personalityType: json["personalityType"] ?? '',
-    myPet: json["myPet"] ?? '',
-    drinkingStatus: json["drinkingStatus"] ?? '',
-    smokingStatus: json["smokingStatus"] ?? '',
-    sportsStatus: json["sportsStatus"] ?? '',
-    eatingStatus: json["eatingStatus"] ?? '',
-    socialNetworkStatus: json["socialNetworkStatus"] ?? '',
-    sleepingHabits: json["sleepingHabits"] ?? '',
+    myPet: json["myPet"] ?? -1,
+    drinkingStatus: json["drinkingStatus"] ?? -1,
+    smokingStatus: json["smokingStatus"] ?? -1,
+    sportsStatus: json["sportsStatus"] ?? -1,
+    eatingStatus: json["eatingStatus"] ?? -1,
+    socialNetworkStatus: json["socialNetworkStatus"] ??-1,
+    sleepingHabits: json["sleepingHabits"] ?? -1,
   );
 
   Map<String, dynamic> toJson() => {
@@ -138,7 +139,7 @@ class UserModel {
     "avatar": avatar ?? '',
     "gender": gender ?? '',
     "requestToShow": requestToShow ?? '',
-    "datingPurpose": datingPurpose ?? '',
+    "datingPurpose": datingPurpose ??  -1,
     "school": school ?? '',
     "introduceYourself": introduceYourself ?? '',
     "followersList": List<String>.from(followersList.map((x) => x)) ?? [],
@@ -154,18 +155,18 @@ class UserModel {
     "currentAddress": currentAddress ?? '',
     "activeStatus": activeStatus ?? '',
     "token": token ?? '',
-    "zodiac": zodiac ?? '',
-    "academicLever": academicLever ?? '',
-    "communicateStyle": communicateStyle ?? '',
-    "languageOfLove": languageOfLove ?? '',
-    "familyStyle": familyStyle ?? '',
+    "zodiac": zodiac ?? -1,
+    "academicLever": academicLever ?? -1,
+    "communicateStyle": communicateStyle ?? -1,
+    "languageOfLove": languageOfLove ??-1,
+    "familyStyle": familyStyle ?? -1,
     "personalityType": personalityType ?? '',
-    "myPet": myPet ?? '',
-    "drinkingStatus": drinkingStatus ?? '',
-    "smokingStatus": smokingStatus ?? '',
-    "sportsStatus": sportsStatus ?? '',
-    "eatingStatus": eatingStatus ?? '',
-    "socialNetworkStatus": socialNetworkStatus ?? '',
-    "sleepingHabits": sleepingHabits ?? '',
+    "myPet": myPet ?? -1,
+    "drinkingStatus": drinkingStatus ?? -1,
+    "smokingStatus": smokingStatus ?? -1,
+    "sportsStatus": sportsStatus ?? -1,
+    "eatingStatus": eatingStatus ?? -1,
+    "socialNetworkStatus": socialNetworkStatus ?? -1,
+    "sleepingHabits": sleepingHabits ?? -1,
   };
 }

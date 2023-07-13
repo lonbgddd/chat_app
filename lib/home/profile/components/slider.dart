@@ -1,13 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:chat_app/config/changedNotify/binder_watch.dart';
-
 import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/home/profile/widget/bottom_modal_fullscreen.dart';
 import 'package:chat_app/home/profile/widget/item_slider.dart';
 import 'package:chat_app/model/item_slider.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SliderCustom extends StatefulWidget {
   const SliderCustom({Key? key}) : super(key: key);
@@ -42,8 +41,7 @@ class _SliderCustomState extends State<SliderCustom> {
       isDismissible: true,
       builder: (BuildContext context) {
         return Container(
-
-          padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
+          padding: EdgeInsets.only(top: padding.top),
           height: MediaQuery.of(context).size.height,
           child: BottomModalFullScreen(
             packageModel: packageModel,
@@ -71,12 +69,11 @@ class _SliderCustomState extends State<SliderCustom> {
           color: Colors.white,
           title: "Binder",
           isHaveIcon: false,
-          packageModel: packageBinderGoldList,
+          packageModel: packageBinderGoldList(context),
           assetsBanner: AppAssets.iconTinderPlatinumBanner,
           assetsIcon: AppAssets.iconTinderPlatinum,
           isHaveColor: true,
-          subTitle:
-              'Nâng cấp lượt Thích và Siêu Thích của bạn với gói Platinum.',
+          subTitle: AppLocalizations.of(context).sliderCustomSubTitle1,
         );
         break;
       case 2:
@@ -85,12 +82,11 @@ class _SliderCustomState extends State<SliderCustom> {
           color: Colors.yellow,
           title: "Binder",
           isHaveIcon: false,
-          packageModel: packageBinderGoldList,
+          packageModel: packageBinderGoldList(context),
           assetsBanner: AppAssets.iconTinderGoldBanner,
           assetsIcon: AppAssets.iconTinderGold,
           isHaveColor: true,
-          subTitle:
-              'Xem ai thích bạn và tương hợp ngay lập tức với Binder Gold™.',
+          subTitle: AppLocalizations.of(context).sliderCustomSubTitle2,
         );
         break;
       case 3:
@@ -99,12 +95,11 @@ class _SliderCustomState extends State<SliderCustom> {
           color: Colors.red.shade200,
           title: "Binder",
           isHaveIcon: false,
-          packageModel: packageBinderGoldList,
+          packageModel: packageBinderGoldList(context),
           assetsBanner: AppAssets.iconTinderPlusBanner,
           assetsIcon: AppAssets.iconTinder,
           isHaveColor: true,
-          subTitle:
-              'Lượt Thích vô hạn. Lượt Quay Lại vô hạn. Hộ Chiếu vô hạn. Không có quảng cáo.',
+          subTitle: AppLocalizations.of(context).sliderCustomSubTitle3,
         );
         break;
     }
@@ -131,7 +126,7 @@ class _SliderCustomState extends State<SliderCustom> {
                     });
                   },
                 ),
-                items: sliderList
+                items: sliderList(context)
                     .map((item) => ItemSliderCustom(itemSlider: item))
                     .toList(),
               ),
@@ -143,7 +138,7 @@ class _SliderCustomState extends State<SliderCustom> {
                 top: 120,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: sliderList.asMap().entries.map((e) {
+                  children: sliderList(context).asMap().entries.map((e) {
                     return GestureDetector(
                       child: Container(
                         width: 6,
@@ -162,7 +157,7 @@ class _SliderCustomState extends State<SliderCustom> {
         ),
         ElevatedButton(
             onPressed: () => checkPackage(
-                index: sliderList[currentIndex].id, context: context),
+                index: sliderList(context)[currentIndex].id, context: context),
             style: ElevatedButton.styleFrom(
                 shadowColor: Colors.grey,
                 fixedSize: Size(250, 50),
@@ -170,10 +165,10 @@ class _SliderCustomState extends State<SliderCustom> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30))),
             child: Text(
-              sliderList[currentIndex].id == 1
-                  ? 'Mua Binder Platinum™'
-                  : sliderList[currentIndex].title,
-              style: TextStyle(color: sliderList[currentIndex].color),
+              sliderList(context)[currentIndex].id == 1
+                  ? AppLocalizations.of(context).sliderCustomSubTitle4
+                  : sliderList(context)[currentIndex].title,
+              style: TextStyle(color: sliderList(context)[currentIndex].color),
             )),
       ],
     );

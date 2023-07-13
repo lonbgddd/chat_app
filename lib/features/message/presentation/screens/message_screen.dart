@@ -1,14 +1,13 @@
-
+import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/features/message/domain/entities/user_entity.dart';
 import 'package:chat_app/features/message/presentation/bloc/chat_item/chat_item_bloc.dart';
-import 'package:chat_app/features/message/presentation/screens/search_Message.dart';
 import 'package:chat_app/features/message/presentation/widgets/circle_message_item.dart';
 import 'package:chat_app/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../config/helpers/app_assets.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../domain/entities/chat_room_entity.dart';
 import '../bloc/message/message_bloc.dart';
 import '../bloc/search_chatroom/search_chatroom_bloc.dart';
@@ -17,6 +16,7 @@ import '../widgets/item_message.dart';
 
 class MyMessageScreen extends StatelessWidget {
   const MyMessageScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,13 +29,13 @@ class MyMessageScreen extends StatelessWidget {
               AppAssets.iconTinder,
               width: 30,
               height: 30,
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
             ),
             const SizedBox(
               width: 5,
             ),
             const Text(
-              "Binder",
+              "Finder",
               style: TextStyle(
                 fontFamily: 'Grandista',
                 fontSize: 24,
@@ -76,8 +76,8 @@ class MyMessageScreen extends StatelessWidget {
                   Container(
                     margin:
                         const EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                    child: const Text(
-                      'Tương hợp mới',
+                    child:  Text(
+                      AppLocalizations.of(context).messageScreenTitle1,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -91,8 +91,8 @@ class MyMessageScreen extends StatelessWidget {
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 20, bottom: 20),
-                    child: const Text(
-                      'Tin nhắn',
+                    child:  Text(
+                      AppLocalizations.of(context).messageScreenTitle2,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -113,8 +113,7 @@ class MyMessageScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChatRoomsList(
-      Stream<List<ChatRoomEntity>> stream, String currentUid, UserEntity user) {
+  Widget _buildChatRoomsList(Stream<List<ChatRoomEntity>> stream, String currentUid, UserEntity user) {
     return StreamBuilder<List<ChatRoomEntity>>(
       stream: stream,
       builder: (BuildContext context, snapshot) {
@@ -138,7 +137,8 @@ class MyMessageScreen extends StatelessWidget {
                   String chatRoomId = data.chatRoomId!;
                   return BlocProvider<ChatItemBloc>(
                       key: ValueKey(chatRoomId),
-                      create: (context) => sl()..add(GetChatItem(uid, chatRoomId)),
+                      create: (context) =>
+                          sl()..add(GetChatItem(uid, chatRoomId)),
                       child: MyItemMessage(uid: uid, chatRoomId: chatRoomId));
                 },
               )
@@ -175,7 +175,7 @@ class MyMessageScreen extends StatelessWidget {
                           ? Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                myImage(user.avatar!, AppAssets.iconHeart3Lines,
+                                myImage(context,user.avatar!, AppAssets.iconHeart3Lines,
                                     user.followersList!.length),
                                 BlocProvider<ChatItemBloc>(
                                     key: ValueKey(chatRoomId),
@@ -193,15 +193,15 @@ class MyMessageScreen extends StatelessWidget {
                                   uid: uid, chatRoomId: chatRoomId));
                     },
                   )
-                : myImage(user.avatar!, AppAssets.iconHeart3Lines,
+                : myImage(context,user.avatar!, AppAssets.iconHeart3Lines,
                     user.followersList!.length)
-            : myImage(user.avatar!, AppAssets.iconHeart3Lines,
+            : myImage(context,user.avatar!, AppAssets.iconHeart3Lines,
                 user.followersList!.length);
       },
     );
   }
 
-  Widget myImage(String url, String icon, int likes) {
+  Widget myImage(BuildContext context,String url, String icon, int likes) {
     return Container(
       margin: const EdgeInsets.only(left: 20),
       child: Column(
@@ -225,9 +225,8 @@ class MyMessageScreen extends StatelessWidget {
                     height: 110,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(url), // Đường dẫn tới ảnh
-                        fit: BoxFit
-                            .fill, // Cách ảnh sẽ được hiển thị trong Container
+                        image: NetworkImage(url),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -242,7 +241,7 @@ class MyMessageScreen extends StatelessWidget {
             ],
           ),
           Text(
-            likes != 0 ? '${likes} lượt thích' : '',
+            likes != 0 ? '${likes} ${AppLocalizations.of(context).messageScreenLikesText}' : '',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
           )
         ],
@@ -253,20 +252,14 @@ class MyMessageScreen extends StatelessWidget {
   Widget search(BuildContext context) {
     final FocusNode focusNode = FocusNode();
     focusNode.unfocus();
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(width: 1, color: Colors.grey)),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 15,vertical: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            margin: const EdgeInsets.only(left: 10),
-            child: const Icon(
-              Icons.search,
-              color: Colors.grey,
-            ),
+           Icon(
+            Icons.search,
+            color: Color.fromRGBO(234, 64, 128, 1),
           ),
           Expanded(
             child: TextField(
@@ -274,12 +267,20 @@ class MyMessageScreen extends StatelessWidget {
                 context.go('/home/search-message');
               },
               focusNode: focusNode,
-              decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  hintText: 'Search',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none),
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,fontSize: 20),
+              decoration:  InputDecoration(
+                contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                constraints: BoxConstraints(
+                  maxHeight: 40,
+                ),
+                hintText: AppLocalizations.of(context).messageScreenSearchText,
+                hintStyle: TextStyle(color: Colors.grey,fontSize: 18),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Color.fromRGBO(
+                      237, 173, 199, 1.0),width: 1),
+                ),
+
+              ),
             ),
           ),
         ],

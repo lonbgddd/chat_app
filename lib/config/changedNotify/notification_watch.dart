@@ -5,13 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class NotificationWatch extends ChangeNotifier {
-  final firestore = FirebaseFirestore.instance;
+  final fireStore = FirebaseFirestore.instance;
   List<dynamic> listNotification = [];
 
   Future getNotification() async {
     try {
       String? idUser = await HelpersFunctions().getUserIdUserSharedPreference();
-      final data = await firestore
+      final data = await fireStore
           .collection('notification')
           .doc(idUser)
           .collection('mess')
@@ -29,7 +29,7 @@ class NotificationWatch extends ChangeNotifier {
 
   Future saveNotification(
       {required String id,
-      required String tyne,
+      required String type,
       required String avatar,
       required String mess,
       required String name,
@@ -37,10 +37,10 @@ class NotificationWatch extends ChangeNotifier {
       required DateTime time}) async {
     try {
       String? idUser = await HelpersFunctions().getUserIdUserSharedPreference();
-      print('Truyền vaò $tyne');
-      firestore.collection('notification').doc(idUser).collection('mess').add({
+      print('Truyền vaò $type');
+      fireStore.collection('notification').doc(idUser).collection('mess').add({
         'uid': id,
-        'tyne': tyne,
+        'type': type,
         'avatar': avatar,
         'mess': mess,
         'name': name,

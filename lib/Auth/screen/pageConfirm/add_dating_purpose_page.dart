@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
 import '../../../config/helpers/helpers_user_and_validators.dart';
 import '../../widget/button_submit_page_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddDatingPurposePageSection extends StatelessWidget {
   const AddDatingPurposePageSection({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class AddDatingPurposePageSection extends StatelessWidget {
     final double itemHeight = (size.height - 300) / 2;
     final double itemWidth = size.width / 2;
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
-
+    final appLocal = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,
@@ -40,7 +41,7 @@ class AddDatingPurposePageSection extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Bây giờ mình đang tìm...',
+                         Text(appLocal.titleAddDatingPurposePage,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 28
@@ -48,7 +49,7 @@ class AddDatingPurposePageSection extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 10,),
-                        const Text('Chia sẻ mục đích để tìm "người ấy"!',
+                         Text(appLocal.textContentDatingPurpose,
                           style: TextStyle(
                               fontSize: 16
                           ),
@@ -63,20 +64,20 @@ class AddDatingPurposePageSection extends StatelessWidget {
                     child: GridView.count(
                       crossAxisCount: 3,
                       childAspectRatio: itemWidth / itemHeight,
-                      children: List.generate(HelpersUserAndValidators.datingPurposeList.length, (index)  {
-                        final item = HelpersUserAndValidators.datingPurposeList[index];
+                      children: List.generate(HelpersUserAndValidators.datingPurposeList(context).length, (index)  {
+                        final item = HelpersUserAndValidators.datingPurposeList(context)[index];
                         return InkWell(
                           onTap: (){
-                            pageProvider.onDatingPurposeChanged(item, index);
+                            pageProvider.onDatingPurposeChanged(index);
                           },
                           child: Container(
                             padding: EdgeInsets.all(5),
                             margin: EdgeInsets.all(2),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color:index == pageProvider.selectedIndexDatingPurpose ? Colors.white : Colors.grey.shade100,
+                              color: index == pageProvider.selectedIndexDatingPurpose ? Colors.white : Colors.grey.shade100,
                               border: Border.all(
-                                color:index == pageProvider.selectedIndexDatingPurpose ? Color.fromRGBO(234, 64, 128, 100,): Colors.white,
+                                color:index == pageProvider.selectedIndexDatingPurpose ? Color.fromRGBO(234, 64, 128, 1,): Colors.white,
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(10),
@@ -99,7 +100,7 @@ class AddDatingPurposePageSection extends StatelessWidget {
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+            ButtonSubmitPageView(text: appLocal.textNextButton,marginBottom: 70,
                 color:  pageProvider.selectedIndexDatingPurpose != -1 ? Colors.transparent : Colors.grey,
                 onPressed: () {
                   pageProvider.selectedIndexDatingPurpose != -1 ? pageProvider.nextPage() : null;

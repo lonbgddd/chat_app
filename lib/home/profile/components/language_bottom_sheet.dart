@@ -2,6 +2,8 @@ import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LanguageBottomSheet extends StatelessWidget {
   const LanguageBottomSheet({super.key});
@@ -9,6 +11,9 @@ class LanguageBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
+    final appLocal = AppLocalizations.of(context);
+
+
     return Consumer<UpdateNotify>(
       builder: (context, updateProvider, child) => Stack(children: [
         Container(
@@ -36,8 +41,8 @@ class LanguageBottomSheet extends StatelessWidget {
                           .then((value) => Navigator.of(context).pop());
                       updateProvider.stopLoading();
                     },
-                    child: const Text(
-                      "Xong",
+                    child:  Text(
+                      appLocal.languageDialogDoneText,
                       style: TextStyle(
                           color: Color.fromRGBO(229, 58, 69, 100),
                           fontSize: 16,
@@ -48,9 +53,8 @@ class LanguageBottomSheet extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const Expanded(
-                      child: Text(
-                    "Ngôn ngữ tôi biết",
+                   Expanded(
+                      child: Text(appLocal.languageDialogTitle,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 32,
@@ -58,7 +62,7 @@ class LanguageBottomSheet extends StatelessWidget {
                   )),
                   Expanded(
                       child: Text(
-                    "${updateProvider.fluentLanguageList!.length} trong tổng số 5",
+                    "${updateProvider.fluentLanguageList!.length} ${appLocal.languageDialogOutOfText}",
                     style: const TextStyle(color: Colors.black),
                   ))
                 ],
@@ -76,11 +80,11 @@ class LanguageBottomSheet extends StatelessWidget {
                     updateProvider.searchLanguage(value);
                   },
                   controller: updateProvider.searchLanguageController,
-                  decoration: const InputDecoration(
+                  decoration:  InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     contentPadding: EdgeInsets.symmetric(vertical: 16.0),
                     border: InputBorder.none,
-                    hintText: "Tìm kiếm ngôn ngữ",
+                    hintText: appLocal.languageDialogSearchText,
                   ),
                   style: const TextStyle(
                       fontSize: 16,

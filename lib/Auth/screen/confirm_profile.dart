@@ -1,4 +1,3 @@
-
 import 'package:chat_app/Auth/screen/pageConfirm/add_birthday_page.dart';
 import 'package:chat_app/Auth/screen/pageConfirm/add_dating_purpose_page.dart';
 import 'package:chat_app/Auth/screen/pageConfirm/add_gender_page.dart';
@@ -7,7 +6,7 @@ import 'package:chat_app/Auth/screen/pageConfirm/add_name_page.dart';
 import 'package:chat_app/Auth/screen/pageConfirm/add_photos_list_page.dart';
 import 'package:chat_app/Auth/screen/pageConfirm/add_request_to_show_page.dart';
 import 'package:chat_app/Auth/screen/pageConfirm/add_sexual_orientation_list_page.dart';
-import 'package:chat_app/Auth/screen/pageConfirm/rulers_page.dart';
+import 'package:chat_app/Auth/screen/pageConfirm/rules_page.dart';
 import 'package:chat_app/config/changedNotify/confirm_profile_watch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +21,6 @@ class ConfirmProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
-
    return WillPopScope(
         onWillPop: () async {
           if (pageProvider.currentPageIndex > 0) {
@@ -50,7 +48,7 @@ class ConfirmProfile extends StatelessWidget {
                       child: IndexedStack(
                         index: pageProvider.currentPageIndex,
                         children: [
-                          RulersPageSection(),
+                          RulesPageSection(),
                           AddNamePageSection(),
                           AddBirthdayPageSection(),
                           AddGenderPageSection(),

@@ -49,6 +49,7 @@ class LoginPhoneProvider extends ChangeNotifier {
   Future<void> onSubmitPhone(BuildContext context) async {
     if(!HelpersUserAndValidators.isValidPhoneNumber(textEditingController.text)){
       onTextFieldError();
+      isTextFieldEmpty = false;
       textEditingController.clear();
     }else {
       await FirebaseAuth.instance.verifyPhoneNumber(

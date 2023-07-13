@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +14,8 @@ class AddRequestToShowPageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
+    final appLocal = AppLocalizations.of(context);
+
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,
@@ -40,23 +42,23 @@ class AddRequestToShowPageSection extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  const Text('Bạn muốn thấy ai ?',
+                   Text(appLocal.titleAddRequestToShow,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 45,),
-                  ButtonSelectRequest(value: 'Nam'),
+                  ButtonSelectRequest(value: appLocal.genderSelectToShow('male')),
                   const SizedBox(height: 20),
-                  ButtonSelectRequest(value:'Nữ'),
+                  ButtonSelectRequest(value: appLocal.genderSelectToShow('female')),
                   const SizedBox(height: 20),
-                  ButtonSelectRequest(value:'Mọi người'),
+                  ButtonSelectRequest(value: appLocal.genderSelectToShow('other')),
                 ],
               ),
             ),
 
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+            ButtonSubmitPageView(text: appLocal.textNextButton,marginBottom: 70,
                 color: pageProvider.isRequestToShowEmpty ? Colors.grey : Colors.transparent,
                 onPressed: () {
                   !pageProvider.isRequestToShowEmpty ? pageProvider.nextPage() : null;

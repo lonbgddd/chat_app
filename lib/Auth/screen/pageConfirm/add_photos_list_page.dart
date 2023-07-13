@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class AddPhotoListPageSection extends StatelessWidget {
   const AddPhotoListPageSection({Key? key}) : super(key: key);
@@ -14,6 +16,8 @@ class AddPhotoListPageSection extends StatelessWidget {
     final double itemHeight = (size.height - 210) / 2;
     final double itemWidth = size.width / 2;
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context, listen: true);
+    final appLocal = AppLocalizations.of(context);
+
 
     return pageProvider.isLoading ? Center(
       child: LoadingAnimationWidget.threeArchedCircle(
@@ -43,14 +47,14 @@ class AddPhotoListPageSection extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Thêm ảnh của bạn gần đây',
+                         Text(appLocal.titleAddPhotosPage,
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 28
                           ),
                         ),
                         const SizedBox(height: 10,),
-                        const Text('Tải lên 2 ảnh để bắt đầu tìm người tâm đầu ý hợp. Thêm nhiều ảnh hơn nữa giúp hồ sơ của bạn thật nổi bật với người khác.',
+                         Text(appLocal.textContentPhotos,
                           style: TextStyle(
                               fontSize: 16
                           ),
@@ -90,7 +94,7 @@ class AddPhotoListPageSection extends StatelessWidget {
                                     bottom: 5,
                                     right: 5,
                                     child: InkWell(
-                                      onTap: () => pageProvider.isEditingPhoto ? pageProvider.removeImageFromList(index) : pageProvider.pickImages(),
+                                      onTap: () => pageProvider.isEditingPhoto ? pageProvider.removeImageFromList(index) : pageProvider.pickImages(context),
                                       child: Container(
                                         padding: EdgeInsets.all(5),
                                         decoration: BoxDecoration(
@@ -115,7 +119,9 @@ class AddPhotoListPageSection extends StatelessWidget {
                           );
                         } else {
                           return InkWell(
-                            onTap: pageProvider.pickImages,
+                            onTap:(){
+                              pageProvider.pickImages(context);
+                            },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: DottedBorder(
@@ -139,7 +145,7 @@ class AddPhotoListPageSection extends StatelessWidget {
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+            ButtonSubmitPageView(text: appLocal.textNextButton,marginBottom: 70,
                     color: pageProvider.imageCount >= 2 ? Colors.transparent : Colors.grey,
                     onPressed: () {
                       pageProvider.imageCount >= 2 ? pageProvider.confirmUser(context) : null;
