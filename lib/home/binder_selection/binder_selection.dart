@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../config/helpers/app_assets.dart';
 import 'components/body.dart';
 
@@ -9,6 +8,7 @@ class BinderSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -31,7 +31,7 @@ class BinderSelection extends StatelessWidget {
                 width: 5,
               ),
               const Text(
-                "Binder",
+                "Finder",
                 style: TextStyle(
                   fontFamily: 'Grandista',
                   fontSize: 24,

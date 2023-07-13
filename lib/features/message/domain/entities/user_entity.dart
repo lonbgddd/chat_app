@@ -9,37 +9,37 @@ class UserEntity extends Equatable {
   final String? avatar;
   final String? gender;
   final String? requestToShow;
-  final String? datingPurpose;
+  final int? datingPurpose;
   final String? school;
   final String? introduceYourself;
   final List<String>? followersList;
   final List<String>? photoList;
-  final List<String>? interestsList;
+  final List<int>? interestsList;
   final List<String>? fluentLanguageList;
   final bool? isHighlighted;
   final String? highlightTime;
-  final List<String>? sexualOrientationList;
+  final List<int>? sexualOrientationList;
   final String? company;
   final String? currentAddress;
   final String? activeStatus;
   final String? token;
 
   //BasicInfoUser
-  final String? zodiac;
-  final String? academicLever;
-  final String? communicateStyle;
-  final String? languageOfLove;
-  final String? familyStyle;
+  final int? zodiac;
+  final int? academicLever;
+  final int? communicateStyle;
+  final int? languageOfLove;
+  final  int? familyStyle;
   final String? personalityType;
 
   //StyleOfLifeUser
-  final String? myPet;
-  final String? drinkingStatus;
-  final String? smokingStatus;
-  final String? sportsStatus;
-  final String? eatingStatus;
-  final String? socialNetworkStatus;
-  final String? sleepingHabits;
+  final  int? myPet;
+  final int? drinkingStatus;
+  final int? smokingStatus;
+  final int? sportsStatus;
+  final int? eatingStatus;
+  final int? socialNetworkStatus;
+  final int? sleepingHabits;
 
   UserEntity(
       {

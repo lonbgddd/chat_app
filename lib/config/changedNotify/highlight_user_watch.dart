@@ -71,6 +71,18 @@ class HighlightUserNotify extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Future<void> updateTemp(List<String> uids) async {
+  //   for(int i = 0 ; i < uids.length; i++){
+  //     await FirebaseFirestore.instance.collection('users').doc(uids[i]).update({
+  //       "followersList": [],
+  //     });
+  //   }
+  //
+  //
+  // }
+
+
+
   List<UserModel> sortUsers(List<UserModel> users) {
     users.sort((a, b) {
       if (a.isHighlighted && !b.isHighlighted) {

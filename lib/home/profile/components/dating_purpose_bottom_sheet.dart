@@ -3,6 +3,8 @@ import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class DatingPurposeBottomSheet extends StatelessWidget {
   const DatingPurposeBottomSheet({super.key});
@@ -13,29 +15,30 @@ class DatingPurposeBottomSheet extends StatelessWidget {
     final double itemHeight = (size.height - 300) / 2;
     final double itemWidth = size.width / 2;
     final double height = MediaQuery.of(context).size.height;
+    final appLocal = AppLocalizations.of(context);
+
     return Consumer<UpdateNotify>(
         builder: (context, updateProvider, child) => Stack(children: [
               Container(
-                padding: const EdgeInsets.only(
-                    left: 16.0, right: 16.0, bottom: 16.0),
+                padding:  EdgeInsets.symmetric(horizontal: 10,vertical: 15),
                 height: height * 0.70,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        "Bây giờ mình đang tìm...",
+                       Text(
+                        appLocal.datingPurposeDialogTitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.black,
-                            fontSize: 32,
+                            fontSize: 30,
                             fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(
                         height: 20.0,
                       ),
                       Text(
-                        "Chia sẻ mục đích để tìm được \"người ấy\"!",
+                        appLocal.datingPurposeDialogContent,
                         style: TextStyle(color: Colors.grey.shade700),
                         textAlign: TextAlign.center,
                       ),
@@ -48,13 +51,13 @@ class DatingPurposeBottomSheet extends StatelessWidget {
                           crossAxisCount: 3,
                           childAspectRatio: itemWidth / itemHeight,
                           children: List.generate(
-                              HelpersUserAndValidators.datingPurposeList.length,
+                              HelpersUserAndValidators.datingPurposeList(context).length,
                               (index) {
                             final item = HelpersUserAndValidators
-                                .datingPurposeList[index];
+                                .datingPurposeList(context)[index];
                             return InkWell(
                               onTap: () async {
-                                updateProvider.datingPurpose = item;
+                                updateProvider.datingPurpose = index;
                                 updateProvider.loading();
                                 await updateProvider.updateDatingPurpose();
                                 await Future.delayed(const Duration(seconds: 1));
@@ -65,11 +68,11 @@ class DatingPurposeBottomSheet extends StatelessWidget {
                                 margin: const EdgeInsets.all(2),
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: item == updateProvider.datingPurpose
+                                  color: index == updateProvider.datingPurpose
                                       ? Colors.white
                                       : Colors.grey.shade100,
                                   border: Border.all(
-                                    color: item == updateProvider.datingPurpose
+                                    color: index == updateProvider.datingPurpose
                                         ? const Color.fromRGBO(
                                             234,
                                             64,

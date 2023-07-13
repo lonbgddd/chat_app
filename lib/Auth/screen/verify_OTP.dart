@@ -1,16 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import '../../config/changedNotify/login_phone.dart';
+import '../widget/button_submit_page_view.dart';
 
 
 class VerifyOTP extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appLocal = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -35,7 +37,7 @@ class VerifyOTP extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Mã của tôi là',
+                   Text(appLocal.titleEnterOTP,
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 35
@@ -92,41 +94,22 @@ class VerifyOTP extends StatelessWidget {
                 visible: context
                     .watch<LoginPhoneProvider>()
                     .isErrorSms,
-                child: const Text('Mã bạn nhập không hợp lệ - vui lòng thử lại',
+                child:  Text(appLocal.textErrorOTP,
                   style: TextStyle(color: Colors.red,
                     fontWeight: FontWeight.w500,
                     fontSize: 16,),
                   textAlign: TextAlign.left,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      await Provider.of<LoginPhoneProvider>(
-                          context, listen: false).verify(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      backgroundColor:  Provider
-                          .of<LoginPhoneProvider>(context, listen: false)
-                          .smsCode.length != 6 ? Colors.grey.shade400 : Color.fromRGBO(234, 64, 128, 100,),
-                    ),
-                    child: Text('Tiếp tục', style: TextStyle(fontSize: 20,
-                        color: Provider
-                            .of<LoginPhoneProvider>(context, listen: false)
-                            .smsCode
-                            .length != 6 ? Colors.black : Colors.white,
-                        fontWeight: FontWeight.w600),)),
-              ),
+
+
+              ButtonSubmitPageView(text:appLocal.textNextButton,marginBottom: 0,
+                  color:  Provider.of<LoginPhoneProvider>(context, listen: false).smsCode.length == 6
+                      ? Colors.transparent : Colors.grey,
+                  onPressed: () async{
+                    await Provider.of<LoginPhoneProvider>(context, listen: false).verify(context);
+                  }),
+
             ],
           ),
         ),
@@ -137,7 +120,7 @@ class VerifyOTP extends StatelessWidget {
     return Countdown(
       seconds: 10,
       build: (BuildContext context, double time) =>
-          Text('Gửi lại mã sau ${time.toInt().toString()}',style: const TextStyle(
+          Text('${AppLocalizations.of(context)!.textResendOTP} ${time.toInt().toString()}',style: const TextStyle(
             fontSize: 20,
           ),),
       interval: const Duration(milliseconds: 1000),
@@ -165,8 +148,7 @@ class VerifyOTP extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(50),
         ),
-        child: const Text(
-          'Gửi lại',
+        child:  Text(AppLocalizations.of(context)!.textButtonResendOTP,
           style: TextStyle(
               fontSize: 16, color: Colors.black, fontWeight: FontWeight.w500),
         ),

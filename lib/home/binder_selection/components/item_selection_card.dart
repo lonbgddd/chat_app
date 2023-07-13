@@ -4,6 +4,8 @@ import 'package:chat_app/config/helpers/app_assets.dart';
 import 'package:chat_app/model/user_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ItemSelectionCard extends StatelessWidget {
   const ItemSelectionCard({
     Key? key,
@@ -110,8 +112,8 @@ class ItemSelectionCard extends StatelessWidget {
                               SizedBox(height: 2),
                               Text(
                                 remainingHours == 1
-                                    ? 'Còn lại $remainingMinutes phút'
-                                    : 'Còn lại $remainingHours giờ',
+                                    ? '${AppLocalizations.of(context).selectionPageContent4} $remainingMinutes ${AppLocalizations.of(context).selectionPageMinuteText}'
+                                    : '${AppLocalizations.of(context).selectionPageContent4} $remainingHours ${AppLocalizations.of(context).selectionPageHourText}',
                                 style: TextStyle(
                                   color: Colors.yellow[800],
                                   fontSize: 15,

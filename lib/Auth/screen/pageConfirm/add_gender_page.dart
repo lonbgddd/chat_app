@@ -1,7 +1,7 @@
 import 'package:chat_app/Auth/widget/button_select_gender.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
 import '../../widget/button_submit_page_view.dart';
 
@@ -11,6 +11,7 @@ class AddGenderPageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
+    final appLocal = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       child: Container(
@@ -32,22 +33,22 @@ class AddGenderPageSection extends StatelessWidget {
                     icon: Icon(Icons.west, color: Colors.grey, size: 30,),
                   ),
                   const SizedBox(height: 15,),
-                  const Text('Giới tính của bạn ?',
+                   Text(appLocal.titleAddGender,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 45,),
-                  ButtonSelectGender(value: 'Nam'),
+                  ButtonSelectGender(value: appLocal.genderSelect("male")),
                   const SizedBox(height: 20),
-                  ButtonSelectGender(value: 'Nữ'),
+                  ButtonSelectGender(value: appLocal.genderSelect("female")),
                   const SizedBox(height: 20),
-                  ButtonSelectGender(value: 'Khác'),
+                  ButtonSelectGender(value: appLocal.genderSelect("other")),
                 ],
               ),
             ),
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+            ButtonSubmitPageView(text: appLocal.textNextButton,marginBottom: 70,
                 color: pageProvider.isGenderEmpty ? Colors.grey : Colors.transparent,
                 onPressed: () {
                   !pageProvider.isGenderEmpty ? pageProvider.nextPage() : null;

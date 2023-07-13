@@ -1,7 +1,6 @@
-
-import 'package:chat_app/config/changedNotify/binder_watch.dart';
-
+import 'package:chat_app/config/changedNotify/highlight_user_watch.dart';
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
+import 'package:chat_app/config/data.dart';
 import 'package:chat_app/home/profile/components/profile_avatar.dart';
 import 'package:chat_app/home/setting/setting_screen.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -13,31 +12,23 @@ import 'package:provider/provider.dart';
 import '../../config/helpers/app_assets.dart';
 import 'components/body_buy_premium.dart';
 
-
-
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-
   void _showBottomModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        final padding = context.read<BinderWatch>().paddingTop;
-        return Container(
-          padding: EdgeInsets.only(top: padding),
-          height: MediaQuery.of(context).size.height,
-          child: const SettingScreen(),
-        );
+        return const SettingScreen();
       },
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<ProfileWatch>(context, listen: false).getUser();
 
-    return Material(
+    return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -56,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
                 width: 5,
               ),
               const Text(
-                "Binder",
+                "Finder",
                 style: TextStyle(
                   fontFamily: 'Grandista',
                   fontSize: 24,
@@ -67,7 +58,9 @@ class ProfileScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                     // Provider.of<HighlightUserNotify>(context, listen: false).updateTemp(lisUid);
+                },
                 icon: Image.asset(
                   AppAssets.iconShield,
                   color: Colors.grey,
@@ -96,6 +89,7 @@ class ProfileScreen extends StatelessWidget {
             String fullName = snapshot.data!.fullName;
             List<String> splitName = fullName.split(" ");
             return SingleChildScrollView(
+
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,11 +132,11 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.blue,
                         ),
                       ),
+
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20,),
+
                   BodyBuyPremium(),
                 ],
               ),

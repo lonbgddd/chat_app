@@ -1,16 +1,19 @@
 import 'package:chat_app/config/changedNotify/update_watch.dart';
+import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class InterestBottomSheet extends StatelessWidget {
   const InterestBottomSheet({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
+    final appLocal = AppLocalizations.of(context);
+
     return Consumer<UpdateNotify>(
       builder: (context, updateProvider, child) => Stack(children: [
         Container(
@@ -37,8 +40,8 @@ class InterestBottomSheet extends StatelessWidget {
                       await Future.delayed(const Duration(seconds: 1)).then((value) => Navigator.of(context).pop());
                       updateProvider.stopLoading();
                     },
-                    child: const Text(
-                      "Xong",
+                    child:  Text(
+                      appLocal.interestDialogDoneText,
                       style: TextStyle(
                           color: Color.fromRGBO(229, 58, 69, 100),
                           fontSize: 16,
@@ -49,9 +52,9 @@ class InterestBottomSheet extends StatelessWidget {
               ),
               Row(
                 children: [
-                  const Expanded(
+                   Expanded(
                       child: Text(
-                        "Sở thích",
+                        appLocal.interestDialogTitle,
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 32,
@@ -59,17 +62,15 @@ class InterestBottomSheet extends StatelessWidget {
                       )),
                   Expanded(
                       child: Text(
-                        "${updateProvider.interestsList!.length} trong tổng số 5",
-                        style: const TextStyle(color: Colors.black),
+                        "${updateProvider.interestsList!.length} ${appLocal.interestDialogOutOfText}",
+                        style:  TextStyle(color: Colors.black),
                       ))
                 ],
               ),
               if (updateProvider.interestsList!.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Text(
-                    "Sở thích giúp bạn dễ dàng tìm được người có cùng đam mê."
-                        " Thêm 3-5 vào Hồ Sơ của bạn để tạo dựng các mối quan hệ phù hợp hơn.",
+                  padding:  EdgeInsets.only(top: 20.0),
+                  child: Text(appLocal.interestDialogContent,
                     style: TextStyle(color: Colors.grey.shade700),
                   ),
                 ),
@@ -83,14 +84,14 @@ class InterestBottomSheet extends StatelessWidget {
                 ),
                 child: TextField(
                   onChanged: (value) {
-                    updateProvider.searchInterest(value);
+                    updateProvider.searchInterest(value,context);
                   },
                   controller: updateProvider.searchInterestController,
-                  decoration: const InputDecoration(
+                  decoration:  InputDecoration(
                     prefixIcon: Icon(Icons.search),
                     contentPadding: EdgeInsets.symmetric(vertical: 16.0),
                     border: InputBorder.none,
-                    hintText: "Tìm kiếm",
+                    hintText: appLocal.interestDialogSearchText,
                   ),
                   style: const TextStyle(
                       fontSize: 16,
@@ -104,21 +105,17 @@ class InterestBottomSheet extends StatelessWidget {
               Expanded(
                 child: ListView(children: [
                   Wrap(
-                    children: List.generate(
-                      updateProvider.filteredInterestsList.length,
-                          (index) {
-                        final item =
-                        updateProvider.filteredInterestsList[index];
-                        final isSelected =
-                        updateProvider.interestsList!.contains(item);
+                    children: List.generate(HelpersUserAndValidators.interestsList(context).length, (index) {
+                        final item = HelpersUserAndValidators.interestsList(context)[index];
+                        final isSelected = HelpersUserAndValidators.getItemFromListIndex(context, HelpersUserAndValidators.interestsList(context), updateProvider.interestsList).contains(item);
                         return InkWell(
                           onTap: () {
                             updateProvider.interestsList!.length < 5
                                 ? !isSelected
-                                ? updateProvider.interestsList!.add(item)
-                                : updateProvider.interestsList!.remove(item)
+                                ? updateProvider.interestsList!.add(index)
+                                : updateProvider.interestsList!.remove(index)
                                 : isSelected
-                                ? updateProvider.interestsList!.remove(item)
+                                ? updateProvider.interestsList!.remove(index)
                                 : null;
                             updateProvider.onDataChange();
                           },
@@ -133,12 +130,7 @@ class InterestBottomSheet extends StatelessWidget {
                                 border: Border.all(
                                   width: isSelected ? 2 : 1,
                                   color: isSelected
-                                      ? const Color.fromRGBO(
-                                    234,
-                                    64,
-                                    128,
-                                    100,
-                                  )
+                                      ? const Color.fromRGBO(234, 64, 128, 1,)
                                       : Colors.grey,
                                 ),
                               ),
@@ -178,7 +170,7 @@ class InterestBottomSheet extends StatelessWidget {
                 // Loading Indicator
                 Center(
                   child: LoadingAnimationWidget.dotsTriangle(
-                    color: const Color.fromRGBO(234, 64, 128, 100),
+                    color: const Color.fromRGBO(234, 64, 128, 1),
                     size: 70,
                   ),
                 ),

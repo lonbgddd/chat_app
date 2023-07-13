@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../data_mothes.dart';
 import '../helpers/app_assets.dart';
 import 'login_google.dart';
@@ -41,13 +41,13 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
   String selectedRequestToShow = '';
   bool isRequestToShowEmpty = true;
 
-  List<String> newSexualOrientationList = [];
+  List<int> newSexualOrientationList = [];
   bool isSexualOrientationEmpty = true;
 
-  String newDatingPurpose ='';
+  int? newDatingPurpose;
   int selectedIndexDatingPurpose = -1;
 
-  List<String> newInterestsList = [];
+  List<int> newInterestsList = [];
   bool isInterestsEmpty = true;
 
   List<File> photosList = [];
@@ -93,9 +93,9 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onDatingPurposeChanged(String value, int index) {
+  void onDatingPurposeChanged(int index) {
     selectedIndexDatingPurpose = index;
-    newDatingPurpose = value;
+    newDatingPurpose = index;
     notifyListeners();
   }
   void onInterestsListChanged() {
@@ -132,13 +132,13 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
   }
 
 
-  Future<void> pickImages() async {
+  Future<void> pickImages(BuildContext context) async {
     List<XFile>? resultList = await ImagePicker().pickMultiImage();
     if (resultList != null) {
       List<File> selectedImages = resultList.map((xFile) => File(xFile.path)).toList();
       if (photosList.length + selectedImages.length <= 6) {
         for(var imageFile in selectedImages){
-          await _cropImage(imageFile: imageFile);
+          await _cropImage(imageFile: imageFile, context: context);
         }
           imageCount = photosList.length;
           isEditingPhoto = photosList.length > 1;
@@ -150,7 +150,7 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
 
   }
 
-  Future<File?> _cropImage({required File imageFile}) async {
+  Future<File?> _cropImage({required File imageFile,required BuildContext context}) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       aspectRatioPresets: [
@@ -165,14 +165,14 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
       maxHeight: 500,
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle: 'Cắt ảnh',
+          toolbarTitle: AppLocalizations.of(context)!.textAppBarCropPhoto ,
           toolbarColor: Colors.blue,
           toolbarWidgetColor: Colors.white,
           statusBarColor: Colors.blue,
           backgroundColor: Colors.white,
         ),
         IOSUiSettings(
-          title: 'Cắt ảnh',
+          title: AppLocalizations.of(context)!.textAppBarCropPhoto ,
         ),
       ],
     );
@@ -204,7 +204,7 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
         selectedRequestToShow,
         birthday,
         newInterestsList,
-        newDatingPurpose,
+        newDatingPurpose!,
         urlImages,
         newSexualOrientationList,
         ['21.07302', '105.7703283'])
@@ -219,7 +219,9 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
   }
 
 
+
   showCustomDialog(BuildContext context) {
+    final appLocal = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -238,13 +240,12 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
                   fit: BoxFit.contain,
                 ),
                 SizedBox(height: 20),
-                Text('Tất cả đã chấm dứt rồi sao', style: TextStyle(
+                Text(appLocal.titleDialogExitRegister, style: TextStyle(
                     fontSize: 18,
                     color: Colors.black,
                     fontWeight: FontWeight.w600),),
                 SizedBox(height: 8),
-                Text(
-                  'Nếu bạn chắc chắn không đăng kí Binder nữa. Thông tin của bạn sẽ được xóa',
+                Text(appLocal.contentDialogExitRegister,
                   style: TextStyle(fontSize: 15, color: Colors.black,),
                   textAlign: TextAlign.center,),
                 SizedBox(height: 40),
@@ -263,8 +264,7 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         backgroundColor:  Color.fromRGBO(234, 64, 128, 1),
                       ),
-                      child: Text(
-                        'Ở lại', style: TextStyle(fontSize: 19, color: Colors
+                      child: Text(appLocal.textStayDialogExitRegister, style: TextStyle(fontSize: 19, color: Colors
                           .white, fontWeight: FontWeight.w600),)),
                 ),
                 SizedBox(height: 10),
@@ -287,8 +287,7 @@ class PageDataConfirmProfileProvider extends ChangeNotifier {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         backgroundColor: Colors.white,
                       ),
-                      child: Text(
-                        'Rời đi', style: TextStyle(fontSize: 19, color: Colors
+                      child: Text(appLocal.textLeaveDialogExitRegister, style: TextStyle(fontSize: 19, color: Colors
                           .black, fontWeight: FontWeight.w600),)),
                 ),
               ],

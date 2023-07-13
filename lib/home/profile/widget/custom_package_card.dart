@@ -1,5 +1,6 @@
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomPackageCard extends StatelessWidget {
   final PackageModel packageModel;
@@ -60,7 +61,7 @@ class CustomPackageCard extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            packageModel.discount==0?'':'Tiết kiệm ${packageModel.discount.round().toString()}%',
+                            packageModel.discount==0?'':'${AppLocalizations.of(context).savingsText} ${packageModel.discount.round().toString()}%',
                             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                           ),
                         ),

@@ -37,7 +37,7 @@ class CustomField extends StatelessWidget {
           padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
           height: MediaQuery.of(context).size.height,
           child: BottomModalFullScreen(
-            packageModel: packageBinderGoldList,
+            packageModel: packageBinderGoldList(context),
             color: Colors.yellow.shade700,
             assetsBanner: AppAssets.iconTinderGoldBanner,
             assetsIcon: AppAssets.iconTinderGold,

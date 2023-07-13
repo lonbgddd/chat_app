@@ -6,6 +6,7 @@ import 'package:chat_app/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WhoLikePage extends StatefulWidget {
   const WhoLikePage({Key? key}) : super(key: key);
@@ -23,6 +24,8 @@ class _WhoLikePageState extends State<WhoLikePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocal = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -44,7 +47,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
                 width: 5,
               ),
               const Text(
-                "Binder",
+                "Finder",
                 style: TextStyle(
                   fontFamily: 'Grandista',
                   fontSize: 24,
@@ -63,7 +66,7 @@ class _WhoLikePageState extends State<WhoLikePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                "This is a list of people\nwho have liked you and your matches.",
+                appLocal.whoLikePageContent,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15,

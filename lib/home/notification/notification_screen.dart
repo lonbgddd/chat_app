@@ -1,8 +1,10 @@
 import 'package:chat_app/config/changedNotify/notification_watch.dart';
-import 'package:chat_app/home/notification/wdget/item.dart';
+import 'package:chat_app/home/notification/widget/item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -22,6 +24,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 1,
+        backgroundColor: Colors.white,
+        title: Text(
+          AppLocalizations.of(context).notificationScreenTitle,
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 22),
+        ),
+        leading: IconButton(
+            onPressed: () => context.pop(),
+            icon: const Icon(Icons.arrow_back_outlined, color: Colors.red,)),
+      ),
         backgroundColor: Colors.white,
         primary: true,
         body: Stack(
@@ -44,7 +60,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               .length,
                           itemBuilder: (context, index) {
                             return ItemNotification(
-                              title: snapshot.data[index]['tyne'],
+                              title: snapshot.data[index]['type'],
                               mess: snapshot.data[index]['mess'],
                               imageUrl: snapshot.data[index]['avatar'],
                               idUser: snapshot.data[index]['uid'],
@@ -55,36 +71,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             );
                           },
                         )
-                      : const Center(
+                      :  Center(
                           child: CircularProgressIndicator(),
                         )
-                  : const Center(
-                      child: Text("Không có thông báo nào"),
-                    ),
+                  : Center(
+                    child: CircularProgressIndicator(),
+                 ),
             ),
-            Positioned(
-                top: 30,
-                left: 5,
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        onPressed: () => context.pop(),
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-                    const Text(
-                      'Notification',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    )
-                  ],
-                )),
+
           ],
         ));
   }

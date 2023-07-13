@@ -10,8 +10,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../Auth/widget/button_submit_page_view.dart';
 import '../config/changedNotify/notification_watch.dart';
+import '../config/changedNotify/profile_watch.dart';
 import '../config/data_mothes.dart';
 import '../config/firebase/firebase_api.dart';
 import '../config/helpers/helpers_database.dart';
@@ -48,7 +50,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           ? {
               NotificationWatch().saveNotification(
                   id: uid,
-                  tyne: 'match',
+                  type: 'match',
                   name: event.notification?.title ?? "",
                   chatRoomId: event.data['chatRoomId'],
                   avatar: event.data['avatar'],
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                       id: uid,
                       name: event.data['name'],
                       chatRoomId: event.data['chatRoomId'],
-                      tyne: event.data['type'],
+                      type: event.data['type'],
                       avatar: event.data['avatar'],
                       mess: event.notification?.body ?? "",
                       time: DateTime.now())
@@ -81,7 +83,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     message.data['type'] != 'chat'
         ? showMatchDialog(context,
             avatar: message.data['avatar'],
-            name: 'Taì',
+            name: 'Tài',
             uid: message.data['id'].toString())
         : showFlutterNotification(message);
   }
@@ -280,76 +282,82 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   void showMatchDialog(BuildContext context,
-      {required String avatar, required String name, required String uid}) {
+      {required String avatar, required String name,required String uid}) {
     final Size screenSize = MediaQuery.of(context).size;
-    final double dialogWidth = screenSize.width * 0.8;
+    final double dialogWidth = screenSize.width;
     final double dialogHeight = screenSize.height * 0.4;
     showDialog(
       context: context,
       useSafeArea: true,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.transparent,
-          title: const Text('It\'s a Match!'),
-          content: SizedBox(
+          backgroundColor: Colors.white,
+          title: Text(AppLocalizations.of(context).notificationMatchTitle, style: TextStyle(fontSize: 22),),
+          content: Container(
             height: dialogHeight,
             width: dialogWidth,
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.pinkAccent,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(0, 2),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: NetworkImage(avatar),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Congratulations!',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(AppLocalizations.of(context).notificationMatchContent),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(context.read<ProfileWatch>().currentUser.avatar.toString()),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(context.read<ProfileWatch>().currentUser.fullName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17,
+                                )
+                            ),
+                          ],
                         ),
-                        SizedBox(height: 10),
-                        Text(
-                          'You have a match with someone special.',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                        SizedBox(
+                          width: 70,
+                          height: 70,
+                          child: Image(image: AssetImage(AppAssets.iconMatch),),
                         ),
+                        Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(avatar.toString()),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17,
+                                )
+                            ),
+                          ],
+                        ),
+
+
                       ],
                     ),
-                  ),
-                ],
-              ),
+
+                  ],
+                ),
+
+                ButtonSubmitPageView(text: AppLocalizations.of(context).notificationButtonMatch, marginBottom: 10, color: Colors.transparent, onPressed: (){context.pop();}),
+
+              ],
             ),
           ),
-          actions: [
-            ElevatedButton(
-              child: const Text('Close'),
-              onPressed: () async {
-                context.pop();
-              },
-            ),
-          ],
+
         );
       },
     );
   }
+
 }

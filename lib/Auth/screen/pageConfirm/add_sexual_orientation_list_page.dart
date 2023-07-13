@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
 import '../../../config/helpers/helpers_user_and_validators.dart';
 import '../../widget/button_submit_page_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddSexualOrientationListPageSection extends StatelessWidget {
   const AddSexualOrientationListPageSection({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
+    final appLocal = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       child: Container(
@@ -39,19 +41,19 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
                           pageProvider.nextPage();
                           pageProvider.newSexualOrientationList.clear();
                           pageProvider.isSexualOrientationEmpty = true;},
-                        child: Text('Bỏ qua', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
+                        child: Text(appLocal.textSkipButton, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
                       )
                     ],
                   ),
                   const SizedBox(height: 15,),
-                  const Text('Khuynh hướng tình dục của bạn ?',
+                   Text(appLocal.titleAddAddSexualOrientationPage,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 10,),
-                  const Text('Chọn tối đa 3',
+                   Text(appLocal.textMaxItemSexual,
                     style: TextStyle(
                         fontSize: 16
                     ),
@@ -77,18 +79,18 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: HelpersUserAndValidators.sexualOrientationList.length,
+                itemCount: HelpersUserAndValidators.sexualOrientationList(context).length,
                 itemBuilder: (BuildContext context, int index) {
-                  final item = HelpersUserAndValidators.sexualOrientationList[index];
-                  final isSelected = pageProvider.newSexualOrientationList.contains(item);
+                  final item = HelpersUserAndValidators.sexualOrientationList(context)[index];
+                  final isSelected = HelpersUserAndValidators.getItemFromListIndex(context, HelpersUserAndValidators.sexualOrientationList(context), pageProvider.newSexualOrientationList).contains(item);
                   return ListTile(
                     title: Text(item, style: TextStyle(fontWeight:  isSelected ? FontWeight.w700 : FontWeight.w400 ),),
                     contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 0),
-                    trailing: isSelected ? Icon(Icons.check, color: Color.fromRGBO(234, 64, 128, 100,),) : null,
+                    trailing: isSelected ? Icon(Icons.check, color: Color.fromRGBO(234, 64, 128, 1,),) : null,
                     onTap: () {
                       pageProvider.newSexualOrientationList.length < 3
-                          ? !isSelected ? pageProvider.newSexualOrientationList.add(item) : pageProvider.newSexualOrientationList.remove(item)
-                          : isSelected ? pageProvider.newSexualOrientationList.remove(item) : null;
+                          ? !isSelected ? pageProvider.newSexualOrientationList.add(index) : pageProvider.newSexualOrientationList.remove(index)
+                          : isSelected ? pageProvider.newSexualOrientationList.remove(index) : null;
                       pageProvider.onSexualOrientationListChanged();
                     },
                   );
@@ -96,7 +98,7 @@ class AddSexualOrientationListPageSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25,),
-            ButtonSubmitPageView(text: 'Tiếp theo',marginBottom: 70,
+            ButtonSubmitPageView(text: appLocal.textNextButton,marginBottom: 70,
                 color: pageProvider.isSexualOrientationEmpty ? Colors.grey : Colors.transparent,
                 onPressed: () {
                   !pageProvider.isSexualOrientationEmpty ? pageProvider.nextPage() : null;

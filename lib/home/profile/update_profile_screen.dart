@@ -9,10 +9,11 @@ import 'package:chat_app/home/profile/components/sexual_orientation_bottom_sheet
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-
 import 'components/basic_information_row.dart';
 import 'components/life_style_row.dart';
 import 'components/update_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -24,8 +25,8 @@ class UpdateProfileScreen extends StatefulWidget {
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   void initState() {
-    Provider.of<UpdateNotify>(context, listen: false).getUser(true);
     super.initState();
+    Provider.of<UpdateNotify>(context, listen: false).getUser(true);
   }
 
   @override
@@ -34,6 +35,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final double itemHeight = (size.height - 210) / 2;
     final double itemWidth = size.width / 2;
     final updateProvider = Provider.of<UpdateNotify>(context);
+    final appLocal = AppLocalizations.of(context);
+
     return WillPopScope(
       onWillPop: () async {
         await Future.delayed(const Duration(seconds: 3)).then((value) async {
@@ -47,12 +50,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            title: Text(
-              "Chỉnh sửa hồ sơ",
+            title: Text(appLocal.updateProfileTitleAppbar,
               style: TextStyle(color: Colors.black),
             ),
             backgroundColor: Colors.white,
-            elevation: 4,
+            elevation: 2,
             leading: IconButton(
               onPressed: () async {
                 updateProvider.loading();
@@ -73,15 +75,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Update image
-                  const SectionTitle(title: "Ảnh"),
+                   SectionTitle(title: appLocal.updateProfilePhotosText),
                   UpdateImage(
                     itemWidth: itemWidth,
                     itemHeight: itemHeight,
                   ),
 
                   // introduceYourself
-                  const SectionTitle(
-                    title: "Giới thiệu bản thân",
+                   SectionTitle(
+                    title: appLocal.updateProfileAboutMeText,
                   ),
                   Container(
                     padding: const EdgeInsets.only(
@@ -102,11 +104,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 .introduceYourselfController
                                 .text);
                           },
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                             contentPadding:
                                 EdgeInsets.symmetric(vertical: 16.0),
                             border: InputBorder.none,
-                            hintText: "Giới thiệu bản thân",
+                            hintText: appLocal.updateProfileAboutMeText,
                           ),
                           style: const TextStyle(
                               fontSize: 16,
@@ -118,11 +120,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
 
                   // interestList
-                  const SectionTitle(
-                    title: "Sở thích",
+                   SectionTitle(
+                    title: appLocal.updateProfileHobbiesText,
                   ),
                   InkWell(
-                    splashColor: const Color.fromRGBO(229, 58, 69, 100),
+                    splashColor:  Color.fromRGBO(229, 58, 69, 100),
                     onTap: () {
                       showModalBottomSheet(
                         isScrollControlled: true,
@@ -130,20 +132,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         useSafeArea: true,
                         context: context,
                         builder: (context) {
-                          return const InterestBottomSheet();
+                          return  InterestBottomSheet();
                         },
                       ).whenComplete(() {
                         updateProvider.getUser(false);
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, top: 16.0, bottom: 16.0),
+                      padding:  EdgeInsets.only(
+                          left: 16.0, top: 16.0, bottom: 16.0,right: 8),
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              updateProvider.interestsList!.join(", "),
+                            child: Text(HelpersUserAndValidators.getItemFromListIndex(context,HelpersUserAndValidators.interestsList(context) ,updateProvider.interestsList).join(", "),
                               style: TextStyle(
                                 color: Colors.grey.shade700,
                                 fontSize: 16,
@@ -151,6 +152,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
+                          const SizedBox(width: 5),
                           Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey.shade700,
@@ -160,8 +162,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Mục đích hẹn hò",
+                   SectionTitle(
+                    title: appLocal.updateProfileDatingPurposeText,
                   ),
                   InkWell(
                     splashColor: const Color.fromRGBO(229, 58, 69, 100),
@@ -179,8 +181,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, top: 16.0, bottom: 16.0),
+                      padding:  EdgeInsets.only(
+                          left: 16.0, top: 16.0, bottom: 16.0,right: 8),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -192,13 +194,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           const SizedBox(
                             width: 16.0,
                           ),
-                          if (updateProvider.datingPurpose!.isNotEmpty &&
-                              HelpersUserAndValidators.datingPurposeList
-                                  .contains(updateProvider.datingPurpose))
+                          if (updateProvider.datingPurpose.toString().isNotEmpty &&
+                              HelpersUserAndValidators.datingPurposeList(context)
+                                  .contains(HelpersUserAndValidators.getItemFromIndex(context,HelpersUserAndValidators.datingPurposeList(context),updateProvider.datingPurpose)))
                             Image.asset(
-                              HelpersUserAndValidators.emojiDatingPurposeList[
-                                  HelpersUserAndValidators.datingPurposeList
-                                      .indexOf(updateProvider.datingPurpose!)],
+                              HelpersUserAndValidators.emojiDatingPurposeList[updateProvider.datingPurpose!],
                               width: 24,
                               height: 24,
                             ),
@@ -207,9 +207,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           ),
                           Expanded(
                             child: Text(
-                              updateProvider.datingPurpose!.isNotEmpty
-                                  ? updateProvider.datingPurpose!
-                                  : "Trống",
+                              updateProvider.datingPurpose.toString().isNotEmpty
+                                  ? HelpersUserAndValidators.getItemFromIndex(context,HelpersUserAndValidators.datingPurposeList(context),updateProvider.datingPurpose!)
+                                  : appLocal.emptyText,
                               style: TextStyle(
                                 color: Colors.grey.shade700,
                                 fontSize: 16,
@@ -217,6 +217,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
+
                           Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.grey.shade700,
@@ -226,8 +227,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Ngôn ngữ tôi biết",
+                   SectionTitle(
+                    title: appLocal.updateProfileLanguagesIKnowText,
                   ),
                   InkWell(
                     splashColor: const Color.fromRGBO(229, 58, 69, 100),
@@ -246,7 +247,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     },
                     child: Container(
                       padding: const EdgeInsets.only(
-                          left: 16.0, top: 16.0, bottom: 16.0),
+                          left: 16.0, top: 16.0, bottom: 16.0,right: 8),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -263,7 +264,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               updateProvider.fluentLanguageList!.isNotEmpty
                                   ? updateProvider.fluentLanguageList!
                                       .join(', ')
-                                  : "Thêm ngôn ngữ",
+                                  : appLocal.updateProfileLanguagesHintText,
                               style: TextStyle(
                                 color: Colors.grey.shade700,
                                 fontSize: 16,
@@ -280,96 +281,96 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Thông tin cơ bản",
+                   SectionTitle(
+                    title: appLocal.updateProfileBasicInformationText,
                   ),
                   BasicInformationRow(
-                    title: "Cung hoàng đạo",
-                    content: updateProvider.zodiac,
+                    title: appLocal.basicInformationZodiacText,
+                    content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.zodiacList(context), updateProvider.zodiac),
                     icon: AppAssets.iconZodiac,
                     updateProvider: updateProvider,
                   ),
                   BasicInformationRow(
-                    title: "Giáo dục",
-                    content: updateProvider.academicLever,
+                    title: appLocal.basicInformationEducationText,
+                    content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.academicLeverList(context), updateProvider.academicLever),
                     icon: AppAssets.iconAcademicLevel,
                     updateProvider: updateProvider,
                   ),
                   BasicInformationRow(
-                    title: "Gia đình tương lai",
-                    content: updateProvider.familyStyle,
+                    title: appLocal.basicInformationFamilyText,
+                    content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.familyStyleList(context), updateProvider.familyStyle),
                     icon: AppAssets.iconFamilyStyle,
                     updateProvider: updateProvider,
                   ),
                   BasicInformationRow(
-                    title: "Kiểu tính cách",
+                    title: appLocal.basicInformationPersonalityText,
                     content: updateProvider.personalityType,
                     icon: AppAssets.iconPersonalityType,
                     updateProvider: updateProvider,
                   ),
                   BasicInformationRow(
-                    title: "Phong cách giao tiếp",
-                    content: updateProvider.communicateStyle,
+                    title: appLocal.basicInformationCommunicationText,
+                    content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.communicateStyleList(context), updateProvider.communicateStyle),
                     icon: AppAssets.iconCommunicateStyle,
                     updateProvider: updateProvider,
                   ),
                   BasicInformationRow(
-                    title: "Ngôn ngữ tình yêu",
-                    content: updateProvider.languageOfLove,
+                    title: appLocal.basicInformationLoveText,
+                    content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.languageOfLoveList(context), updateProvider.languageOfLove),
                     icon: AppAssets.iconLanguageOfLove,
                     updateProvider: updateProvider,
                   ),
-                  const SectionTitle(
-                    title: "Phong cách sống",
+                   SectionTitle(
+                    title: appLocal.updateProfileLifestyleText,
                   ),
                   LifeStyleRow(
-                      title: "Thú cưng",
-                      content: updateProvider.myPet,
+                      title: appLocal.lifestylePetText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.myPetList(context), updateProvider.myPet),
                       icon: AppAssets.iconMyPets,
                       updateProvider: updateProvider),
 
                   LifeStyleRow(
-                      title: "Về việc uống rượu bia",
-                      content: updateProvider.drinkingStatus,
+                      title: appLocal.lifestyleAlcoholText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.drinkingStatusList(context), updateProvider.drinkingStatus),
                       icon: AppAssets.iconDrinkingStatus,
                       updateProvider: updateProvider),
                   LifeStyleRow(
-                      title: "Bạn có hay hút thuốc",
-                      content: updateProvider.smokingStatus,
+                      title: appLocal.lifestyleSmokeText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.smokingStatusList(context), updateProvider.smokingStatus),
                       icon: AppAssets.iconSmokingStatus,
                       updateProvider: updateProvider),
                   LifeStyleRow(
-                      title: "Tập luyện",
-                      content: updateProvider.sportsStatus,
+                      title: appLocal.lifestyleExerciseText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.sportsStatusList(context), updateProvider.sportsStatus),
                       icon: AppAssets.iconSportStatus,
                       updateProvider: updateProvider),
                   LifeStyleRow(
-                      title: "Chế độ ăn uống",
-                      content: updateProvider.eatingStatus,
+                      title: appLocal.lifestyleDietaryText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.eatingStatusList(context), updateProvider.eatingStatus),
                       icon: AppAssets.iconEatingStatus,
                       updateProvider: updateProvider),
                   LifeStyleRow(
-                      title: "Truyền thông",
-                      content: updateProvider.socialNetworkStatus,
+                      title: appLocal.lifestyleMediaText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.socialNetworkStatusList(context), updateProvider.socialNetworkStatus),
                       icon: AppAssets.iconSocialNetworkStatus,
                       updateProvider: updateProvider),
                   LifeStyleRow(
-                      title: "Thói quen ngủ",
-                      content: updateProvider.sleepingHabits,
+                      title: appLocal.lifestyleSleepText,
+                      content: HelpersUserAndValidators.getItemFromIndex(context, HelpersUserAndValidators.sleepingHabitsStatusList(context), updateProvider.sleepingHabits),
                       icon: AppAssets.iconSleepingHabits,
                       updateProvider: updateProvider),
-                  const SectionTitle(
-                    title: "Công ty",
+                   SectionTitle(
+                    title: appLocal.updateProfileCompanyText,
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 16.0, left: 16.0),
                     color: Colors.white,
                     child: TextField(
                       controller: updateProvider.companyController,
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 16.0),
                         border: InputBorder.none,
-                        hintText: "Thêm công ty",
+                        hintText: appLocal.updateProfileCompanyHintText,
                       ),
                       style: const TextStyle(
                           fontSize: 16,
@@ -377,18 +378,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           fontWeight: FontWeight.normal),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Trường",
+                  SectionTitle(
+                    title: appLocal.updateProfileSchoolText,
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 16.0, left: 16.0),
                     color: Colors.white,
                     child: TextField(
                       controller: updateProvider.schoolController,
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 16.0),
                         border: InputBorder.none,
-                        hintText: "Thêm tên trường",
+                        hintText: appLocal.updateProfileSchoolHintText,
                       ),
                       style: const TextStyle(
                           fontSize: 16,
@@ -396,18 +397,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           fontWeight: FontWeight.normal),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Đang sống tại",
+                   SectionTitle(
+                    title: appLocal.updateProfileLivingText,
                   ),
                   Container(
                     padding: const EdgeInsets.only(right: 16.0, left: 16.0),
                     color: Colors.white,
                     child: TextField(
                       controller: updateProvider.currentAddressController,
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         contentPadding: EdgeInsets.symmetric(vertical: 16.0),
                         border: InputBorder.none,
-                        hintText: "Thêm thành phố",
+                        hintText: appLocal.updateProfileLivingHintText,
                       ),
                       style: const TextStyle(
                           fontSize: 16,
@@ -415,8 +416,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           fontWeight: FontWeight.normal),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Giới tính",
+                   SectionTitle(
+                    title: appLocal.updateProfileGenderText,
                   ),
                   InkWell(
                     splashColor: const Color.fromRGBO(229, 58, 69, 100),
@@ -446,8 +447,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
                     ),
                   ),
-                  const SectionTitle(
-                    title: "Khuynh hướng tính dục",
+                   SectionTitle(
+                    title: appLocal.updateProfileSexualText,
                   ),
                   InkWell(
                     splashColor: const Color.fromRGBO(229, 58, 69, 100),
@@ -471,7 +472,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       child: Text(
                         updateProvider.sexualOrientationList!.isNotEmpty
                             ? updateProvider.sexualOrientationList!.join(', ')
-                            : "Trống",
+                            : appLocal.emptyText,
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.grey.shade700,
@@ -531,7 +532,7 @@ class SectionTitle extends StatelessWidget {
           top: 16.0, right: 16.0, left: 16.0, bottom: 6.0),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        style:  TextStyle(fontSize: 19, fontWeight: FontWeight.w700),
       ),
     );
   }

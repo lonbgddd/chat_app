@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chat_app/features/message/domain/entities/chat_room_entity.dart';
 import 'package:chat_app/features/message/domain/entities/user_entity.dart';
 import 'package:chat_app/features/message/presentation/bloc/detail_message/detail_message_bloc.dart';
@@ -11,10 +10,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../config/helpers/helpers_database.dart';
 import '../../domain/entities/chat_message_entity.dart';
-import '../screens/image_Message.dart';
+import '../screens/image_message.dart';
 
 class DetailMessage extends StatefulWidget {
   const DetailMessage(
@@ -48,6 +47,7 @@ class _DetailMessageState extends State<DetailMessage> {
         return Scaffold(
           appBar: AppBar(
             titleSpacing: 0,
+            elevation: 1,
             backgroundColor: Colors.white,
             title: state is MessageListLoaded
                 ? head(state.user)
@@ -64,7 +64,7 @@ class _DetailMessageState extends State<DetailMessage> {
           ),
           backgroundColor: Colors.transparent,
           body: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             decoration: const BoxDecoration(color: Colors.white),
             child: Builder(builder: (context) {
               if (state is MessageListLoaded) {
@@ -96,9 +96,10 @@ class _DetailMessageState extends State<DetailMessage> {
               ? Row(
                   children: [
                     Container(
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       margin: const EdgeInsets.only(right: 10),
                       child: CircleAvatar(
-                        radius: 25,
+                        radius: 20,
                         backgroundImage: NetworkImage(widget.avatar.toString()),
                       ),
                     ),
@@ -110,30 +111,23 @@ class _DetailMessageState extends State<DetailMessage> {
                             '${widget.name}',
                             style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           snapshot.data!.activeStatus == 'online'
                               ? Container(
-                                  margin: const EdgeInsets.only(top: 7),
-                                  child: const Text(
-                                    'Online',
+                                  margin:  EdgeInsets.only(top: 7),
+                                  child:  Text(
+                                    AppLocalizations.of(context).active,
                                     style: TextStyle(
                                       color: Colors.green,
                                       fontSize: 16,
                                     ),
                                   ),
                                 )
-                              : Container(
-                                  margin: const EdgeInsets.only(top: 7),
-                                  child: const Text('Offline',
-                                      style: TextStyle(
-                                        color: Colors.black54,
-                                        fontSize: 16,
-                                      )),
-                                )
+                              : SizedBox.shrink()
                         ],
                       ),
                     ),
@@ -279,63 +273,43 @@ class _DetailMessageState extends State<DetailMessage> {
                                           }
                                         },
                                         child: Container(
-                                          width: snapshot
-                                                      .data![index].messageText
-                                                      .toString()
-                                                      .length >
-                                                  20
-                                              ? MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  2
+                                          width: snapshot.data![index].messageText.toString().length > 20
+                                              ? MediaQuery.of(context).size.width / 2
                                               : null,
                                           decoration: BoxDecoration(
-                                            borderRadius: snapshot.data?[index]
-                                                        .imageURL !=
-                                                    ''
-                                                ? const BorderRadius.all(
-                                                    Radius.circular(10))
-                                                : snapshot.data?[index].uid ==
-                                                        widget.uid
+                                            borderRadius: snapshot.data?[index].imageURL != ''
+                                                ? const BorderRadius.all(Radius.circular(10))
+                                                : snapshot.data?[index].uid == widget.uid
                                                     ? const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(10),
-                                                        topRight:
-                                                            Radius.circular(10),
-                                                        bottomLeft:
-                                                            Radius.circular(10))
+                                                        topLeft: Radius.circular(30),
+                                                        topRight: Radius.circular(30),
+                                                        bottomLeft: Radius.circular(30),
+                                                        bottomRight: Radius.circular(8)
+                                            )
                                                     : const BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(10),
-                                                        topRight:
-                                                            Radius.circular(10),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                10)),
-                                            color: (snapshot.data![index].uid !=
-                                                    widget.uid
-                                                ? const Color.fromARGB(
-                                                    255, 248, 222, 225)
+                                                        topLeft: Radius.circular(30),
+                                                        topRight: Radius.circular(30),
+                                                        bottomRight: Radius.circular(30),
+                                                        bottomLeft: Radius.circular(8)
+                                            ),
+                                            color: (snapshot.data![index].uid == widget.uid
+                                                ?  Colors.blue
                                                 : Colors.grey.shade300),
                                           ),
                                           padding:
-                                              snapshot.data?[index].imageURL !=
-                                                      ''
+                                              snapshot.data?[index].imageURL != ''
                                                   ? EdgeInsets.zero
-                                                  : const EdgeInsets.all(16),
+                                                  :  EdgeInsets.symmetric(horizontal: 15,vertical: 10),
                                           child:
-                                              snapshot.data![index].imageURL !=
-                                                      ''
-                                                  ? _image(
-                                                      snapshot.data![index]
-                                                          .imageURL!,
-                                                      context)
+                                              snapshot.data![index].imageURL != ''
+                                                  ? _image(snapshot.data![index].imageURL!, context)
                                                   : Text(
-                                                      snapshot.data?[index]
-                                                              .messageText ??
-                                                          '',
-                                                      style: const TextStyle(
-                                                          fontSize: 15)),
+                                                      snapshot.data?[index].messageText ?? '',
+                                                      style:  TextStyle(
+                                                          fontSize: 15, color: snapshot.data![index].uid == widget.uid
+                                                          ? Colors.white
+                                                          : Colors.black
+                                                      )),
                                         ),
                                       ),
                                     ],
@@ -362,7 +336,7 @@ class _DetailMessageState extends State<DetailMessage> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        padding: const EdgeInsets.only(left: 16, bottom: 10),
+        padding: EdgeInsets.only(bottom: 10),
         width: double.infinity,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -483,9 +457,9 @@ class _DetailMessageState extends State<DetailMessage> {
                     isShowEmoji = false;
                   }
                 },
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                     contentPadding: EdgeInsets.all(10),
-                    hintText: 'Type something...',
+                    hintText: AppLocalizations.of(context).messageScreenInputTypingText,
                     border: InputBorder.none),
               ),
             ),

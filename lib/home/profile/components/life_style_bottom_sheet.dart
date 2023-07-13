@@ -3,6 +3,8 @@ import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LifeStyleBottomSheet extends StatelessWidget {
   const LifeStyleBottomSheet({super.key});
@@ -47,13 +49,13 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     )
                   ],
                 ),
-                const Align(
+                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Thông tin thêm về tôi",
+                    AppLocalizations.of(context).lifeStyleDialogTitle,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 36,
+                        fontSize: 30,
                         fontWeight: FontWeight.w700),
                     textAlign: TextAlign.center,
                   ),
@@ -62,19 +64,19 @@ class LifeStyleBottomSheet extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "Thêm thông tin về bạn để mọi người hiểu rõ hơn về con người tuyệt vời của bạn.",
+                  AppLocalizations.of(context).lifeStyleDialogContent,
                   style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                _buildPets(updateProvider),
-                _buildDrinkingStatus(updateProvider),
-                _buildSmokingStatus(updateProvider),
-                _buildSportStatus(updateProvider),
-                _buildEatingStatus(updateProvider),
-                _buildSocialNetworkStatus(updateProvider),
-                _buildSleepingHabits(updateProvider)
+                _buildPets(context,updateProvider),
+                _buildDrinkingStatus(context,updateProvider),
+                _buildSmokingStatus(context,updateProvider),
+                _buildSportStatus(context,updateProvider),
+                _buildEatingStatus(context,updateProvider),
+                _buildSocialNetworkStatus(context,updateProvider),
+                _buildSleepingHabits(context,updateProvider)
               ],
             ),
           ),
@@ -105,12 +107,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildPets(UpdateNotify updateProvider) {
+  Widget _buildPets(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Bạn có nuôi thú cưng không ?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogPetText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -119,14 +121,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.myPetList.length,
+            HelpersUserAndValidators.myPetList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.myPetList[index];
-              final isSelected = updateProvider.myPet! == item;
+              final item = HelpersUserAndValidators.myPetList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.myPet = !isSelected ? item : "";
-
+                  updateProvider.myPet = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -137,21 +137,16 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.myPet  ? 2 : 1,
+                        color: index == updateProvider.myPet
+                            ? const Color.fromRGBO(234, 64, 128, 1)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.myPet ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -170,12 +165,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildDrinkingStatus(UpdateNotify updateProvider) {
+  Widget _buildDrinkingStatus(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Bạn thường uống rượu bia như thế nào?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogAlcoholText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -184,14 +179,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.drinkingStatusList.length,
+            HelpersUserAndValidators.drinkingStatusList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.drinkingStatusList[index];
-              final isSelected = updateProvider.drinkingStatus! == item;
+              final item = HelpersUserAndValidators.drinkingStatusList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.drinkingStatus = !isSelected ? item : "";
-
+                  updateProvider.drinkingStatus = index ;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -202,21 +195,16 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.drinkingStatus ? 2 : 1,
+                        color: index == updateProvider.drinkingStatus
+                            ? const Color.fromRGBO(234, 64, 128, 1)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.drinkingStatus ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -235,12 +223,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSmokingStatus(UpdateNotify updateProvider) {
+  Widget _buildSmokingStatus(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Bạn có hay hút thuốc không ?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogSmokeText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -249,13 +237,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.smokingStatusList.length,
+            HelpersUserAndValidators.smokingStatusList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.smokingStatusList[index];
-              final isSelected = updateProvider.smokingStatus! == item;
+              final item = HelpersUserAndValidators.smokingStatusList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.smokingStatus = !isSelected ? item : "";
+                  updateProvider.smokingStatus =  index;
 
                   updateProvider.onDataChange();
                 },
@@ -267,21 +254,16 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.smokingStatus ? 2 : 1,
+                        color: index == updateProvider.smokingStatus
+                            ? const Color.fromRGBO(234, 64, 128, 1)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.smokingStatus ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -300,12 +282,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSportStatus(UpdateNotify updateProvider) {
+  Widget _buildSportStatus(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Bạn có tập thể dục không ?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogExerciseText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -314,14 +296,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.sportsStatusList.length,
+            HelpersUserAndValidators.sportsStatusList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.sportsStatusList[index];
-              final isSelected = updateProvider.sportsStatus! == item;
+              final item = HelpersUserAndValidators.sportsStatusList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.sportsStatus = !isSelected ? item : "";
-
+                  updateProvider.sportsStatus = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -332,21 +312,16 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.sportsStatus ? 2 : 1,
+                        color: index == updateProvider.sportsStatus
+                            ? const Color.fromRGBO(234, 64, 128, 1)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color:  index == updateProvider.sportsStatus ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -365,12 +340,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildEatingStatus(UpdateNotify updateProvider) {
+  Widget _buildEatingStatus(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Ngôn ngữ tình yêu ?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogEatText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -379,14 +354,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.eatingStatusList.length,
+            HelpersUserAndValidators.eatingStatusList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.eatingStatusList[index];
-              final isSelected = updateProvider.eatingStatus! == item;
+              final item = HelpersUserAndValidators.eatingStatusList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.eatingStatus = !isSelected ? item : "";
-
+                  updateProvider.eatingStatus =  index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -397,13 +370,9 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
+                        width:  index == updateProvider.eatingStatus ? 2 : 1,
+                        color: index == updateProvider.eatingStatus
+                            ? const Color.fromRGBO(234, 64, 128, 1,
                               )
                             : Colors.grey,
                       ),
@@ -411,7 +380,7 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.eatingStatus  ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -430,12 +399,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialNetworkStatus(UpdateNotify updateProvider) {
+  Widget _buildSocialNetworkStatus(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Mức độ hoạt động của bạn trên mạng xã hội ?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogMediaText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -444,14 +413,14 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.socialNetworkStatusList.length,
+            HelpersUserAndValidators.socialNetworkStatusList(context).length,
             (index) {
               final item =
-                  HelpersUserAndValidators.socialNetworkStatusList[index];
-              final isSelected = updateProvider.socialNetworkStatus! == item;
+              HelpersUserAndValidators.socialNetworkStatusList(context)[index];
+
               return InkWell(
                 onTap: () {
-                  updateProvider.socialNetworkStatus = !isSelected ? item : "";
+                  updateProvider.socialNetworkStatus = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -462,13 +431,9 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
+                        width: index == updateProvider.socialNetworkStatus  ? 2 : 1,
+                        color: index == updateProvider.socialNetworkStatus
+                            ? const Color.fromRGBO(234, 64, 128, 1,
                               )
                             : Colors.grey,
                       ),
@@ -476,7 +441,7 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.socialNetworkStatus ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -495,12 +460,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildSleepingHabits(UpdateNotify updateProvider) {
+  Widget _buildSleepingHabits(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Thói quen ngủ của bạn ra sao ?",
+         Text(
+           AppLocalizations.of(context).lifeStyleDialogSleepingText,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -509,15 +474,12 @@ class LifeStyleBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.sleepingHabitsStatusList.length,
+            HelpersUserAndValidators.sleepingHabitsStatusList(context).length,
             (index) {
-              final item =
-                  HelpersUserAndValidators.sleepingHabitsStatusList[index];
-              final isSelected = updateProvider.sleepingHabits! == item;
+              final item = HelpersUserAndValidators.sleepingHabitsStatusList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.sleepingHabits = !isSelected ? item : "";
-
+                  updateProvider.sleepingHabits = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -528,21 +490,16 @@ class LifeStyleBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.sleepingHabits ? 2 : 1,
+                        color: index == updateProvider.sleepingHabits
+                            ? const Color.fromRGBO(234, 64, 128,1,)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.sleepingHabits ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -560,4 +517,5 @@ class LifeStyleBottomSheet extends StatelessWidget {
       ],
     );
   }
+
 }

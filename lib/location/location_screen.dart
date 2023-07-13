@@ -2,17 +2,17 @@ import 'package:chat_app/config/changedNotify/location_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class LocationScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return LocationSCreenState();
+    return LocationScreenState();
   }
 }
 
-class LocationSCreenState extends State<LocationScreen> {
+class LocationScreenState extends State<LocationScreen> {
   var textController = TextEditingController();
   String? country;
   String? province;
@@ -31,14 +31,16 @@ class LocationSCreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocal = AppLocalizations.of(context);
+
     return MaterialApp(
       home: SafeArea(
         child: Scaffold(
           body: SingleChildScrollView(
             child: Column(
               children: [
-                const Text(
-                  'Địa chỉ',
+                 Text(
+                  appLocal.locationScreenTitle,
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 35),
                 ),
                 Card(
@@ -88,7 +90,7 @@ class LocationSCreenState extends State<LocationScreen> {
 
                               }
                             },
-                            hint: const Text('Chọn một quốc gia'),
+                            hint:  Text(appLocal.locationScreenSelectCountry),
                             items: context
                                 .watch<LocationProvider>()
                                 .listCountry!
@@ -146,7 +148,7 @@ class LocationSCreenState extends State<LocationScreen> {
                                     .setListWardNull();
                               }
                             },
-                            hint: const Text('Chọn một tỉnh, thành phố...'),
+                            hint: Text(appLocal.locationScreenSelectCity),
                             items: context
                                 .watch<LocationProvider>()
                                 .listProvince!
@@ -200,7 +202,7 @@ class LocationSCreenState extends State<LocationScreen> {
                                     .setListWardNull();
                               }
                             },
-                            hint: const Text('Chọn một thành phố, huyện...'),
+                            hint:  Text(appLocal.locationScreenSelectDistrict),
                             items: context
                                 .watch<LocationProvider>()
                                 .listDistrict!
@@ -241,7 +243,7 @@ class LocationSCreenState extends State<LocationScreen> {
                               List<String> splitValues = value!.split('-');
                               ward = splitValues[1];
                             },
-                            hint: const Text('Chọn một xã, phường...'),
+                            hint:  Text(appLocal.locationScreenSelectWard),
                             items: context
                                 .watch<LocationProvider>()
                                 .listWard!
@@ -268,10 +270,10 @@ class LocationSCreenState extends State<LocationScreen> {
                         child: TextField(
                           controller: textController,
                           maxLines: 1,
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               contentPadding:
                                   EdgeInsets.symmetric(horizontal: 10),
-                              hintText: 'Số nhà, ngõ ...',
+                              hintText: appLocal.locationScreenSelectAlley,
                               hintStyle: TextStyle(color: Colors.grey),
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none),
@@ -313,8 +315,8 @@ class LocationSCreenState extends State<LocationScreen> {
                               .updateAddressUser(address);
                         }
                       },
-                      child: const Text(
-                        'Confirm',
+                      child:  Text(
+                        appLocal.locationScreenConfirm,
                         style: TextStyle(fontSize: 17),
                       )),
                 )

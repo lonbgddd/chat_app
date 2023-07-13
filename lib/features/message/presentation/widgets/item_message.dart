@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ntp/ntp.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyItemMessage extends StatelessWidget {
   final String? uid;
@@ -73,7 +74,7 @@ class MyItemMessage extends StatelessWidget {
                                     ),
                                   ),
                                   child: const CircleAvatar(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: Colors.green,
                                   ),
                                 )),
                           ])
@@ -95,7 +96,6 @@ class MyItemMessage extends StatelessWidget {
                           builder: (context, snapshot) {
                             return Row(
                               children: [
-
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -110,17 +110,15 @@ class MyItemMessage extends StatelessWidget {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      snapshot.hasData
-                                          ? Text(
-                                              snapshot.data!.messageText  != '' ? snapshot.data!.messageText! : 'đã gửi 1 ảnh',
+                                      snapshot.hasData ? Text(
+                                              snapshot.data!.messageText  != '' ? snapshot.data!.messageText! : AppLocalizations.of(context).messageScreenSentImageText,
                                               style: const TextStyle(
                                                 fontSize: 14,
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             )
-                                          : Text(
-                                              "Chưa có tin nhắn nào",
+                                          : Text(AppLocalizations.of(context)!.messageScreenNoMessage,
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.grey.shade500,
@@ -141,8 +139,8 @@ class MyItemMessage extends StatelessWidget {
                                                   BorderRadius.circular(15),
                                               color: Colors.black,
                                             ),
-                                            child: const Text(
-                                              'Đến lượt bạn',
+                                            child:  Text(
+                                              AppLocalizations.of(context).messageScreenYourTurnText,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12),

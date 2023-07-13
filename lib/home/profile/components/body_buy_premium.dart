@@ -7,6 +7,7 @@ import 'package:chat_app/home/profile/widget/custom_card.dart';
 import 'package:chat_app/model/package_binder_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BodyBuyPremium extends StatefulWidget {
   const BodyBuyPremium({Key? key}) : super(key: key);
@@ -39,10 +40,11 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
       isScrollControlled: true,
       isDismissible: true,
       builder: (BuildContext context) {
-
+        MediaQueryData mediaQueryData = MediaQuery.of(context);
+        EdgeInsets padding = mediaQueryData.padding;
 
         return Container(
-          padding: EdgeInsets.only(top: context.read<BinderWatch>().paddingTop),
+          padding: EdgeInsets.only(top: padding.top),
           height: MediaQuery.of(context).size.height,
           child: BottomModalFullScreen(
             color: color,
@@ -62,10 +64,11 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 50),
+    final appLocal = AppLocalizations.of(context);
 
-      color: Colors.grey[200],
+    return Container(
+      padding: const EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 70),
+      color: Colors.grey[100],
       child: Column(
         children: [
           Row(
@@ -76,20 +79,20 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
                 child: CustomCard(
                   onTap: () => _showBottomModal(
                       context: context,
-                      packageModel: packageBinderSuperLike,
+                      packageModel: packageBinderSuperLike(context),
                       isSuperLike: true,
                       isHaveColor: true,
                       iconData: Icons.star,
                       isHaveIcon: true,
                       iconColor: Colors.blue,
                       color: Colors.blue[200]!,
-                      title: 'Nhận lượt Siêu Thích',
-                      subTitle:
-                          "Siêu Thích giúp bạn nổi bật. Tăng khả năng được tương hợp gấp 3 lần!"),
+                      title: appLocal.bodyBuyPremiumTitle,
+                      subTitle: appLocal.bodyBuyPremiumContent,
+                  ),
                   iconColor: Colors.blue,
                   icon: Icons.star,
-                  title: '0 lượt Siêu Thích',
-                  subtitle: "MUA THÊM",
+                  title: appLocal.bodyBuyPremiumContentSuperLikesText,
+                  subtitle: appLocal.bodyBuyPremiumButtonText,
                   isIcon: true,
                 ),
               ),
@@ -101,8 +104,8 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
                   onTap: _showModal,
                   iconColor: Colors.purple,
                   icon: Icons.bolt,
-                  title: 'Lượt Tăng Tốc của tôi',
-                  subtitle: "MUA THÊM",
+                  title: appLocal.bodyBuyPremiumContentSuperBoostsText,
+                  subtitle: appLocal.bodyBuyPremiumButtonText,
                 ),
               ),
               Flexible(
@@ -111,7 +114,7 @@ class _BodyBuyPremiumState extends State<BodyBuyPremium> {
                 child: CustomCard(
                   isIcon: false,
                   onTap: () {},
-                  title: "Gói đăng ký",
+                  title: appLocal.bodyBuyPremiumSubscriptionText,
                 ),
               ),
             ],

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:chat_app/config/changedNotify/profile_watch.dart';
 import 'package:chat_app/config/changedNotify/login_google.dart';
 import 'package:chat_app/config/helpers/app_assets.dart';
@@ -9,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../config/changedNotify/binder_watch.dart';
 import '../../config/helpers/helpers_user_and_validators.dart';
-import '../binder_page/compnents/photo_item_card.dart';
+import '../binder_page/components/photo_item_card.dart';
 
 class DetailProfileOthersScreen extends StatefulWidget {
   final String? uid;
@@ -49,6 +48,8 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    final appLocal = AppLocalizations.of(context);
+
     final EdgeInsets padding = MediaQuery.of(context).padding;
     return Scaffold(
       extendBody: true,
@@ -126,7 +127,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             ),
                           ),
 
-                          (snapshot.data!.introduceYourself!.isNotEmpty || snapshot.data!.datingPurpose!.isNotEmpty) ? Container(
+                          (snapshot.data!.introduceYourself!.isNotEmpty || snapshot.data!.datingPurpose!.toString().isNotEmpty) ? Container(
                             width: MediaQuery.of(context).size.width,
                             padding: EdgeInsets.symmetric(vertical: 25,horizontal: 15),
                             margin: EdgeInsets.only(top: 20),
@@ -145,15 +146,15 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                (snapshot.data!.datingPurpose!.isNotEmpty) ?
-                                     buildDatingPurposeBox(snapshot.data!.datingPurpose) : SizedBox.shrink(),
+                                (snapshot.data!.datingPurpose!.toString().isNotEmpty && snapshot.data!.datingPurpose.toString().length == 1) ?
+                                     buildDatingPurposeBox(context,snapshot.data!.datingPurpose) : SizedBox.shrink(),
 
                                 (snapshot.data!.introduceYourself!.isNotEmpty) ?
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         const SizedBox(height: 25,),
-                                        Text('Giới thiệu bản thân', style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
+                                        Text(appLocal.detailProfileIntroduceTitle, style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w600),),
                                         const SizedBox(height: 10),
                                         Text(snapshot.data!.introduceYourself.toString(), style: TextStyle(color: Colors.black54,fontSize: 16,),textAlign: TextAlign.start,),
                                       ],
@@ -162,22 +163,20 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
                               ],
                             ),
                           ): SizedBox.shrink(),
-                          (HelpersUserAndValidators.isListNotEmpty(HelpersUserAndValidators.styleOfLifeUserList(snapshot.data!))) ?
-                          generateList(title: 'Phong cách sống',list: HelpersUserAndValidators.styleOfLifeUserList(snapshot.data!)) : SizedBox.shrink(),
+                          (HelpersUserAndValidators.isListNotEmpty(HelpersUserAndValidators.styleOfLifeUserList(context,snapshot.data!))) ?
+                          generateList(title: appLocal.detailProfileLifestyleTitle,list: HelpersUserAndValidators.styleOfLifeUserList(context,snapshot.data!)) : SizedBox.shrink(),
 
-                          (HelpersUserAndValidators.isListNotEmpty(HelpersUserAndValidators.basicInfoUserList(snapshot.data!))) ?
-                          generateList(title: 'Thông tin thêm về tôi',list: HelpersUserAndValidators.basicInfoUserList(snapshot.data!)) : SizedBox.shrink(),
+                          (HelpersUserAndValidators.isListNotEmpty(HelpersUserAndValidators.basicInfoUserList(context,snapshot.data!))) ?
+                          generateList(title: appLocal.detailProfileAdditionalMeTitle,list: HelpersUserAndValidators.basicInfoUserList(context,snapshot.data!)) : SizedBox.shrink(),
 
                           (snapshot.data!.interestsList.length > 0) ?
-                          generateList(title: 'Sở thích',list: snapshot.data!.interestsList) : SizedBox.shrink(),
-
-
+                          generateList(title: appLocal.detailProfileHobbiesTitle,list:HelpersUserAndValidators.getItemFromListIndex(context, HelpersUserAndValidators.interestsList(context), snapshot.data!.interestsList)) : SizedBox.shrink(),
 
 
                           const SizedBox(height: 30),
-                          buildFunctionButton(title:'Chia sẻ hồ sơ',content: 'Xem bạn nghĩ gì',onTap: (){} ),
-                          buildFunctionButton(title:'Chặn ${snapshot.data?.fullName}',content: 'Bạn sẽ không thấy họ, và học sẽ không thấy bạn',onTap: (){} ),
-                          buildFunctionButton(title:'Báo cáo ${snapshot.data?.fullName}',content:'Đừng lo lắng - chúng tôi sẽ không thông báo cho người này',onTap: (){} ),
+                          buildFunctionButton(title:appLocal.detailProfileShareTitle,content: appLocal.detailProfileShareContent,onTap: (){} ),
+                          buildFunctionButton(title:'${appLocal.detailProfileBlockTitle} ${snapshot.data?.fullName}',content: appLocal.detailProfileBlockContent,onTap: (){} ),
+                          buildFunctionButton(title:'${appLocal.detailProfileReportTitle} ${snapshot.data?.fullName}',content: appLocal.detailProfileReportContent,onTap: (){} ),
                         ],
                       ),
                     ),
@@ -204,7 +203,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
               const SizedBox(width: 20),
               buildFloatingButton(55,55,10,AppAssets.iconHeart,(){
                 Navigator.pop(context);
-                Provider.of<BinderWatch>(context, listen: false).like();
+                Provider.of<BinderWatch>(context, listen: false).like(context);
               },2),
             ],
           ),
@@ -276,8 +275,9 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
   }
 
 
-  Widget buildDatingPurposeBox(String title) {
-    int index = HelpersUserAndValidators.datingPurposeList.indexWhere((item) => item == title);
+  Widget buildDatingPurposeBox(BuildContext context,int index) {
+    String title = HelpersUserAndValidators.getItemFromIndex(context,HelpersUserAndValidators.datingPurposeList(context), index);
+    print('Vị trí item : $index');
     return Container(
         width: MediaQuery.of(context).size.width / 1.4,
         padding: EdgeInsets.all(8),
@@ -293,7 +293,7 @@ class _DetailProfileOthersScreenState extends State<DetailProfileOthersScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Mình đang tìm', style: TextStyle(color:(index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 13,fontWeight: FontWeight.w500),),
+              Text(AppLocalizations.of(context).detailProfileLookingFor, style: TextStyle(color:(index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 13,fontWeight: FontWeight.w500),),
               Text(title, style: TextStyle(color: (index != -1) ? HelpersUserAndValidators.colorTitlePurposeList[index] : Colors.white ,fontSize: 15,fontWeight: FontWeight.w600),),
             ],
           )

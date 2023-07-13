@@ -3,6 +3,8 @@ import 'package:chat_app/config/helpers/helpers_user_and_validators.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class BasicInformationBottomSheet extends StatelessWidget {
   const BasicInformationBottomSheet({super.key});
@@ -11,7 +13,8 @@ class BasicInformationBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     return Consumer<UpdateNotify>(
-      builder: (context, updateProvider, child) => Stack(children: [
+      builder: (context, updateProvider, child) => Stack(
+          children: [
         Container(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8.0),
           height: height,
@@ -47,13 +50,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
                     )
                   ],
                 ),
-                const Align(
+                 Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    "Thông tin thêm về tôi",
+                  child: Text(AppLocalizations.of(context).basicInformationDialogTitle,
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 36,
+                        fontSize: 30,
                         fontWeight: FontWeight.w700),
                     textAlign: TextAlign.center,
                   ),
@@ -62,17 +64,17 @@ class BasicInformationBottomSheet extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "Thêm thông tin về bạn để mọi người hiểu rõ hơn về con người tuyệt vời của bạn.",
+                  AppLocalizations.of(context).basicInformationDialogContent,
                   style: TextStyle(color: Colors.grey.shade700, fontSize: 16),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                _buildZodiac(updateProvider),
-                _buildAcademicLevel(updateProvider),
-                _buildFamilyStyle(updateProvider),
-                _buildPersonalityType(updateProvider),
-                _buildLanguageOfLove(updateProvider)
+                _buildZodiac(context,updateProvider),
+                _buildAcademicLevel(context,updateProvider),
+                _buildFamilyStyle(context,updateProvider),
+                _buildPersonalityType(context,updateProvider),
+                _buildLanguageOfLove(context, updateProvider)
               ],
             ),
           ),
@@ -103,12 +105,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildZodiac(UpdateNotify updateProvider) {
+  Widget _buildZodiac(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Cung hoàng đạo của bạn là gì ?",
+         Text(
+          AppLocalizations.of(context).basicInformationDialogZodiac,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -117,14 +119,11 @@ class BasicInformationBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.zodiacList.length,
-            (index) {
-              final item = HelpersUserAndValidators.zodiacList[index];
-              final isSelected = updateProvider.zodiac! == item;
+            HelpersUserAndValidators.zodiacList(context).length, (index) {
+              final item = HelpersUserAndValidators.zodiacList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.zodiac = !isSelected ? item : "";
-
+                  updateProvider.zodiac = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -135,21 +134,16 @@ class BasicInformationBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.zodiac ? 2 : 1,
+                        color: index == updateProvider.zodiac
+                            ? const Color.fromRGBO(234, 64, 128, 1,)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.zodiac  ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -168,12 +162,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildAcademicLevel(UpdateNotify updateProvider) {
+  Widget _buildAcademicLevel(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Trình độ học vấn của bạn",
+         Text(
+        AppLocalizations.of(context).basicInformationDialogEducation,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -182,14 +176,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.academicLeverList.length,
+            HelpersUserAndValidators.academicLeverList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.academicLeverList[index];
-              final isSelected = updateProvider.academicLever! == item;
+              final item = HelpersUserAndValidators.academicLeverList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.academicLever = !isSelected ? item : "";
-
+                  updateProvider.academicLever = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -200,8 +192,8 @@ class BasicInformationBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
+                        width: index == updateProvider.academicLever ? 2 : 1,
+                        color: index == updateProvider.academicLever
                             ? const Color.fromRGBO(
                                 234,
                                 64,
@@ -214,7 +206,7 @@ class BasicInformationBottomSheet extends StatelessWidget {
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color: index == updateProvider.academicLever ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -233,12 +225,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildFamilyStyle(UpdateNotify updateProvider) {
+  Widget _buildFamilyStyle(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Bạn muốn có con không ?",
+         Text(
+           AppLocalizations.of(context).basicInformationDialogFamily,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -247,14 +239,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.familyStyleList.length,
+            HelpersUserAndValidators.familyStyleList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.familyStyleList[index];
-              final isSelected = updateProvider.familyStyle! == item;
+              final item = HelpersUserAndValidators.familyStyleList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.familyStyle = !isSelected ? item : "";
-
+                  updateProvider.familyStyle = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -265,21 +255,16 @@ class BasicInformationBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width: index == updateProvider.familyStyle ? 2 : 1,
+                        color:  index == updateProvider.familyStyle
+                            ? const Color.fromRGBO(234, 64, 128, 1,)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color:  index == updateProvider.familyStyle ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,
@@ -298,12 +283,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildPersonalityType(UpdateNotify updateProvider) {
+  Widget _buildPersonalityType(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Kiểu tính cách ?",
+         Text(
+           AppLocalizations.of(context).basicInformationDialogPersonality,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -318,7 +303,7 @@ class BasicInformationBottomSheet extends StatelessWidget {
               final isSelected = updateProvider.personalityType! == item;
               return InkWell(
                 onTap: () {
-                  updateProvider.personalityType = !isSelected ? item : "";
+                  updateProvider.personalityType = !isSelected ? item : '';
 
                   updateProvider.onDataChange();
                 },
@@ -363,12 +348,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildLanguageOfLove(UpdateNotify updateProvider) {
+  Widget _buildLanguageOfLove(BuildContext context,UpdateNotify updateProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Ngôn ngữ tình yêu ?",
+         Text(
+          AppLocalizations.of(context).basicInformationDialogLove,
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
         ),
@@ -377,14 +362,12 @@ class BasicInformationBottomSheet extends StatelessWidget {
         ),
         Wrap(
           children: List.generate(
-            HelpersUserAndValidators.languageOfLoveList.length,
+            HelpersUserAndValidators.languageOfLoveList(context).length,
             (index) {
-              final item = HelpersUserAndValidators.languageOfLoveList[index];
-              final isSelected = updateProvider.languageOfLove! == item;
+              final item = HelpersUserAndValidators.languageOfLoveList(context)[index];
               return InkWell(
                 onTap: () {
-                  updateProvider.languageOfLove = !isSelected ? item : "";
-
+                  updateProvider.languageOfLove = index;
                   updateProvider.onDataChange();
                 },
                 child: Padding(
@@ -395,21 +378,16 @@ class BasicInformationBottomSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       border: Border.all(
-                        width: isSelected ? 2 : 1,
-                        color: isSelected
-                            ? const Color.fromRGBO(
-                                234,
-                                64,
-                                128,
-                                100,
-                              )
+                        width:  index == updateProvider.languageOfLove  ? 2 : 1,
+                        color:  index == updateProvider.languageOfLove
+                            ? const Color.fromRGBO(234, 64, 128, 1,)
                             : Colors.grey,
                       ),
                     ),
                     child: Text(
                       item,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : Colors.black54,
+                        color:  index == updateProvider.languageOfLove  ? Colors.black : Colors.black54,
                         fontSize: 15,
                       ),
                       textAlign: TextAlign.center,

@@ -1,3 +1,6 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class PackageModel {
   final String title;
   final int id;
@@ -5,8 +8,7 @@ class PackageModel {
   final String price;
   final double discount;
 
-
-  PackageModel({
+  PackageModel( {
     required this.name,
     required this.id,
     required this.title,
@@ -15,78 +17,83 @@ class PackageModel {
   });
 }
 
-List<PackageModel> packageBinderPlatinumList = [
 
-  PackageModel(
-    id: 1,
-    title: '',
-    name: '1 Tháng',
-    price: '279.000 ₫/th',
-    discount: 0,
-  ),
-  PackageModel(
-    id: 2,
-    title: 'Phổ biến',
-    name: '6 Tháng',
-    price: '139.833 ₫/th',
-    discount: 50,
-  ),
-  PackageModel(
-    id: 3,
-    title: 'Giá Tốt Nhất',
-    name: '12 Tháng',
-    price: '96.583 ₫/th',
-    discount: 65,
-  ),
-];
 
-List<PackageModel> packageBinderGoldList = [
-  PackageModel(
-    id: 1,
-    title: '',
-    name: '1 Tháng',
-    price: '189.000 ₫/th',
-    discount: 0,
-  ),
-  PackageModel(
-    id: 2,
-    title: 'Phổ biến',
-    name: '6 tháng',
-    price: '93.167 ₫/th',
-    discount: 50,
-  ),
-  PackageModel(
-    id: 3,
-    title: 'Giá Tốt Nhất',
-    name: '12 tháng',
-    price: '64.083 ₫/th',
-    discount: 65,
-  ),
-];
+List<PackageModel> packageBinderPlatinumList(BuildContext context) {
+  final appLocal = AppLocalizations.of(context);
+ return [
+    PackageModel(
+      id: 1,
+      title: '',
+      name: '1 ${appLocal.pageFunctionVipMonthText}',
+      price: '279.000 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 0,
+    ),
+    PackageModel(
+      id: 2,
+      title: appLocal.pageFunctionVipPopularText,
+      name: '6 Tháng',
+      price: '139.833 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 50,
+    ),
+    PackageModel(
+      id: 3,
+      title: appLocal.pageFunctionVipBestText,
+      name: '12 ${appLocal.pageFunctionVipMonthText}',
+      price: '96.583 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 65,
+      ),
+  ];
+}
 
-List<PackageModel> packageBinderSuperLike = [
-  PackageModel(
-    id: 1,
-    title: '',
-    name: '5 lượt Siêu Thích',
-    price: '39.800 ₫/th',
+List<PackageModel> packageBinderGoldList (BuildContext context) {
+  final appLocal = AppLocalizations.of(context);
+  return [
+    PackageModel(
+      id: 1,
+      title: '',
+      name: '1 ${appLocal.pageFunctionVipMonthText}',
+      price: '189.000 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 0,
+    ),
+    PackageModel(
+      id: 2,
+      title: appLocal.pageFunctionVipPopularText,
+      name: '6 ${appLocal.pageFunctionVipMonthText}',
+      price: '93.167 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 50,
+    ),
+    PackageModel(
+      id: 3,
+      title: appLocal.pageFunctionVipBestText,
+      name: '12 ${appLocal.pageFunctionVipMonthText}',
+      price: '64.083 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 65,
+    ),
+  ];
+}
 
-    discount: 0,
-  ),
-  PackageModel(
-    id: 2,
-    title: 'Phổ biến',
-    name: '25 lượt Siêu Thích',
-    price: '31.160 ₫/th',
+List<PackageModel> packageBinderSuperLike (BuildContext context) {
+  final appLocal = AppLocalizations.of(context);
+  return [
+    PackageModel(
+      id: 1,
+      title: '',
+      name: '5 ${appLocal.pageFunctionVipSuperText}',
+      price: '39.800 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 0,),
+    PackageModel(
+      id: 2,
+      title: appLocal.pageFunctionVipPopularText,
+      name: '25 ${appLocal.pageFunctionVipSuperText}',
+      price: '31.160 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 22,),
+    PackageModel(
+      id: 3,
+      title: appLocal.pageFunctionVipBestText,
+      name: '60 ${appLocal.pageFunctionVipSuperText}',
+      price: '24.983 ₫/${appLocal.pageFunctionVipMonthText}',
+      discount: 37,),
+  ];
 
-    discount: 22,
-  ),
-  PackageModel(
-    id: 3,
-    title: 'Giá Tốt Nhất',
-    name: '60 lượt Siêu Thích',
-    price: '24.983 ₫/th',
-
-    discount: 37,
-  ),
-];
+}

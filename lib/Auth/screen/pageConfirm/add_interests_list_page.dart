@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../../../config/changedNotify/confirm_profile_watch.dart';
 import '../../../config/helpers/helpers_user_and_validators.dart';
 import '../../widget/button_submit_page_view.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class AddInterestsListPageSection extends StatelessWidget {
   const AddInterestsListPageSection({Key? key}) : super(key: key);
@@ -10,6 +12,7 @@ class AddInterestsListPageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageProvider = Provider.of<PageDataConfirmProfileProvider>(context);
+    final appLocal = AppLocalizations.of(context);
 
     return SingleChildScrollView(
       child: Container(
@@ -40,19 +43,19 @@ class AddInterestsListPageSection extends StatelessWidget {
                           pageProvider.isInterestsEmpty = true;
                           print('Sở thích ${pageProvider.newInterestsList}');
                         },
-                        child: Text('Bỏ qua', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
+                        child: Text(appLocal.textSkipButton, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600,fontSize: 17),),
                       )
                     ],
                   ),
                   const SizedBox(height: 15,),
-                  const Text('Sở thích của bạn ?',
+                   Text(appLocal.titleAddInterestsPage,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 28
                     ),
                   ),
                   const SizedBox(height: 10,),
-                  const Text('Bạn có sở thích riêng của mình. Hãy cho mọi người cùng biết nhé.',
+                   Text(appLocal.textContentInterests,
                     style: TextStyle(
                         fontSize: 16
                     ),
@@ -81,14 +84,14 @@ class AddInterestsListPageSection extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Wrap(
-                  children: List.generate(HelpersUserAndValidators.interestsList.length , (index) {
-                    final item = HelpersUserAndValidators.interestsList[index];
-                    final isSelected = pageProvider.newInterestsList.contains(item);
+                  children: List.generate(HelpersUserAndValidators.interestsList(context).length , (index) {
+                    final item = HelpersUserAndValidators.interestsList(context)[index];
+                    final isSelected = HelpersUserAndValidators.getItemFromListIndex(context, HelpersUserAndValidators.interestsList(context),  pageProvider.newInterestsList).contains(item);
                     return InkWell(
                       onTap: (){
                           pageProvider.newInterestsList.length < 5
-                              ? !isSelected ? pageProvider.newInterestsList.add(item) : pageProvider.newInterestsList.remove(item)
-                              : isSelected ? pageProvider.newInterestsList.remove(item): null;
+                              ? !isSelected ? pageProvider.newInterestsList.add(index) : pageProvider.newInterestsList.remove(index)
+                              : isSelected ? pageProvider.newInterestsList.remove(index): null;
                           pageProvider.onInterestsListChanged();
                       },
                       child: Padding(
@@ -99,7 +102,7 @@ class AddInterestsListPageSection extends StatelessWidget {
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(
                               width: isSelected ? 2 : 1,
-                              color: isSelected ? Color.fromRGBO(234, 64, 128, 100,) : Colors.grey ,
+                              color: isSelected ? Color.fromRGBO(234, 64, 128, 1,) : Colors.grey ,
                             ),
                           ),
                           child: Text(item, style: TextStyle(color: Colors.black54,fontSize: 15,),textAlign: TextAlign.center,),
@@ -113,7 +116,7 @@ class AddInterestsListPageSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 25,),
-            ButtonSubmitPageView(text: 'Tiếp theo ${pageProvider.newInterestsList.length}/5',marginBottom: 70,
+            ButtonSubmitPageView(text: '${appLocal.textNextButton} ${pageProvider.newInterestsList.length}/5',marginBottom: 70,
                 color: pageProvider.isInterestsEmpty ? Colors.grey: Colors.transparent,
                 onPressed: () {
                   !pageProvider.isInterestsEmpty ? pageProvider.nextPage() : null;

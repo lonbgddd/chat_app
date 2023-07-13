@@ -1,6 +1,6 @@
 import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'basic_information_bottom_sheet.dart';
 
 class BasicInformationRow extends StatelessWidget {
@@ -64,14 +64,14 @@ class BasicInformationRow extends StatelessWidget {
             ),
             Container(
               width: MediaQuery.of(context).size.width / 2 - 8.0,
-              padding: const EdgeInsets.only(left: 8.0),
+              padding:  EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Text(
-                      content!.isNotEmpty ? content! : "Trống",
+                      content!.isNotEmpty ? content! : AppLocalizations.of(context).emptyText,
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 16,
@@ -80,6 +80,7 @@ class BasicInformationRow extends StatelessWidget {
                       textAlign: TextAlign.right,
                     ),
                   ),
+                  const SizedBox(width: 5),
                   Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.grey.shade700,

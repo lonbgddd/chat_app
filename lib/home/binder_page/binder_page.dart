@@ -1,15 +1,16 @@
+import 'package:chat_app/Auth/widget/button_submit_page_view.dart';
 import 'package:chat_app/config/changedNotify/binder_watch.dart';
-import 'package:chat_app/home/binder_page/compnents/item_card.dart';
+import 'package:chat_app/home/binder_page/components/item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../config/changedNotify/profile_watch.dart';
 import '../../config/helpers/app_assets.dart';
-import 'compnents/discovery_setting.dart';
+import 'components/discovery_setting.dart';
 
 class BinderPage extends StatefulWidget {
   const BinderPage({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class BinderPage extends StatefulWidget {
 
 class _BinderPageState extends State<BinderPage>
     with SingleTickerProviderStateMixin {
+
   bool isRefresh = false;
   bool hasNotification = true;
 
@@ -84,12 +86,8 @@ class _BinderPageState extends State<BinderPage>
     super.didChangeDependencies();
     if (isRefresh) {
       final provider = context.read<BinderWatch>();
-      provider.allUserBinder(
-          context,
-          provider.selectedOption,
-          provider.currentAgeValue,
-          provider.showPeopleInRangeDistance,
-          provider.distancePreference);
+      provider.allUserBinder(context,provider.selectedOption, provider.currentAgeValue,
+          provider.showPeopleInRangeDistance, provider.distancePreference);
       setState(() {
         isRefresh = false;
       });
@@ -120,7 +118,7 @@ class _BinderPageState extends State<BinderPage>
               width: 5,
             ),
             const Text(
-              "Binder",
+              "Finder",
               style: TextStyle(
                 fontFamily: 'Grandista',
                 fontSize: 24,
@@ -135,11 +133,14 @@ class _BinderPageState extends State<BinderPage>
             child: Stack(
               children: [
                 IconButton(
-                  onPressed: () => context.go('/home/notification-page'),
-                  // showMatchDialog(context,
-                  //     avatar:
-                  //         "https://th.bing.com/th/id/R.a09840b729ea09d72cacd38ed1101662?rik=F1t%2bhCJtqq9b7Q&pid=ImgRaw&r=0",
-                  //     name: "Long"),
+                  onPressed: () {
+                    context.go('/home/notification-page');
+                    // showMatchDialog(context,
+                    //     avatar:
+                    //     "https://th.bing.com/th/id/R.a09840b729ea09d72cacd38ed1101662?rik=F1t%2bhCJtqq9b7Q&pid=ImgRaw&r=0",
+                    //     name: "Long");
+                  },
+
                   icon: const Icon(
                     Icons.notifications,
                     color: Colors.grey,
@@ -191,38 +192,22 @@ class _BinderPageState extends State<BinderPage>
   Widget getBody(BuildContext context, String gender, List<double> age,
       bool isInDistanceRange, double kilometres) {
     return FutureBuilder(
-      future: context
-          .read<BinderWatch>()
-          .allUserBinder(context, gender, age, isInDistanceRange, kilometres),
+      future: context.read<BinderWatch>().allUserBinder(context,gender, age, isInDistanceRange, kilometres),
       builder: (context, snapshot) => snapshot.hasData
           ? Padding(
               padding: const EdgeInsets.all(10),
               child: Stack(
                   alignment: Alignment.center,
-                  children: context
-                      .watch<BinderWatch>()
-                      .listCard
-                      .reversed
-                      .map((e) => ProfileCard(
+                  children: context.watch<BinderWatch>().listCard.reversed.map((e) => ProfileCard(
                             targetUser: e,
-                            isDetail: () => context.goNamed(
-                                'home-detail-others',
+                            isDetail: () => context.goNamed('home-detail-others',
+                                queryParameters: {'uid': e.uid.toString(),}),
+                            onHighlight: () => context.goNamed('home-highlight-page',
                                 queryParameters: {
-                                  'uid': e.uid.toString(),
-                                }),
-                            onHighlight: () => context.goNamed(
-                                'home-highlight-page',
-                                queryParameters: {
-                                  'currentUserID': context
-                                      .read<ProfileWatch>()
-                                      .currentUser
-                                      .uid
-                                      .toString(),
+                                  'currentUserID': context.read<ProfileWatch>().currentUser.uid.toString(),
                                   'targetUserID': e.uid.toString(),
                                 }),
-                            isFont:
-                                context.watch<BinderWatch>().listCard.first ==
-                                    e,
+                    isFront: context.watch<BinderWatch>().listCard.first == e,
                           ))
                       .toList()),
             )
@@ -235,49 +220,4 @@ class _BinderPageState extends State<BinderPage>
     );
   }
 
-  void showMatchDialog(BuildContext context,
-      {required String avatar, required String name}) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final double dialogWidth = screenSize.width * 0.8;
-    final double dialogHeight = screenSize.height * 0.4;
-    showDialog(
-      context: context,
-      useSafeArea: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.redAccent,
-          title: const Text('It\'s a Match!'),
-          content: Container(
-            height: dialogHeight,
-            width: dialogWidth,
-            child: Column(
-              children: [
-                const Text('Congratulations! You matched with someone.'),
-                const SizedBox(height: 16),
-                CircleAvatar(
-                  radius: 50,
-                  // Hiển thị hình ảnh của người đã match
-                  backgroundImage: NetworkImage(avatar.toString()),
-                ),
-                const SizedBox(height: 16),
-                Text(name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    )),
-              ],
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              child: const Text('Close'),
-              onPressed: () {
-                context.pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

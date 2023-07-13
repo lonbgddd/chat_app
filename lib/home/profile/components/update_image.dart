@@ -2,6 +2,7 @@ import 'package:chat_app/config/changedNotify/update_watch.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UpdateImage extends StatelessWidget {
   const UpdateImage({
@@ -120,25 +121,23 @@ class UpdateImage extends StatelessWidget {
                         .pickImages();
                   },
                   child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 60, vertical: 10),
+                    width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 20,),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           gradient: const LinearGradient(
-                              colors: [
-                                Color.fromRGBO(229, 58, 69, 100),
-                                Color(0XFFF29727)
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              stops: [0.5, 1])),
-                      child: const Text(
-                        "THÊM ẢNH",
+                              colors: [const Color.fromRGBO(234, 64, 128, 1), const Color.fromRGBO(238, 128, 95, 1)],
+                          )),
+                      child:  Text( AppLocalizations.of(context).buttonAddPhotoText,
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      )))),
+                        textAlign: TextAlign.center,
+                      )
+                  )
+              )),
         ],
       ),
     );
